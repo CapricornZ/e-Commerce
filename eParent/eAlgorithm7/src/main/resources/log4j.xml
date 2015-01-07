@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?><!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration>
+	<appender name="CONSOLE-CLEAN" class="org.apache.log4j.ConsoleAppender">
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%m" />
+		</layout>
+	</appender>
+	
+	<appender name="FILE-CLEAN" class="org.apache.log4j.FileAppender">
+		<param name="File" value="/home/martin/alg7.txt" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%m" />
+		</layout>
+		<filter class="org.apache.log4j.varia.LevelRangeFilter">
+			<param name="LevelMax" value="INFO" />
+			<param name="LevelMin" value="DEBUG" />
+		</filter>
+	</appender>
+	
+	<appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%-5p - %m%n" />
+		</layout>    <!--限制输出级别 -->
+		<filter class="org.apache.log4j.varia.LevelRangeFilter">
+			<param name="LevelMax" value="ERROR" />
+			<param name="LevelMin" value="TRACE" />
+		</filter>
+	</appender>
+	<appender name="FILE" class="org.apache.log4j.FileAppender">
+		<param name="File" value="C:/log4j1.log" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d - %c -%-4r [%t] %-5p %x - %m%n" />
+		</layout>
+	</appender>
+	
+	<logger name="ecommerce.algorithm5.patterns" additivity="false">
+		<level value="DEBUG" />
+		<appender-ref ref="CONSOLE-CLEAN" />
+	</logger>
+	
+	<logger name="ecommerce.base" additivity="false">
+		<level value="DEBUG" />
+		<appender-ref ref="CONSOLE-CLEAN" />
+		<appender-ref ref="FILE-CLEAN" />
+	</logger>
+	
+	<logger name="ecommerce.eAlgorithm7" additivity="false">
+		<level value="DEBUG" />
+		<appender-ref ref="CONSOLE-CLEAN" />
+		<appender-ref ref="FILE-CLEAN" />
+	</logger>
+	
+	<root>
+		<priority value="DEBUG" />
+		<appender-ref ref="CONSOLE" />
+	</root>
+</log4j:configuration>

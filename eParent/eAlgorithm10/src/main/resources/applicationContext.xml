@@ -1,0 +1,66 @@
+<beans xmlns="http://www.springframework.org/schema/beans"  
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"   
+    xmlns:p="http://www.springframework.org/schema/p"  
+    xsi:schemaLocation="http://www.springframework.org/schema/beans   
+    http://www.springframework.org/schema/beans/spring-beans-3.1.xsd"> 
+    
+    <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="staticMethod" value="ecommerce.eAlgorithm10.SourceRowA.setRowLimit"/>
+        <property name="arguments">
+        	<bean id="rowLimitA" class="ecommerce.base.sourcerow.LimitRow">
+		    	<property name="limit" value="${ROW.A.MAXSIZE}"/>
+		    </bean>
+        </property>
+    </bean>
+    
+    <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="staticMethod" value="ecommerce.eAlgorithm10.SourceRowB.setRowLimit"/>
+        <property name="arguments">
+        	<bean id="rowLimitB" class="ecommerce.base.sourcerow.LimitRow">
+		    	<property name="limit" value="${ROW.B.MAXSIZE}"/>
+		    </bean>
+        </property>
+    </bean>
+    
+	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+    	<property name="locations" value="classpath:app.properties"/>
+	</bean>
+	<!-- TrueAndFalse 运算何时回第一位开始运算 -->
+    <bean id="next" class="ecommerce.patterns.trueandfalse.GoNextOR">
+    	<property name="goNext">
+    		<array>
+    			<bean class="ecommerce.patterns.trueandfalse.gonext.GoNext1"/>
+    			<bean class="ecommerce.patterns.trueandfalse.gonext.GoNext4"/>
+    		</array>
+    	</property>
+    </bean>
+    
+    <!-- TrueAndFalse 运算何时终止？ -->
+    <bean id="stop" class="ecommerce.patterns.trueandfalse.StopOR">
+    	<property name="stops">
+    		<array>
+    			<bean class="ecommerce.patterns.trueandfalse.stop.StopBySum">
+    				<property name="max" value="${SUM}"/>
+    			</bean>
+    			<bean class="ecommerce.patterns.trueandfalse.stop.StopByCurrent">
+    				<property name="max" value="${DELTA}"/>
+    			</bean>
+    		</array>
+    	</property>
+    </bean>
+    
+    <bean id="trueAndFalse" class="ecommerce.eAlgorithm10.TrueAndFalse">
+    	<property name="stop" ref="stop"/>
+    	<property name="goNext" ref="next"/>
+    </bean>
+    
+    <bean id="alg10.patternA12" class="ecommerce.eAlgorithm10.pattern.element.A.Pattern12"/>
+    <bean id="alg10.patternA5" class="ecommerce.eAlgorithm10.pattern.element.A.Pattern5"/>
+    <bean id="alg10.patternB" class="ecommerce.eAlgorithm10.pattern.element.B.Pattern"/>
+    
+    <bean id="alg10.SourceRowBuilder" class="ecommerce.eAlgorithm10.SourceRowBuilder">
+	    <property name="expectA12" ref="alg10.patternA12"/>
+	    <property name="expectA5" ref="alg10.patternA5"/>
+	    <property name="expectB345" ref="alg10.patternB"/>
+    </bean>
+</beans>

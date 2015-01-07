@@ -1,0 +1,45 @@
+<beans xmlns="http://www.springframework.org/schema/beans"  
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"   
+    xmlns:p="http://www.springframework.org/schema/p"  
+    xsi:schemaLocation="http://www.springframework.org/schema/beans   
+    http://www.springframework.org/schema/beans/spring-beans-3.1.xsd"> 
+    
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+    	<property name="locations" value="classpath:app.properties"/>
+	</bean>
+    
+	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="staticMethod" value="ecommerce.eAlgorithm7.SourceRow.setRowLimit"/>
+        <property name="arguments">
+        	<bean id="rowLimit" class="ecommerce.base.sourcerow.LimitRow">
+		    	<property name="limit" value="${ROW.MAXSIZE}"/>
+		    </bean>
+        </property>
+    </bean>
+    	
+    <!-- TrueAndFalse 运算何时回第一位开始运算 -->
+    <bean id="next" class="ecommerce.patterns.trueandfalse.GoNextOR">
+    	<property name="goNext">
+    		<array>
+    			<bean class="ecommerce.patterns.trueandfalse.gonext.GoNext1"/><!-- match oo -->
+    			<!-- <bean class="ecommerce.patterns.trueandfalse.gonext.GoNext4"/> --><!-- match oxo -->
+    		</array>
+    	</property>
+    </bean>
+    
+    <!-- TrueAndFalse 运算何时终止？ -->
+    <bean id="stop" class="ecommerce.patterns.trueandfalse.StopOR">
+    	<property name="stops">
+    		<array>
+    			<bean class="ecommerce.patterns.trueandfalse.stop.StopBySum"><!-- SUM>=${SUM} -->
+    				<property name="max" value="${SUM}"/>
+    			</bean>
+    		</array>
+    	</property>
+    </bean>
+    
+    <bean id="trueAndFalse" class="ecommerce.eAlgorithm7.TrueAndFalse">
+    	<property name="stop" ref="stop"/>
+    	<property name="goNext" ref="next"/>
+    </bean>
+</beans>
