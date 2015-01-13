@@ -4,6 +4,11 @@ import java.util.List;
 
 import ecommerce.base.ITrueAndFalse;
 
+/***
+ * match oo
+ * @author martin
+ *
+ */
 public class GoNext1 implements IGoNext {
 
 	@Override

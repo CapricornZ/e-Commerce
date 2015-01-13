@@ -31,9 +31,10 @@
     <bean id="stop" class="ecommerce.patterns.trueandfalse.StopOR">
     	<property name="stops">
     		<array>
-    			<bean class="ecommerce.patterns.trueandfalse.stop.StopBySum"><!-- SUM>=${SUM} -->
+    			<!-- SUM>=${SUM} -->
+    			<!-- <bean class="ecommerce.patterns.trueandfalse.stop.StopBySum">
     				<property name="max" value="${SUM}"/>
-    			</bean>
+    			</bean> -->
     			<bean class="ecommerce.patterns.trueandfalse.stop.StopByCurrent"><!-- DELTE==${DELTA} -->
     				<property name="max" value="${DELTA}"/>
     			</bean>

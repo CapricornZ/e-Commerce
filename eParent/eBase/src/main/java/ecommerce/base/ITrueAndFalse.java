@@ -41,4 +41,9 @@ public interface ITrueAndFalse {
 	
 	void setStop(IStop stop);
 	void setGoNext(IGoNext next);
+	/***
+	 * 获取当前运算过程
+	 * @return
+	 */
+	List<Integer> getProcess();
 }

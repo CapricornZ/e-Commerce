@@ -100,8 +100,8 @@ public class App {
 			int countOfTaf = 0;
 			for (ITrueAndFalse taf : rtn) {
 				countOfTaf++;
-				taf.print();
 				taf.run(0);
+				taf.print();
 			}
 			if (countOfTaf > maxCountOfTaf)
 				maxCountOfTaf = countOfTaf;

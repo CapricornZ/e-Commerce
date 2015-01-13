@@ -17,6 +17,8 @@
 		<module>eAlgorithm8</module>
     <module>eAlgorithm9</module>
     <module>eAlgorithm10</module>
+    <module>eAlgorithm11</module>
+    <module>eAlgorithm12</module>
   </modules>
 
 	<properties>
@@ -73,6 +75,12 @@
 			    <groupId>org.springframework</groupId>
 			    <artifactId>spring-context-support</artifactId>
 			    <version>${spring-version}</version>
+			</dependency>
+			<!-- velocity -->
+			<dependency>
+				<groupId>org.apache.velocity</groupId>
+				<artifactId>velocity</artifactId>
+				<version>1.7</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

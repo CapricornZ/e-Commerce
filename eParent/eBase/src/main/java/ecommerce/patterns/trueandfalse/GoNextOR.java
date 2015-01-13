@@ -16,8 +16,10 @@ public class GoNextOR implements IGoNext {
 		boolean bStop = false;
 		int rtn = 0;
 		for(int i=0; i<goNexts.length && !bStop; i++){
-			rtn = goNexts[i].GetNext(taf);
-			bStop = rtn==0;
+			IGoNext goNext = goNexts[i];
+			rtn = goNext.GetNext(taf);
+			//bStop = rtn==0;
+			bStop = rtn!=taf.getMetaPos();
 		}
 		return rtn;
 	}

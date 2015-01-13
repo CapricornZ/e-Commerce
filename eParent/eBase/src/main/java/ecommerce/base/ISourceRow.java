@@ -18,7 +18,7 @@ abstract public class ISourceRow implements IRow {
 	
 	@Override
 	public void print() {
-		
+
 		char[] array=this.getSource().toCharArray();
 		char last = array[0];
 		int i=1, maxColumn=0;
@@ -42,10 +42,12 @@ abstract public class ISourceRow implements IRow {
 		matrix.add(column);
 		maxColumn = maxColumn>column.length?maxColumn:column.length;
 		
+		//logger.info("<Source>\r\n");
 		for(i=0; i<maxColumn; i++){
 			for(char[] columnLine : matrix)
 				logger.info("{}", columnLine.length>i?columnLine[i]:' ');
 			logger.info("\r\n");
 		}
+		//logger.info("</Source>\r\n");
 	}
 }

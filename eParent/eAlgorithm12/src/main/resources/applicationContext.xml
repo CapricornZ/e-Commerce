@@ -1,0 +1,115 @@
+<beans xmlns="http://www.springframework.org/schema/beans"  
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"   
+    xmlns:p="http://www.springframework.org/schema/p"  
+    xsi:schemaLocation="http://www.springframework.org/schema/beans   
+    http://www.springframework.org/schema/beans/spring-beans-3.1.xsd"> 
+    
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+    	<property name="locations" value="classpath:app.properties"/>
+	</bean>
+	
+	<!-- 
+		#####	APP 上下文	#####
+	 -->
+	<bean id="AppContext" class="ecommerce.eAlgorithm12.AppContext">
+		<property name="element4Expect">
+			<bean class="ecommerce.eAlgorithm12.element.Element4$PatternPositive"/>
+		</property>
+		<property name="element5Expect">
+			<bean class="ecommerce.eAlgorithm12.element.Element5$PatternPositive"/>
+		</property>
+		<property name="destinationFolder"><value>/home/martin/先5后4</value></property>
+		<property name="resultRowType"><value>ecommerce.eAlgorithm12.ResultRowSkip</value></property>
+		<property name="elementBuilders">
+			<array>
+        		<bean class="ecommerce.eAlgorithm12.element.Element5Builder"/>
+        		<bean class="ecommerce.eAlgorithm12.element.Element4Builder"/>
+        	</array>
+		</property>
+	</bean>
+	
+	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="staticMethod" value="ecommerce.FileAccess.setDestFolder"/>
+        <property name="arguments">
+        	<bean factory-bean="AppContext" factory-method="getDestinationFolder"/>
+        </property>
+    </bean>
+    
+    <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="staticMethod" value="ecommerce.eAlgorithm12.element.Element4.setExpect"/>
+        <property name="arguments">
+        	<bean factory-bean="AppContext" factory-method="getElement4Expect"/>
+        </property>
+    </bean>
+    
+    <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="staticMethod" value="ecommerce.eAlgorithm12.element.Element5.setExpect"/>
+        <property name="arguments">
+        	<bean factory-bean="AppContext" factory-method="getElement5Expect"/>
+        </property>
+    </bean>
+    
+	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="staticMethod" value="ecommerce.eAlgorithm12.SourceRow.setRowLimit"/>
+        <property name="arguments">
+        	<bean id="rowLimit" class="ecommerce.base.sourcerow.UnLimitRow"/>
+        </property>
+    </bean>
+    
+    <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="staticMethod" value="ecommerce.eAlgorithm12.SourceRow.setTypeOfResultRow"/>
+        <property name="arguments">
+        	<bean factory-bean="AppContext" factory-method="getResultRowType"/>
+        	<!-- <value>ecommerce.eAlgorithm12.ResultRowNonSkip</value> -->
+        	<!-- <value>ecommerce.eAlgorithm12.ResultRowSkip</value> -->
+        </property>
+    </bean>
+    
+    <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="staticMethod" value="ecommerce.eAlgorithm12.ResultRowNonSkip.setElementBuilder"/>
+        <property name="arguments">
+        	<bean factory-bean="AppContext" factory-method="getElementBuilders"/>
+        </property>
+    </bean>
+    
+    <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="staticMethod" value="ecommerce.eAlgorithm12.ResultRowSkip.setElementBuilder"/>
+        <property name="arguments">
+        	<bean factory-bean="AppContext" factory-method="getElementBuilders"/>
+        </property>
+    </bean>
+    	
+    <!-- TrueAndFalse 运算何时回第一位开始运算 -->
+    <bean id="next" class="ecommerce.patterns.trueandfalse.GoNextOR">
+    	<property name="goNext">
+    		<array>
+    			<bean class="ecommerce.patterns.trueandfalse.gonext.GoNext1"/><!-- match oo -->
+    			<bean class="ecommerce.patterns.trueandfalse.gonext.GoNext4"/><!-- match oxo -->
+    			<bean class="ecommerce.patterns.trueandfalse.gonext.GoNextByProcess">
+    				<property name="metaPosition" value="0"/>
+    				<property name="target" value="-1,-2,+3"/>
+    			</bean>
+    			<bean class="ecommerce.patterns.trueandfalse.gonext.GoNextByProcess">
+    				<property name="metaPosition" value="1"/>
+    				<property name="target" value="-1,-2,-3,+5"/>
+    			</bean>
+    			<bean class="ecommerce.patterns.trueandfalse.gonext.GoNextByProcess">
+    				<property name="metaPosition" value="2"/>
+    				<property name="target" value="-1,-2,-3,-5,+8"/>
+    			</bean>
+    			<bean class="ecommerce.patterns.trueandfalse.gonext.GoNextByProcess">
+    				<property name="metaPosition" value="3"/>
+    				<property name="target" value="-1,-2,-3,-5,-8,+13"/>
+    			</bean>
+    		</array>
+    	</property>
+    </bean>
+    
+    <!-- TrueAndFalse 运算何时终止？ -->
+    <bean id="stop" class="ecommerce.patterns.trueandfalse.DoNotStop"/>
+    
+    <bean id="trueAndFalse" class="ecommerce.eAlgorithm12.TrueAndFalse">
+    	<property name="stop" ref="stop"/>
+    	<property name="goNext" ref="next"/>
+    </bean>
+</beans>
