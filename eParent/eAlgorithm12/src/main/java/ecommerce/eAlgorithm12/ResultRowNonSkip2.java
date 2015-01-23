@@ -19,22 +19,22 @@ import ecommerce.eAlgorithm12.element.IElementBuilder;
  * @author martin
  *
  */
-public class ResultRowNonSkip implements IResultRow,IGetPositions {
+public class ResultRowNonSkip2 implements IResultRow,IGetPositions {
 	
 	//----- static -----
-	static private final Logger logger = LoggerFactory.getLogger(ResultRowNonSkip.class);
+	static private final Logger logger = LoggerFactory.getLogger(ResultRowNonSkip2.class);
 	
 	static private IElementBuilder[] elementBuilder;
-	static public void setElementBuilder(IElementBuilder[] builder){ResultRowNonSkip.elementBuilder = builder;}
+	static public void setElementBuilder(IElementBuilder[] builder){ResultRowNonSkip2.elementBuilder = builder;}
 	
 	static private Swap swap;
-	static public void setSwap(Swap swap){ResultRowNonSkip.swap = swap;}
+	static public void setSwap(Swap swap){ResultRowNonSkip2.swap = swap;}
 	//----- static -----
 
 	private String source;
 	private List<IElement> elements;
 	private int startOff, indexOfCreateElement;
-	public ResultRowNonSkip(String source){
+	public ResultRowNonSkip2(String source){
 		this.source = source;
 	}
 	
@@ -50,14 +50,14 @@ public class ResultRowNonSkip implements IResultRow,IGetPositions {
 		this.startOff = 0;
 		this.indexOfCreateElement = 0;
 		this.elements = new ArrayList<IElement>();
-		IElement element = ResultRowNonSkip.elementBuilder[indexOfCreateElement].createElement(this.source, this.startOff);
+		IElement element = ResultRowNonSkip2.elementBuilder[indexOfCreateElement].createElement(this.source, this.startOff);
 		startOff += element.getSource().length;
 		this.elements.add(element);
-		Swap swap = ResultRowNonSkip.swap.createSwap();
+		Swap swap = ResultRowNonSkip2.swap.createSwap();
 		
 		for(;startOff<source.length();){
 			
-			IElement current = ResultRowNonSkip.elementBuilder[indexOfCreateElement].createElement(this.source, this.startOff);
+			IElement current = ResultRowNonSkip2.elementBuilder[indexOfCreateElement].createElement(this.source, this.startOff);
 			IElement last = this.elements.get(this.elements.size()-1);
 			List<Boolean> result = null;
 			if(current.getSource().length>last.getSource().length)
@@ -67,13 +67,15 @@ public class ResultRowNonSkip implements IResultRow,IGetPositions {
 			total.add(result);
 			
 			startOff += current.getSource().length;
-			this.elements.add(current);
-			
 			//if(result.size()==2 && !result.get(0) && !result.get(1)){//swap
 			if(swap.exam(result)){//swap
 				indexOfCreateElement = (indexOfCreateElement+1)%2;
 				this.relayPos.add(new RelayPosition(startOff-2, startOff-1));
+				if(current.getSource().length == 4)
+					if(startOff<source.length())
+						current.append(this.source.charAt(startOff++));
 			}
+			this.elements.add(current);
 		}
 		
 		List<ITrueAndFalse> rtn = new ArrayList<ITrueAndFalse>();

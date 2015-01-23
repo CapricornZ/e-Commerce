@@ -21,11 +21,15 @@ import ecommerce.eAlgorithm12.element.IElementBuilder;
  */
 public class ResultRowSkip implements IResultRow, IGetPositions{
 	
+	//----- static -----
 	static private final Logger logger = LoggerFactory.getLogger(ResultRowSkip.class);
+	
 	static private IElementBuilder[] elementBuilder;
-	static public void setElementBuilder(IElementBuilder[] builder){
-		ResultRowSkip.elementBuilder = builder;
-	}
+	static public void setElementBuilder(IElementBuilder[] builder){ResultRowSkip.elementBuilder = builder;}
+	
+	static private Swap swap;
+	static public void setSwap(Swap swap){ResultRowSkip.swap = swap;}
+	//----- static -----
 
 	private String source;
 	private List<IElement> elements;
@@ -41,26 +45,30 @@ public class ResultRowSkip implements IResultRow, IGetPositions{
 	@Override
 	public List<ITrueAndFalse> getResult() {
 		
+		this.bFirst = true;
+		List<List<Boolean>> total = new ArrayList<List<Boolean>>();
 		this.relayPos = new ArrayList<RelayPosition>();
-		List<Boolean> total = new ArrayList<Boolean>();
 		this.startOff = 0;
 		this.indexOfCreateElement = 0;
 		this.elements = new ArrayList<IElement>();
 		IElement element = ResultRowSkip.elementBuilder[indexOfCreateElement].createElement(this.source, this.startOff);
 		startOff += element.getSource().length;
 		this.elements.add(element);
+		Swap swap = ResultRowSkip.swap.createSwap();
 		
 		for(;startOff<source.length();){
 			
 			IElement current = ResultRowSkip.elementBuilder[indexOfCreateElement].createElement(this.source, this.startOff);
 			IElement last = this.elements.get(this.elements.size()-1);
-			List<Boolean> result = current.execute(last);
-			total.addAll(result);
+			List<Boolean> result = current.execute(last, true);
+			total.add(result);
 			
 			startOff += current.getSource().length;
 			this.elements.add(current);
 			
-			if(result.size()==2 && !result.get(0) && !result.get(1)){//swap
+			//if(result.size()==2 && !result.get(0) && !result.get(1) && bFirst){//swap
+			//	bFirst = false;
+			if(swap.exam(result)){//swap
 				indexOfCreateElement = (indexOfCreateElement+1)%2;
 				this.relayPos.add(new RelayPosition(startOff-2, startOff-1));
 				if(current.getSource().length == 4){//新建一列
@@ -73,9 +81,10 @@ public class ResultRowSkip implements IResultRow, IGetPositions{
 		}
 		
 		List<ITrueAndFalse> rtn = new ArrayList<ITrueAndFalse>();
-		rtn.add(new TrueAndFalse(total));
+		rtn.add(new TrueAndFalseEx(total));
 		return rtn;
 	}
+	private boolean bFirst;
 	
 	@Override
 	public IRow run() {

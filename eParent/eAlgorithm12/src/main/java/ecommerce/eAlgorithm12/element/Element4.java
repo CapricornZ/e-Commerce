@@ -65,13 +65,6 @@ public class Element4 implements IElement{
 		}
 	}
 	
-	static public IElement createElement(String source, int startOff){
-		
-		int length = startOff+4<source.length()?4:source.length()-startOff;
-		char[] data = source.substring(startOff, startOff+length).toCharArray();
-		return new Element4(data);
-	}
-	
 	private char[] source;
 	private char[] result;
 	public Element4(char[] source){
@@ -84,14 +77,14 @@ public class Element4 implements IElement{
 	}
 	@Override
 	public String getValue(int columnIndex){
-		if(columnIndex<4 && columnIndex<this.source.length)
+		if(columnIndex<this.source.length)
 			return String.format("%c%c", this.source[columnIndex], this.result[columnIndex]);
 		else
 			return "__";
 	}
 	
 	@Override
-	public List<Boolean> execute(IElement other){
+	public List<Boolean> execute(IElement other, boolean result2this){
 		List<Boolean> rtn = new ArrayList<Boolean>();
 		
 		if(this.source.length<=2)
@@ -104,11 +97,25 @@ public class Element4 implements IElement{
 		Compare[] expects = pattern.expects(depends);//r1&r2得到期待值
 		
 		boolean val = expects[0] == (this.source[2]==other.getSource()[2]?Compare.same:Compare.difference);
-		rtn.add(val);this.result[2] = val?'o':'x';
+		rtn.add(val);
+		if(result2this)
+			this.result[2] = val?'o':'x';
+		else{
+			char[] result = other.getResult();
+			result[2] = val?'o':'x';
+			other.setResult(result);
+		}	
 		
 		if(!rtn.get(0) && this.source.length==4){//若刚才的结果为true,则跳过第二个运算
 			val = expects[1] == (this.source[3]==other.getSource()[3]?Compare.same:Compare.difference);
-			rtn.add(val);this.result[3] = val?'o':'x';
+			rtn.add(val);
+			if(result2this)
+				this.result[3] = val?'o':'x';
+			else{
+				char[] result = other.getResult();
+				result[3] = val?'o':'x';
+				other.setResult(result);
+			}
 		}
 		return rtn;
 	}
@@ -116,5 +123,26 @@ public class Element4 implements IElement{
 	@Override
 	public boolean needSkip(int offSet) {
 		return offSet%4>1;
+	}
+	@Override
+	public void setResult(char[] result) {
+		this.result = result;
+	}
+	@Override
+	public char[] getResult() {
+		return this.result;
+	}
+	@Override
+	public void append(char val) {
+		char[] result = this.result;
+		this.result = new char[result.length+1];
+		this.result[result.length] = '_';
+		System.arraycopy(result, 0, this.result, 0, result.length);
+		
+		char[] source = this.source;
+		this.source = new char[source.length+1];
+		this.source[source.length] = val;
+		System.arraycopy(source, 0, this.source, 0, source.length);
+		
 	}
 }

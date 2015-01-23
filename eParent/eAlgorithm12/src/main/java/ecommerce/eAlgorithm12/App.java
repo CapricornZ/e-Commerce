@@ -16,6 +16,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import ecommerce.FileAccess;
 import ecommerce.base.IResultRow;
 import ecommerce.base.IRow;
+import ecommerce.base.ISourceRow;
 import ecommerce.base.ITrueAndFalse;
 import ecommerce.base.SourceRowConvert;
 import ecommerce.base.stastic.ISequentialStastic;
@@ -46,6 +47,7 @@ public class App {
 		List<List<ITrueAndFalse>> totalTAF = new ArrayList<List<ITrueAndFalse>>();
 		int maxCountOfTaf = 0;
 		int number = 1;
+		int countOfSkip = 0;
 		while ((lineTxt = bufferedReader.readLine()) != null) {
 			
 			String source = lineTxt.trim();
@@ -61,6 +63,11 @@ public class App {
 				sRow = SourceRowConvert.convert(source, SourceRow.class);
 			
 			logger.warn("{}.\r\n", number++);
+			if(Skip.exam((ISourceRow)sRow)){
+				countOfSkip++;
+				sRow.print();
+				continue;
+			}
 
 			while(!IResultRow.class.isAssignableFrom(sRow.getClass())){
 				sRow.print();
@@ -73,6 +80,10 @@ public class App {
 			int countOfTaf = 0;
 			for(ITrueAndFalse taf : rtn){
 				countOfTaf ++ ;
+				//if(Skip.exam((TrueAndFalseEx)taf)){
+				//	countOfSkip++;
+				//	continue;
+				//}
 				taf.run(0);
 				taf.print();
 			}
@@ -84,8 +95,9 @@ public class App {
 		}
 		bufferedReader.close();
 		
-		logger.info("--------------------------------------------------\r\n");
+		logger.info("\r\n--------------------------------------------------\r\n");
 		logger.info("---------------------整个文件汇总-------------------\r\n");
+		logger.info("----------------数据源中{}条记录xx跳过----------------\r\n", countOfSkip);
 		
 		//>>>>>>begin
 		int countOfXX=0;

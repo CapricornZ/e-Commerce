@@ -57,13 +57,6 @@ public class Element5 implements IElement{
 		}
 	}
 	
-	static public IElement createElement(String source, int startOff){
-		
-		int length = startOff+5<source.length()?5:source.length()-startOff;
-		char[] data = source.substring(startOff, startOff+length).toCharArray();
-		return new Element5(data);
-	}
-	
 	private char[] source;
 	private char[] result;
 	public Element5(char[] source){
@@ -83,7 +76,7 @@ public class Element5 implements IElement{
 	}
 	
 	@Override
-	public List<Boolean> execute(IElement other) {
+	public List<Boolean> execute(IElement other, boolean result2this) {
 		
 		List<Boolean> rtn = new ArrayList<Boolean>();
 		if(this.source.length<=3)
@@ -98,11 +91,24 @@ public class Element5 implements IElement{
 		
 		boolean val = expects[0] == (this.source[3]==other.getSource()[3]?Compare.same:Compare.difference);
 		rtn.add(val);
-		this.result[3] = val?'o':'x';
+		if(result2this)
+			this.result[3] = val?'o':'x';
+		else{
+			char[] result = other.getResult();
+			result[3] = val?'o':'x';
+			other.setResult(result);
+		}
+		
 		if(!rtn.get(0) && this.source.length==5){//若刚才的结果为true,则跳过第二个运算
 			val = expects[1] == (this.source[4]==other.getSource()[4]?Compare.same:Compare.difference);
 			rtn.add(val);
-			this.result[4]=val?'o':'x';
+			if(result2this)
+				this.result[4]=val?'o':'x';
+			else{
+				char[] result = other.getResult();
+				result[4] = val?'o':'x';
+				other.setResult(result);
+			}
 		}
 		
 		return rtn;
@@ -111,5 +117,26 @@ public class Element5 implements IElement{
 	@Override
 	public boolean needSkip(int offSet) {
 		return offSet%5>2;
+	}
+	@Override
+	public void setResult(char[] result) {
+		this.result = result;
+	}
+	@Override
+	public char[] getResult() {
+		return this.result;
+	}
+	@Override
+	public void append(char val) {
+		char[] result = this.result;
+		this.result = new char[result.length+1];
+		this.result[result.length] = '_';
+		System.arraycopy(result, 0, this.result, 0, result.length);
+		
+		char[] source = this.source;
+		this.source = new char[source.length+1];
+		this.source[source.length] = val;
+		System.arraycopy(source, 0, this.source, 0, source.length);
+		
 	}
 }
