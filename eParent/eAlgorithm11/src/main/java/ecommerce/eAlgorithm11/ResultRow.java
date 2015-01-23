@@ -47,22 +47,25 @@ public class ResultRow implements IResultRow {
 	@Override
 	public List<ITrueAndFalse> getResult() {
 
+		List<List<Boolean>> total = new ArrayList<List<Boolean>>();
+		//List<Boolean> total = new ArrayList<Boolean>();
 		this.relayPos = new ArrayList<RelayPosition>();
-		List<Boolean> total = new ArrayList<Boolean>();
 		Relay.Result result = null;
 		int i=0;
 		result = this.relays[i].run(this.startOff);
 		if(result.position!=null)
 			this.relayPos.add(result.position);
 		while(result.result.size()>0){
-			total.addAll(result.result);
+			total.addAll(result.detail);
+			//total.add(result.result);
+			//total.addAll(result.result);
 			//swap
 			result = this.relays[(++i)%2].run(result.startOff);
 			if(result.position!=null)
 				this.relayPos.add(result.position);
 		}
 		List<ITrueAndFalse> rtn = new ArrayList<ITrueAndFalse>();
-		rtn.add(new TrueAndFalse(total));
+		rtn.add(new TrueAndFalseEx(total));
 		return rtn;
 	}
 

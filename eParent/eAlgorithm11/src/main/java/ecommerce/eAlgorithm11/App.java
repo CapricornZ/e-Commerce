@@ -47,7 +47,7 @@ public class App {
 		List<List<ITrueAndFalse>> totalTAF = new ArrayList<List<ITrueAndFalse>>();
 		int maxCountOfTaf = 0;
 		int number = 1;
-		//loggerSource.info("<ecommerce>\r\n");
+		int countOfSkip = 0;
 		while ((lineTxt = bufferedReader.readLine()) != null) {
 			
 			String source = lineTxt.trim();
@@ -77,6 +77,10 @@ public class App {
 			int countOfTaf = 0;
 			for(ITrueAndFalse taf : rtn){
 				countOfTaf ++ ;
+				if(Skip.exam(taf)){
+					countOfSkip++;
+					continue;
+				}
 				taf.run(0);
 				taf.print();
 			}
@@ -91,8 +95,9 @@ public class App {
 		bufferedReader.close();
 		//loggerSource.info("</ecommerce>\r\n");
 		
-		loggerSource.info("--------------------------------------------------\r\n");
+		loggerSource.info("\r\n--------------------------------------------------\r\n");
 		loggerSource.info("---------------------整个文件汇总-------------------\r\n");
+		loggerSource.info("----------------数据源中{}条记录xx跳过----------------\r\n", countOfSkip);
 		
 		//>>>>>>begin
 		int countOfXX=0;

@@ -13,9 +13,10 @@ import ecommerce.patterns.trueandfalse.stop.IStop;
 public class TrueAndFalse implements ITrueAndFalse {
 	
 	private static final Logger logger = LoggerFactory.getLogger(TrueAndFalse.class);
-	private static int[] metaData = new int[] { 1, 2, 3, 5, 8, 13, 21, 34,
+	/*private static int[] metaData = new int[] { 1, 2, 3, 5, 8, 13, 21, 34,
 		55, 89, 144, 233, 377, 610, 987, 1597, 2584, 4181, 6765, 10946,
-		17711, 28657, 46368 };
+		17711, 28657, 46368 };*/
+	private static int[] metaData = new int[] {1,3,7,15,31,63};
 	
 	private List<Boolean> result;
 	private int resultIndex=0, metaIndex=0;
@@ -28,7 +29,7 @@ public class TrueAndFalse implements ITrueAndFalse {
 	
 	public void print(){
 		
-		StringBuilder sBuild = new StringBuilder();
+		/*StringBuilder sBuild = new StringBuilder();
 		this.countTrue = 0;
 		this.countFalse = 0;
 		for(Boolean o:this.result){
@@ -39,13 +40,13 @@ public class TrueAndFalse implements ITrueAndFalse {
 				countFalse ++;
 				sBuild.append("x");
 			}
-		}
+		}*/
 		
 		//logger.info("<Result>\r\n");
 		logger.info(" [ x:{} ({}%), o:{} ({}%) ]\r\n", 
 				countFalse, ((float)countFalse*100/(float)(countFalse+countTrue)), 
 				countTrue, ((float)countTrue*100/(float)(countFalse+countTrue)));
-		logger.info("{}\r\n", sBuild.toString());
+		//logger.info("{}\r\n", sBuild.toString());
 		
 		for(int val:this.process){
 			if(val>=0)
@@ -58,6 +59,8 @@ public class TrueAndFalse implements ITrueAndFalse {
 	
 	public void run(int offset){
 		
+		this.countTrue = 0;
+		this.countFalse = 0;
 		this.max = 0;
 		this.sum = 0;
 		metaIndex = 0;
@@ -69,14 +72,14 @@ public class TrueAndFalse implements ITrueAndFalse {
 			if(max < current)//记录最大值
 				max = current;
 
-			if (result.get(this.resultIndex)) {
+			if (result.get(this.resultIndex)) {	this.countTrue++;
 				sum += metaData[this.metaIndex];
 				this.process.add(metaData[this.metaIndex]);
 				this.current = metaData[this.metaIndex];
 				//logger.info("+{}", metaData[this.metaIndex]);
 				if (this.metaIndex != 0)
 					this.metaIndex--;
-			} else {
+			} else {	this.countFalse++;
 				sum -= metaData[this.metaIndex];
 				this.process.add(-metaData[this.metaIndex]);
 				this.current = -metaData[this.metaIndex];

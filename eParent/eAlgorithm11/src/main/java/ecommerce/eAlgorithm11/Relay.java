@@ -15,6 +15,7 @@ public class Relay {
 	public class Result{
 		public int startOff;
 		public List<Boolean> result;
+		public List<List<Boolean>> detail;
 		public RelayPosition position;
 	}
 	
@@ -51,11 +52,13 @@ public class Relay {
 		index += this.source.get(index).needSkip(startOff)?1:0;//determine if this element should be skip
 		int newStartOff = index*length-1;
 		List<Boolean> result = new ArrayList<Boolean>();
+		List<List<Boolean>> detail = new ArrayList<List<Boolean>>();
 		for(int i=index; i<this.source.size(); i++){
 			
 			IElement current = this.source.get(i);
 			List<Boolean> tmp = current.execute(this.source.get(i-1));
 			result.addAll(tmp);
+			detail.add(tmp);
 			newStartOff += length;
 			if(tmp.size()==2 && tmp.get(0)==tmp.get(1) && !tmp.get(0)){
 				rtn.position = new RelayPosition(newStartOff-1, newStartOff);
@@ -64,6 +67,7 @@ public class Relay {
 		}
 		rtn.startOff = newStartOff;
 		rtn.result = result;
+		rtn.detail = detail;
 		return rtn;
 	}
 }

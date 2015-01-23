@@ -65,11 +65,12 @@
     </bean>
     	
     <!-- TrueAndFalse 运算何时回第一位开始运算 -->
-    <bean id="next" class="ecommerce.patterns.trueandfalse.GoNextOR">
+    <bean id="next" class="ecommerce.patterns.trueandfalse.GoNext"/>
+    <!-- <bean id="next" class="ecommerce.patterns.trueandfalse.GoNextOR">
     	<property name="goNext">
     		<array>
-    			<bean class="ecommerce.patterns.trueandfalse.gonext.GoNext1"/><!-- match oo -->
-    			<bean class="ecommerce.patterns.trueandfalse.gonext.GoNext4"/><!-- match oxo -->
+    			<bean class="ecommerce.patterns.trueandfalse.gonext.GoNext1"/>match oo
+    			<bean class="ecommerce.patterns.trueandfalse.gonext.GoNext4"/>match oxo
     			<bean class="ecommerce.patterns.trueandfalse.gonext.GoNextByProcess">
     				<property name="metaPosition" value="0"/>
     				<property name="target" value="-1,-2,+3"/>
@@ -88,10 +89,18 @@
     			</bean>
     		</array>
     	</property>
-    </bean>
+    </bean> -->
     
     <!-- TrueAndFalse 运算何时终止？ -->
-    <bean id="stop" class="ecommerce.patterns.trueandfalse.DoNotStop"/>
+    <!-- <bean id="stop" class="ecommerce.patterns.trueandfalse.DoNotStop"/> -->
+    <bean id="stop" class="ecommerce.patterns.trueandfalse.StopOR">
+    	<property name="stops">
+    		<array>
+    			<bean class="ecommerce.patterns.trueandfalse.stop.StopWhileTrue"/>
+    			<bean class="ecommerce.patterns.trueandfalse.stop.StopWhile6X"/>
+    		</array>
+    	</property>
+    </bean>
     
     <bean id="trueAndFalse" class="ecommerce.eAlgorithm11.TrueAndFalse">
     	<property name="stop" ref="stop"/>
