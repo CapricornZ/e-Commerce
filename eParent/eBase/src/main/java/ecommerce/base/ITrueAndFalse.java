@@ -5,7 +5,7 @@ import java.util.List;
 import ecommerce.patterns.trueandfalse.gonext.IGoNext;
 import ecommerce.patterns.trueandfalse.stop.IStop;
 
-public interface ITrueAndFalse {
+public interface ITrueAndFalse extends IView{
 	
 	void print();	
 	void run(int offset);
@@ -46,4 +46,9 @@ public interface ITrueAndFalse {
 	 * @return
 	 */
 	List<Integer> getProcess();
+	/***
+	 * 是否有效（只有当运算时满足终止条件的记录，由于o/x位数不足终止的返回false）
+	 * @return 是否有效（是否满足终止条件）
+	 */
+	boolean isValid();
 }

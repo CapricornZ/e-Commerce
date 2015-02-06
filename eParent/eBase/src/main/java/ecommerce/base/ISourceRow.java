@@ -16,9 +16,16 @@ abstract public class ISourceRow implements IRow {
 		return visitor.filter(this);
 	}
 	
-	@Override
-	public void print() {
-
+	@Override 
+	public Context getContext(){
+		String[] rows = this.format();
+		Context context = new Context();
+		context.put("SOURCE_ROW", rows);
+		return context;
+	}
+	
+	private String[] format(){
+		
 		char[] array=this.getSource().toCharArray();
 		char last = array[0];
 		int i=1, maxColumn=0;
@@ -42,12 +49,52 @@ abstract public class ISourceRow implements IRow {
 		matrix.add(column);
 		maxColumn = maxColumn>column.length?maxColumn:column.length;
 		
-		//logger.info("<Source>\r\n");
+		String[] rtn = new String[maxColumn];
 		for(i=0; i<maxColumn; i++){
+			StringBuilder sbRow = new StringBuilder();
 			for(char[] columnLine : matrix)
-				logger.info("{}", columnLine.length>i?columnLine[i]:' ');
-			logger.info("\r\n");
+				sbRow.append(columnLine.length>i?columnLine[i]:' ');
+			rtn[i] = sbRow.toString();
 		}
-		//logger.info("</Source>\r\n");
+		return rtn;
+	}
+
+	@Override
+	public void print() {
+
+		String[] rows = this.format();
+		for(String row : rows)
+			logger.info("{}\r\n", row);
+		
+		/*char[] array=this.getSource().toCharArray();
+		char last = array[0];
+		int i=1, maxColumn=0;
+		List<char[]> matrix = new ArrayList<char[]>();
+		StringBuilder sb = new StringBuilder();sb.append(last);
+		while(i<array.length){
+			if(array[i] != last){
+				
+				char[] column = sb.toString().toCharArray();
+				matrix.add(column);
+				maxColumn = maxColumn>column.length?maxColumn:column.length;
+				
+				last = array[i];
+				sb = new StringBuilder();sb.append(last);
+			} else
+				sb.append(last);
+			i++;
+		}
+		
+		char[] column = sb.toString().toCharArray();
+		matrix.add(column);
+		maxColumn = maxColumn>column.length?maxColumn:column.length;
+		
+		for(i=0; i<maxColumn; i++){
+			StringBuilder sbRow = new StringBuilder();
+			for(char[] columnLine : matrix)
+				sbRow.append(columnLine.length>i?columnLine[i]:' ');
+				//logger.info("{}", columnLine.length>i?columnLine[i]:' ');
+			logger.info("{}\r\n", sbRow.toString());
+		}*/
 	}
 }

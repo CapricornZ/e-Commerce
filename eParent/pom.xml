@@ -15,17 +15,19 @@
 		<module>eAlgorithm6</module>
 		<module>eAlgorithm7</module>
 		<module>eAlgorithm8</module>
-    <module>eAlgorithm9</module>
-    <module>eAlgorithm10</module>
-    <module>eAlgorithm11</module>
-    <module>eAlgorithm12</module>
+		<module>eAlgorithm9</module>
+		<module>eAlgorithm10</module>
+		<module>eAlgorithm11</module>
+		<module>eAlgorithm12</module>
+    <module>eAlgorithmWS</module>
   </modules>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<jdk-version>1.6</jdk-version>
 		<junit-version>4.11</junit-version>
-		<spring-version>3.2.2.RELEASE</spring-version>
+		<spring.version>3.2.10.RELEASE</spring.version>
+		<cxf.version>2.7.12</cxf.version>
 	</properties>
 
 	<build>
@@ -59,22 +61,22 @@
 			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-core</artifactId>
-				<version>${spring-version}</version>
+				<version>${spring.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-beans</artifactId>
-				<version>${spring-version}</version>
+				<version>${spring.version}</version>
 			</dependency>
 			<dependency>
-			    <groupId>org.springframework</groupId>
-			    <artifactId>spring-context</artifactId>
-			    <version>${spring-version}</version>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-context</artifactId>
+				<version>${spring.version}</version>
 			</dependency>
 			<dependency>
-			    <groupId>org.springframework</groupId>
-			    <artifactId>spring-context-support</artifactId>
-			    <version>${spring-version}</version>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-context-support</artifactId>
+				<version>${spring.version}</version>
 			</dependency>
 			<!-- velocity -->
 			<dependency>
@@ -82,6 +84,55 @@
 				<artifactId>velocity</artifactId>
 				<version>1.7</version>
 			</dependency>
+
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-web</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-webmvc</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-orm</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-tx</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+			<!-- CXF start -->
+			<dependency>
+				<groupId>org.apache.cxf</groupId>
+				<artifactId>cxf-rt-frontend-jaxws</artifactId>
+				<version>${cxf.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>com.sun.xml.bind</groupId>
+						<artifactId>jaxb-impl</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.cxf</groupId>
+				<artifactId>cxf-rt-frontend-jaxrs</artifactId>
+				<version>${cxf.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.cxf</groupId>
+				<artifactId>cxf-rt-rs-extension-providers</artifactId>
+				<version>${cxf.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.cxf</groupId>
+				<artifactId>cxf-rt-transports-http</artifactId>
+				<version>${cxf.version}</version>
+			</dependency>
+			<!-- CXF end -->
 		</dependencies>
 	</dependencyManagement>
 

@@ -1,0 +1,7 @@
+#if(${TAF_SHOULD_STOP})
+<pre>
+#foreach($row in $RESULT_ROW)
+	$row
+#end
+</pre>
+#end
