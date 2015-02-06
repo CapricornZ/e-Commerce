@@ -5,6 +5,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import ecommerce.base.Context;
 import ecommerce.base.ITrueAndFalse;
 import ecommerce.eAlgorithm12.TrueAndFalse;
 import ecommerce.patterns.trueandfalse.gonext.IGoNext;
@@ -27,6 +28,21 @@ public class TrueAndFalseEx implements ITrueAndFalse {
 	
 	public List<List<Boolean>> getResultDetail(){
 		return this.source;
+	}
+	
+	@Override
+	public Context getContext() {
+		Context context = this.taf.getContext();
+		StringBuilder sb = new StringBuilder();
+		sb.append("\t");
+		for(List<Boolean> swap : this.source){
+			for(Boolean val : swap)
+				sb.append(val?'o':'x');
+			sb.append(' ');
+		}
+		sb.append("\r\n");
+		context.put("TAF_SOURCE", sb.toString());
+		return context;
 	}
 	
 	@Override
@@ -78,4 +94,6 @@ public class TrueAndFalseEx implements ITrueAndFalse {
 	@Override
 	public List<Integer> getProcess() {return this.taf.getProcess();}
 
+	@Override
+	public boolean isValid() {return this.taf.isValid();}
 }

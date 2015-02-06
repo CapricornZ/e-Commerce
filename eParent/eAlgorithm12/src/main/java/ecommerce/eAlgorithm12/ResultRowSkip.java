@@ -6,6 +6,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import ecommerce.base.Context;
 import ecommerce.base.IResultRow;
 import ecommerce.base.IRow;
 import ecommerce.base.ITrueAndFalse;
@@ -44,8 +45,7 @@ public class ResultRowSkip implements IResultRow, IGetPositions{
 
 	@Override
 	public List<ITrueAndFalse> getResult() {
-		
-		this.bFirst = true;
+
 		List<List<Boolean>> total = new ArrayList<List<Boolean>>();
 		this.relayPos = new ArrayList<RelayPosition>();
 		this.startOff = 0;
@@ -84,7 +84,6 @@ public class ResultRowSkip implements IResultRow, IGetPositions{
 		rtn.add(new TrueAndFalseEx(total));
 		return rtn;
 	}
-	private boolean bFirst;
 	
 	@Override
 	public IRow run() {
@@ -102,6 +101,24 @@ public class ResultRowSkip implements IResultRow, IGetPositions{
 				sbRow.append(this.elements.get(column).getValue(rowIndex));
 			logger.debug("{}\r\n", sbRow.toString());
 		}
+	}
+
+	@Override
+	public Context getContext() {
+
+		int max=0;
+		for(IElementBuilder eb : elementBuilder)
+			max = eb.getLength()>max?eb.getLength():max;
+		List<String> rows = new ArrayList<String>();
+		for(int rowIndex=0; rowIndex<max; rowIndex++){
+			StringBuilder sbRow = new StringBuilder();
+			for(int column=0; column<this.elements.size(); column++)
+				sbRow.append(this.elements.get(column).getHtml(rowIndex));
+			rows.add(sbRow.toString());
+		}
+		Context rtn = new Context();
+		rtn.put("RESULT_ROW", rows);
+		return rtn;
 	}
 
 }

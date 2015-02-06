@@ -6,6 +6,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import ecommerce.base.Context;
 import ecommerce.base.ITrueAndFalse;
 import ecommerce.patterns.trueandfalse.gonext.IGoNext;
 import ecommerce.patterns.trueandfalse.stop.IStop;
@@ -16,36 +17,53 @@ public class TrueAndFalse implements ITrueAndFalse {
 	/*private static int[] metaData = new int[] { 1, 2, 3, 5, 8, 13, 21, 34,
 		55, 89, 144, 233, 377, 610, 987, 1597, 2584, 4181, 6765, 10946,
 		17711, 28657, 46368 };*/
-	private static int[] metaData = new int[] {1,3,7,15,31,63};
+	private static int[] metaData = new int[] {1,3,7,15,31,63,127,255,511,1023,2047,4095,8191};
 	
 	private List<Boolean> result;
 	private int resultIndex=0, metaIndex=0;
 	private List<Integer> process;
+	private boolean toBePrint = true;
+	
 	public TrueAndFalse(List<Boolean> result){
 		this.result = result;
 	}
 	public TrueAndFalse(){
 	}
 	
-	public void print(){
+	@Override
+	public Context getContext() {
 		
-		/*StringBuilder sBuild = new StringBuilder();
-		for(int i=0; i<this.countFalse+this.countTrue; i++)
-			if(this.result.get(i))
-				sBuild.append("o");
-			else
-				sBuild.append("x");*/
-
-		logger.info("{} [ x:{} ({}%), o:{} ({}%) ]\r\n", 
-				countFalse, ((float)countFalse*100/(float)(countFalse+countTrue)), 
+		Context context = new Context();
+		context.put("TAF_SHOULD_STOP", this.toBePrint);
+		StringBuilder sb = new StringBuilder();
+		String stastic = String.format(" = %d [MAX:%d, x:%d (%f%%), o:%d (%f%%)]\r\n", 
+				sum, max, 
+				countFalse, ((float)countFalse*100/(float)(countFalse+countTrue)),
 				countTrue, ((float)countTrue*100/(float)(countFalse+countTrue)));
 		
+		sb.append("\t");
 		for(int val:this.process){
-			if(val>=0)
-				logger.warn("+");
-			logger.warn("{}", val);
+			sb.append(val>=0?"+"+val:val);
 		}
-		logger.warn(" = {} [ MAX: {} ]\r\n", sum, max);
+		sb.append(stastic);
+		context.put("TAF_ROW", sb.toString());
+		return context;
+	}
+	
+	public void print(){
+
+		//if(this.toBePrint){
+			logger.info("[ x:{} ({}%), o:{} ({}%) ]\r\n", 
+					countFalse, ((float)countFalse*100/(float)(countFalse+countTrue)), 
+					countTrue, ((float)countTrue*100/(float)(countFalse+countTrue)));
+			
+			for(int val:this.process){
+				if(val>=0)
+					logger.warn("+");
+				logger.warn("{}", val);
+			}
+			logger.warn(" = {} [ MAX: {} ]\r\n", sum, max);
+		//}
 	}
 	
 	public void run(int offset){
@@ -82,6 +100,7 @@ public class TrueAndFalse implements ITrueAndFalse {
 			
 			shouldStop = TrueAndFalse.stop.match(this);
 		}
+		this.toBePrint = shouldStop;
 		//logger.info(" = {} [ MAX: {} ]\r\n", sum, max);
 	}
 
@@ -107,4 +126,5 @@ public class TrueAndFalse implements ITrueAndFalse {
 	public int getCountFalse(){return this.countFalse;}
 	public List<Boolean> getResult(){return this.result;}
 	@Override public List<Integer> getProcess() {return this.process;}
+	@Override public boolean isValid() {return this.toBePrint;}
 }

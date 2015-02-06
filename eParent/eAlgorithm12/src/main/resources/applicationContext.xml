@@ -10,10 +10,12 @@
 	
 	<!-- #####	APP 上下文	##### -->
 	<bean id="AppContext" class="ecommerce.eAlgorithm12.AppContext">
-		<property name="expectType" value="NEGTIVE"/><!-- POSITIVE | NEGTIVE -->
-		<property name="resultRowType" value="ecommerce.eAlgorithm12.ResultRowNonSkip"/>
+		
+		<property name="resultRowType" value="ecommerce.eAlgorithm12.ResultRowSkip"/>
+		<property name="swapType" value="XX-Once"/><!-- XX | XX-Once -->
 		<property name="destinationFolder" value="/home/martin/"/>
-		<property name="swapType" value="XX"/><!-- XX | XX-Once -->
+		<property name="countOfX" value="6"/>
+		<property name="expectType" value="POSITIVE"/><!-- "POSITIVE" | "NEGTIVE" -->
 		<property name="elementBuilders">
 			<array>
         		<bean class="ecommerce.eAlgorithm12.element.Element4Builder"/>
@@ -137,7 +139,11 @@
     	<property name="stops">
     		<array>
     			<bean class="ecommerce.patterns.trueandfalse.stop.StopWhileTrue"/>
-    			<bean class="ecommerce.patterns.trueandfalse.stop.StopWhile6X"/>
+    			<bean class="ecommerce.patterns.trueandfalse.stop.StopWhileNX">
+    				<property name="n">
+    					<bean factory-bean="AppContext" factory-method="getCountOfX"/>
+    				</property>
+    			</bean>
     		</array>
     	</property>
     </bean>

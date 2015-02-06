@@ -76,6 +76,21 @@ public class Element5 implements IElement{
 	}
 	
 	@Override
+	public String getHtml(int columnIndex) {
+		if(this.result[3] == this.result[4] && this.result[3]=='x' && columnIndex>2){
+			if(columnIndex<5 && columnIndex<this.source.length)
+				return String.format("<font color='red'>%c%c</font>", this.source[columnIndex], this.result[columnIndex]);
+			else
+				return "__";
+		} else {
+			if(columnIndex<5 && columnIndex<this.source.length)
+				return String.format("%c%c", this.source[columnIndex], this.result[columnIndex]);
+			else
+				return "__";
+		}
+	}
+	
+	@Override
 	public List<Boolean> execute(IElement other, boolean result2this) {
 		
 		List<Boolean> rtn = new ArrayList<Boolean>();

@@ -6,6 +6,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import ecommerce.base.Context;
 import ecommerce.base.IResultRow;
 import ecommerce.base.IRow;
 import ecommerce.base.ITrueAndFalse;
@@ -100,5 +101,23 @@ public class ResultRowNonSkip2 implements IResultRow,IGetPositions {
 				sbRow.append(this.elements.get(column).getValue(rowIndex));
 			logger.debug("{}\r\n", sbRow.toString());
 		}
+	}
+	
+	@Override
+	public Context getContext() {
+
+		int max=0;
+		for(IElementBuilder eb : elementBuilder)
+			max = eb.getLength()>max?eb.getLength():max;
+		List<String> rows = new ArrayList<String>();
+		for(int rowIndex=0; rowIndex<max; rowIndex++){
+			StringBuilder sbRow = new StringBuilder();
+			for(int column=0; column<this.elements.size(); column++)
+				sbRow.append(this.elements.get(column).getHtml(rowIndex));
+			rows.add(sbRow.toString());
+		}
+		Context rtn = new Context();
+		rtn.put("RESULT_ROW", rows);
+		return rtn;
 	}
 }

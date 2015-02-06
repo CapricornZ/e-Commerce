@@ -34,6 +34,11 @@
 			<artifactId>spring-context-support</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>org.apache.velocity</groupId>
+			<artifactId>velocity</artifactId>
+		</dependency>
+		
 		<!-- ecommerce Libs -->
 		<dependency>
 			<groupId>ecommerce</groupId>
@@ -41,4 +46,32 @@
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
+	
+	<profiles>
+		<profile>
+			<id>default</id>
+			<properties>
+				<SwapType>XX-Once</SwapType>
+				<ExpectType>POSITIVE</ExpectType>
+			</properties>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+		</profile>
+		<profile>
+			<id>XX</id>
+			<properties>
+				<SwapType>XX</SwapType>
+				<ExpectType>NEGTIVE</ExpectType>
+			</properties>
+		</profile>
+	</profiles>
+	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+	</build>
 </project>

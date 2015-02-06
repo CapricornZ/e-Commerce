@@ -1,11 +1,23 @@
 package ecommerce.eAlgorithm12;
 
 import ecommerce.eAlgorithm12.element.Element4;
-import ecommerce.eAlgorithm12.element.Element4.PatternPositive;
 import ecommerce.eAlgorithm12.element.Element5;
 import ecommerce.eAlgorithm12.element.IElementBuilder;
 
 public class AppContext {
+
+	public String getOutput(){
+		StringBuilder sb = new StringBuilder();
+		sb.append(this.destinationFolder + countOfX+"x/");
+		sb.append(this.expectType.equals("POSITIVE")?"正,":"反,");
+		sb.append(this.elementBuilders[0] instanceof ecommerce.eAlgorithm12.element.Element4Builder?"先4":"先5");
+		sb.append(".html");
+		return sb.toString();
+	}
+	
+	private int countOfX;
+	public void setCountOfX(int value){this.countOfX = value;}
+	public int getCountOfX(){return this.countOfX;}
 	
 	//##### SWAP TYPE #####
 	private String swapType;
@@ -26,8 +38,10 @@ public class AppContext {
 	}
 	
 	//##### Expect #####
+	private String expectType;
 	private IExpect element4Expect, element5Expect;
 	public void setExpectType(String type){
+		this.expectType = type;
 		if(type.equals("POSITIVE")){
 			this.element4Expect = new Element4.PatternPositive();
 			this.element5Expect = new Element5.PatternPositive();

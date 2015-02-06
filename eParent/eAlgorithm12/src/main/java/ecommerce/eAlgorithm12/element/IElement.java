@@ -7,6 +7,7 @@ public interface IElement {
 	char[] getSource();
 	boolean needSkip(int offSet);
 	String getValue(int columnIndex);
+	String getHtml(int columnIndex);
 	
 	void setResult(char[] result);
 	char[] getResult();
