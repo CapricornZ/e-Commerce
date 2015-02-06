@@ -6,6 +6,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import ecommerce.base.Context;
 import ecommerce.base.IResultRow;
 import ecommerce.base.IRow;
 import ecommerce.base.ITrueAndFalse;
@@ -46,6 +47,12 @@ public class ResultRow implements IResultRow {
 		List<ITrueAndFalse> rtn = new ArrayList<ITrueAndFalse>();
 		rtn.add(new TrueAndFalse(result));
 		return rtn;
+	}
+
+	@Override
+	public Context getContext() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

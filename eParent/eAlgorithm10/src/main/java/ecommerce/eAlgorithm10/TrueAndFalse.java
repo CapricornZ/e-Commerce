@@ -6,6 +6,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import ecommerce.base.Context;
 import ecommerce.base.ITrueAndFalse;
 import ecommerce.patterns.trueandfalse.gonext.IGoNext;
 import ecommerce.patterns.trueandfalse.stop.IStop;
@@ -113,4 +114,14 @@ public class TrueAndFalse implements ITrueAndFalse {
 	public int getCountFalse(){return this.countFalse;}
 	public List<Boolean> getResult(){return this.result;}
 	@Override public List<Integer> getProcess() {return this.process;}
+	@Override
+	public Context getContext() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public boolean isValid() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }
