@@ -82,6 +82,21 @@ public class Element4 implements IElement{
 		else
 			return "__";
 	}
+	@Override
+	public String getHtml(int columnIndex) {
+		if(this.result[2]==this.result[3] && this.result[2]=='x'){
+			if(columnIndex<this.source.length)
+				return String.format("<font color='red'>%c%c</font>", this.source[columnIndex], this.result[columnIndex]);
+			else
+				return "__";
+		}
+		else{
+			if(columnIndex<this.source.length)
+				return String.format("%c%c", this.source[columnIndex], this.result[columnIndex]);
+			else
+				return "__";
+		}
+	}
 	
 	@Override
 	public List<Boolean> execute(IElement other){

@@ -6,6 +6,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import ecommerce.base.Context;
 import ecommerce.base.ITrueAndFalse;
 import ecommerce.patterns.trueandfalse.gonext.IGoNext;
 import ecommerce.patterns.trueandfalse.stop.IStop;
@@ -21,6 +22,8 @@ public class TrueAndFalse implements ITrueAndFalse {
 	private List<Boolean> result;
 	private int resultIndex=0, metaIndex=0;
 	private List<Integer> process;
+	private boolean toBePrint = true;
+	
 	public TrueAndFalse(List<Boolean> result){
 		this.result = result;
 	}
@@ -29,24 +32,9 @@ public class TrueAndFalse implements ITrueAndFalse {
 	
 	public void print(){
 		
-		/*StringBuilder sBuild = new StringBuilder();
-		this.countTrue = 0;
-		this.countFalse = 0;
-		for(Boolean o:this.result){
-			if(o){
-				countTrue ++;
-				sBuild.append("o");
-			} else {
-				countFalse ++;
-				sBuild.append("x");
-			}
-		}*/
-		
-		//logger.info("<Result>\r\n");
 		logger.info(" [ x:{} ({}%), o:{} ({}%) ]\r\n", 
 				countFalse, ((float)countFalse*100/(float)(countFalse+countTrue)), 
 				countTrue, ((float)countTrue*100/(float)(countFalse+countTrue)));
-		//logger.info("{}\r\n", sBuild.toString());
 		
 		for(int val:this.process){
 			if(val>=0)
@@ -54,7 +42,6 @@ public class TrueAndFalse implements ITrueAndFalse {
 			logger.warn("{}", val);
 		}
 		logger.warn(" = {} [ MAX: {} ]\r\n", sum, max);
-		//logger.info("</Result>\r\n");
 	}
 	
 	public void run(int offset){
@@ -91,7 +78,7 @@ public class TrueAndFalse implements ITrueAndFalse {
 			
 			shouldStop = TrueAndFalse.stop.match(this);
 		}
-		//logger.info(" = {} [ MAX: {} ]\r\n", sum, max);
+		this.toBePrint = shouldStop;
 	}
 
 	static private IStop stop;
@@ -116,4 +103,24 @@ public class TrueAndFalse implements ITrueAndFalse {
 	public int getCountFalse(){return this.countFalse;}
 	public List<Boolean> getResult(){return this.result;}
 	@Override public List<Integer> getProcess() {return this.process;}
+	@Override
+	public Context getContext() {
+		
+		Context context = new Context();
+		context.put("TAF_SHOULD_STOP", this.toBePrint);
+		StringBuilder sb = new StringBuilder();
+		String stastic = String.format(" = %d [MAX:%d, x:%d (%f%%), o:%d (%f%%)]\r\n", 
+				sum, max, 
+				countFalse, ((float)countFalse*100/(float)(countFalse+countTrue)),
+				countTrue, ((float)countTrue*100/(float)(countFalse+countTrue)));
+		
+		sb.append("\t");
+		for(int val:this.process){
+			sb.append(val>=0?"+"+val:val);
+		}
+		sb.append(stastic);
+		context.put("TAF_ROW", sb.toString());
+		return context;
+	}
+	@Override public boolean isValid() {return this.toBePrint;}
 }

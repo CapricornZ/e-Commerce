@@ -6,6 +6,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import ecommerce.base.Context;
 import ecommerce.base.IResultRow;
 import ecommerce.base.IRow;
 import ecommerce.base.ITrueAndFalse;
@@ -27,21 +28,6 @@ public class ResultRow implements IResultRow {
 	@Override
 	public IRow run() {
 		return null;
-	}
-
-	@Override
-	public void print() {
-		//logger.debug("<Process>\r\n");
-		for(int relayIndex=0; relayIndex<relays.length; relayIndex++){
-			for(int rowIndex=0; rowIndex<relays[relayIndex].getLengthOfElement(); rowIndex++){
-				StringBuilder sbRow = new StringBuilder();
-				for(int columnIndex=0; columnIndex<relays[relayIndex].getElements().size(); columnIndex++)
-					sbRow.append(this.relays[relayIndex].getValue(rowIndex, columnIndex));
-				logger.debug("{}\r\n", sbRow.toString());
-			}
-			logger.debug("\r\n");
-		}
-		//logger.debug("</Process>\r\n");
 	}
 
 	@Override
@@ -68,5 +54,38 @@ public class ResultRow implements IResultRow {
 		rtn.add(new TrueAndFalseEx(total));
 		return rtn;
 	}
+	
+	@Override
+	public void print() {
 
+		for(int relayIndex=0; relayIndex<relays.length; relayIndex++){
+			for(int rowIndex=0; rowIndex<relays[relayIndex].getLengthOfElement(); rowIndex++){
+				StringBuilder sbRow = new StringBuilder();
+				for(int columnIndex=0; columnIndex<relays[relayIndex].getElements().size(); columnIndex++)
+					sbRow.append(this.relays[relayIndex].getValue(rowIndex, columnIndex));
+				logger.debug("{}\r\n", sbRow.toString());
+			}
+			logger.debug("\r\n");
+		}
+	}
+
+	@Override
+	public Context getContext() {
+		
+		List<String> rows = new ArrayList<String>();
+		for(int relayIndex=0; relayIndex<relays.length; relayIndex++){
+			for(int rowIndex=0; rowIndex<relays[relayIndex].getLengthOfElement(); rowIndex++){
+				StringBuilder sbRow = new StringBuilder();
+				for(int columnIndex=0; columnIndex<relays[relayIndex].getElements().size(); columnIndex++)
+					sbRow.append(this.relays[relayIndex].getValue(rowIndex, columnIndex));
+				logger.debug("{}\r\n", sbRow.toString());
+				rows.add(sbRow.toString());
+			}
+			logger.debug("\r\n");
+		}
+		
+		Context rtn = new Context();
+		rtn.put("RESULT_ROW", rows);
+		return rtn;
+	}
 }
