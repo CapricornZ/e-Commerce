@@ -1,5 +1,8 @@
 package elements;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Element5 implements IElement {
 	
 	/***
@@ -45,7 +48,7 @@ public class Element5 implements IElement {
 			return countOfSame>countOfDifference?expectDifference:expectSame;
 		}
 	}
-	
+
 	public Element5(IExpect expectMode, char[] source){
 		this.pattern = expectMode;
 		this.source = source;
@@ -53,12 +56,13 @@ public class Element5 implements IElement {
 	@Override public int getLength(){return this.source.length;}
 	private IExpect pattern;
 	private char[] source;
+	private boolean skipFlag = false;
 	
 	@Override
 	public char nextItem(IElement other) {
 		
 		char rtn = 0;
-		if(this.source.length<3)
+		if(this.skipFlag || this.source.length<3)
 			return rtn;
 		
 		Compare[] depends = new Compare[3];
@@ -75,7 +79,7 @@ public class Element5 implements IElement {
 		} else if(this.source.length==4){
 			if((expects[0]==Compare.same && other.getPositiveItem(3)==this.source[3])
 					||(expects[0]==Compare.difference && other.getNegtiveItem(3)==this.source[3]))
-				rtn = 1;
+				rtn = 0;
 			else
 				if(expects[1]==Compare.same)
 					rtn = other.getPositiveItem(4);
@@ -97,5 +101,48 @@ public class Element5 implements IElement {
 			return 'B';
 		else
 			return 'A';
+	}
+	
+	@Override
+	public char[] getSource(){
+		return this.source;
+	}
+	
+	@Override
+	public List<Boolean> execute(IElement other) {
+		
+		List<Boolean> rtn = new ArrayList<Boolean>();
+		if(this.source.length<=3)
+			return rtn;
+		
+		Compare[] depends = new Compare[3];
+		depends[0] = this.source[0]==other.getSource()[0]?Compare.same:Compare.difference;
+		depends[1] = this.source[1]==other.getSource()[1]?Compare.same:Compare.difference;
+		depends[2] = this.source[2]==other.getSource()[2]?Compare.same:Compare.difference;
+		
+		Compare[] expects = pattern.expects(depends);//r1&r2&r3得到期待值
+		
+		boolean val = expects[0] == (this.source[3]==other.getSource()[3]?Compare.same:Compare.difference);
+		rtn.add(val);
+		
+		if(!rtn.get(0) && this.source.length==5){//若刚才的结果为true,则跳过第二个运算
+			val = expects[1] == (this.source[4]==other.getSource()[4]?Compare.same:Compare.difference);
+			rtn.add(val);
+		}
+		
+		return rtn;
+	}
+	@Override
+	public void setSkipFlag() {
+		this.skipFlag = true;
+	}
+	@Override
+	public void append(char value) {
+		
+		char[] source = this.source;
+		this.source = new char[source.length+1];
+		this.source[source.length] = value;
+		System.arraycopy(source, 0, this.source, 0, source.length);
+		
 	}
 }

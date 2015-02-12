@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>ecommerce</groupId>
@@ -19,8 +20,8 @@
 		<module>eAlgorithm10</module>
 		<module>eAlgorithm11</module>
 		<module>eAlgorithm12</module>
-    <module>eAlgorithmWS</module>
-  </modules>
+		<module>eAlgorithmWS</module>
+	</modules>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -28,6 +29,7 @@
 		<junit-version>4.11</junit-version>
 		<spring.version>3.2.10.RELEASE</spring.version>
 		<cxf.version>2.7.12</cxf.version>
+		<jackson.version>1.8.4</jackson.version>
 	</properties>
 
 	<build>
@@ -133,6 +135,18 @@
 				<version>${cxf.version}</version>
 			</dependency>
 			<!-- CXF end -->
+
+			<!-- jackson -->
+			<dependency>
+				<groupId>org.codehaus.jackson</groupId>
+				<artifactId>jackson-core-asl</artifactId>
+				<version>${jackson.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.codehaus.jackson</groupId>
+				<artifactId>jackson-mapper-asl</artifactId>
+				<version>${jackson.version}</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 

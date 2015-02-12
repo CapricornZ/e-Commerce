@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Insert title here</title>
+	<script type="text/javascript" src="js/jquery/jquery-1.11.2.min.js"></script>
+	<script type="text/javascript">
+	$(function(){
+		$('#txtDataSource').on('input',function(e){
+			$.post('ajax/helloworld.do',
+					{source:$(this).val()},
+					function(data, status){
+						var rtn = eval('('+data+')');
+						$.each(rtn.elements, function(index, item){
+							$('#expect').html(item.algorithm+','+item.nextItem);
+						});
+					});
+		});
+	});
+	</script>
+</head>
+<body>
+DataSource<input id="txtDataSource" size="64"/>
+<BR/>
+expects:<div id="expect"></div>
+</body>
+</html>
