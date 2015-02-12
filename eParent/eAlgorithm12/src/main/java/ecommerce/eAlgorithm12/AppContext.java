@@ -16,7 +16,25 @@ public class AppContext {
 	}
 	
 	private int countOfX;
-	public void setCountOfX(int value){this.countOfX = value;}
+	public void setCountOfX(int value){
+		this.countOfX = value;
+		switch(this.countOfX){
+		case 6:
+			Skip.setLengthLimit(29);break;
+		case 7:
+			Skip.setLengthLimit(35);break;
+		case 8:
+			Skip.setLengthLimit(36);break;
+		case 9:
+			Skip.setLengthLimit(42);break;
+		case 10:
+			Skip.setLengthLimit(43);break;
+		case 11:
+			Skip.setLengthLimit(49);break;
+		case 12:
+			Skip.setLengthLimit(50);break;
+		}
+	}
 	public int getCountOfX(){return this.countOfX;}
 	
 	//##### SWAP TYPE #####

@@ -6,7 +6,22 @@ import ecommerce.base.ISourceRow;
 
 public class Skip {
 	
+	static private int lengthLimit;
+	static public void setLengthLimit(int limit){
+		lengthLimit = limit;
+	}
+	
+	/***
+	 * 1 长度检查
+	 * 2 3:1检查
+	 * @param row
+	 * @return
+	 */
 	static public boolean exam(ISourceRow row){
+		
+		//if(row.getSource().length()<lengthLimit)
+		//	return true;
+		
 		int[] index4 = new int[]{2,3,6,7};
 		int[] index5 = new int[]{3,4,8,9};
 		int[] count4 = new int[]{0,0};
