@@ -1,4 +1,4 @@
-package elements.algorithm;
+package elements.algorithmX;
 
 import java.util.List;
 
@@ -20,8 +20,8 @@ public class Swap {
 		
 		public SwapMatchXX(){}
 		@Override
-		public boolean exam(List<Boolean> result){
-			return result.size()==2 && !result.get(0) && !result.get(1);
+		public boolean exam(List<eAlgorithmWS.Item> result){
+			return result.size()==2 && !result.get(0).getValue() && !result.get(1).getValue();
 		}
 	}
 	
@@ -35,15 +35,15 @@ public class Swap {
 		public SwapMatchXXOnce(){}
 		private int count = 0;
 		@Override
-		public boolean exam(List<Boolean> result){
-			boolean rtn = result.size()==2 && !result.get(0) && !result.get(1) && count==0;
+		public boolean exam(List<eAlgorithmWS.Item> result){
+			boolean rtn = result.size()==2 && !result.get(0).getValue() && !result.get(1).getValue() && count==0;
 			if(rtn)
 				count++;
 			return rtn;
 		}
 	}
 	
-	public boolean exam(List<Boolean> result){
+	public boolean exam(List<eAlgorithmWS.Item> result){
 		return false;
 	}
 }

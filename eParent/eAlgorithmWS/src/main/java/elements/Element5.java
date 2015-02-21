@@ -49,14 +49,16 @@ public class Element5 implements IElement {
 		}
 	}
 
-	public Element5(IExpect expectMode, char[] source){
+	public Element5(IExpect expectMode, char[] source, int startOff){
 		this.pattern = expectMode;
 		this.source = source;
+		this.startOff = startOff;
 	}
 	@Override public int getLength(){return this.source.length;}
 	private IExpect pattern;
 	private char[] source;
 	private boolean skipFlag = false;
+	private int startOff;
 	
 	@Override
 	public char nextItem(IElement other) {
@@ -109,9 +111,9 @@ public class Element5 implements IElement {
 	}
 	
 	@Override
-	public List<Boolean> execute(IElement other) {
+	public List<eAlgorithmWS.Item> execute(IElement other) {
 		
-		List<Boolean> rtn = new ArrayList<Boolean>();
+		List<eAlgorithmWS.Item> rtn = new ArrayList<eAlgorithmWS.Item>();
 		if(this.source.length<=3)
 			return rtn;
 		
@@ -121,17 +123,17 @@ public class Element5 implements IElement {
 		depends[2] = this.source[2]==other.getSource()[2]?Compare.same:Compare.difference;
 		
 		Compare[] expects = pattern.expects(depends);//r1&r2&r3得到期待值
-		
 		boolean val = expects[0] == (this.source[3]==other.getSource()[3]?Compare.same:Compare.difference);
-		rtn.add(val);
+		rtn.add(new eAlgorithmWS.Item(this.startOff+3, this.source[3], val));
 		
-		if(!rtn.get(0) && this.source.length==5){//若刚才的结果为true,则跳过第二个运算
+		if(!val && this.source.length==5){//若刚才的结果为true,则跳过第二个运算
 			val = expects[1] == (this.source[4]==other.getSource()[4]?Compare.same:Compare.difference);
-			rtn.add(val);
+			rtn.add(new eAlgorithmWS.Item(this.startOff+4, this.source[4], val));
 		}
 		
 		return rtn;
 	}
+
 	@Override
 	public void setSkipFlag() {
 		this.skipFlag = true;
@@ -143,6 +145,9 @@ public class Element5 implements IElement {
 		this.source = new char[source.length+1];
 		this.source[source.length] = value;
 		System.arraycopy(source, 0, this.source, 0, source.length);
-		
+	}
+	@Override
+	public String toString() {
+		return String.format("%s", this.source.toString());
 	}
 }

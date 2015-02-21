@@ -6,24 +6,67 @@
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
     	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
 	
-	<bean id="Element4Builder" class="elements.builder.Element4Builder">
+	<bean name="ALG12_4_POSITIVE" class="elements.algorithmX.RowSkip">
+		<property name="swap" value="XX"/>
+		<property name="builders">
+			<array>
+				<ref bean="Positive_Element4Builder"/>
+				<ref bean="Positive_Element5Builder"/>
+			</array>
+		</property>
+	</bean>
+	
+	<bean name="ALG12_4_NEGTIVE" class="elements.algorithmX.RowSkip">
+		<property name="swap" value="XX"/>
+		<property name="builders">
+			<array>
+				<ref bean="Negtive_Element4Builder"/>
+				<ref bean="Negtive_Element5Builder"/>
+			</array>
+		</property>
+	</bean>
+	
+	<bean name="ALG12_5_POSITIVE" class="elements.algorithmX.RowSkip">
+		<property name="swap" value="XX"/>
+		<property name="builders">
+			<array>
+				<ref bean="Positive_Element5Builder"/>
+				<ref bean="Positive_Element4Builder"/>
+			</array>
+		</property>
+	</bean>
+	
+	<bean name="ALG12_5_NEGTIVE" class="elements.algorithmX.RowSkip">
+		<property name="swap" value="XX"/>
+		<property name="builders">
+			<array>
+				<ref bean="Negtive_Element5Builder"/>
+				<ref bean="Negtive_Element4Builder"/>
+			</array>
+		</property>
+	</bean>
+	
+	<!-- Positive Builders -->
+	<bean id="Positive_Element4Builder" class="elements.builder.Element4Builder">
 		<property name="expect">
 			<bean class="elements.Element4$PatternPositive"/>
 		</property>
 	</bean>
-	<bean id="Element5Builder" class="elements.builder.Element5Builder">
+	<bean id="Positive_Element5Builder" class="elements.builder.Element5Builder">
 		<property name="expect">
 			<bean class="elements.Element5$PatternPositive"/>
 		</property>
 	</bean>
 	
-	<bean name="ALG12" class="elements.algorithm.RowNonSkip2">
-		<property name="swap" value="XX-Once"/>
-		<property name="builders">
-			<array>
-				<ref bean="Element4Builder"/>
-				<ref bean="Element5Builder"/>
-			</array>
+	<!-- Negtive Builders -->
+	<bean id="Negtive_Element4Builder" class="elements.builder.Element4Builder">
+		<property name="expect">
+			<bean class="elements.Element4$PatternNegtive"/>
+		</property>
+	</bean>
+	<bean id="Negtive_Element5Builder" class="elements.builder.Element5Builder">
+		<property name="expect">
+			<bean class="elements.Element5$PatternNegtive"/>
 		</property>
 	</bean>
 </beans>

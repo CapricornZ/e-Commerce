@@ -4,13 +4,28 @@ import java.util.List;
 
 public class Result {
 	
-	private List<Element> elements;
+	private String sourceRow;
+	public String getSourceRow() {
+		return sourceRow;
+	}
+	public void setSourceRow(String sourceRow) {
+		this.sourceRow = sourceRow;
+	}
 	
-	public List<Element> getElements() {
-		return elements;
+	private String formatSourceRow;
+	public String getFormatSourceRow() {
+		return formatSourceRow;
 	}
-
-	public void setElements(List<Element> elements) {
-		this.elements = elements;
+	public void setFormatSourceRow(String formatSourceRow) {
+		this.formatSourceRow = formatSourceRow;
 	}
+	
+	private List<Phase> phases;
+	public List<Phase> getPhases() {
+		return phases;
+	}
+	public void setPhases(List<Phase> phases) {
+		this.phases = phases;
+	}
+	
 }

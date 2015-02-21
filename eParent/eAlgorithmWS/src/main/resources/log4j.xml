@@ -16,11 +16,9 @@
 		</layout>
 	</appender>
 	
-	<logger name="ecommerce.eAlgorithm12" additivity="false">
+	<logger name="elements" additivity="false">
 		<level value="DEBUG" />
-		<appender-ref ref="CONSOLE-CLEAN" />
-		<appender-ref ref="FILE-CLEAN" />
-		<appender-ref ref="FILE-STASTIC" />
+		<appender-ref ref="CONSOLE" />
 	</logger>
 	
 	<root>

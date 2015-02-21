@@ -13,8 +13,21 @@
     	
     <import resource="ALG.xml"/>
 
+	<!-- 
 	<bean class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor"/>
 	<context:component-scan base-package="elements.controller" />
+	-->
+	
+	<bean class="elements.controller.AjaxController">
+		<property name="algorithms">
+			<array>
+				<ref bean="ALG12_4_POSITIVE"/>
+				<ref bean="ALG12_4_NEGTIVE"/>
+				<ref bean="ALG12_5_POSITIVE"/>
+				<ref bean="ALG12_5_NEGTIVE"/>
+			</array>
+		</property>
+	</bean>
 	<bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping" />
 	<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
 		<property name="messageConverters">

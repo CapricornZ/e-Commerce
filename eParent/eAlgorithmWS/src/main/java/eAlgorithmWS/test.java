@@ -5,31 +5,69 @@ import java.util.List;
 
 import elements.Element4;
 import elements.IElement;
+import elements.algorithmX.RowSkip;
 import elements.builder.Element4Builder;
+import elements.builder.IElementBuilder;
+import elements.patterns.GoNext;
+import elements.patterns.IStop;
+import elements.patterns.StopOR;
+import elements.patterns.StopWhileNX;
+import elements.patterns.StopWhileTrue;
 
 public class test {
 
 	public static void main(String[] args) {
+		MultiSourceRow multi = new MultiSourceRow("BBABAABBBBBBBAABBBABABAAABBBAABABBBABABAAB");
 		
-		//String source = "BAAAAAAABAABBBABBBAABBBAABAABBAABABBAAAABAABAABBAABBBABBBBAAAAA";
-		String source = "BAAAAAABAB";
-		Element4Builder builder4 = new Element4Builder();
-		builder4.setExpect(new Element4.PatternNegtive());
-
-		boolean stop = false;
-		int startOff = 0;
-		List<IElement> elements = new ArrayList<IElement>();
-		while(!stop){
-			IElement element = builder4.createElement(source, startOff);
-			elements.add(element);
-			startOff += element.getLength();
-			stop = startOff>=source.length();
+		elements.builder.Element5Builder builder5 = new elements.builder.Element5Builder();
+		builder5.setExpect(new elements.Element5.PatternPositive());
+		elements.builder.Element4Builder builder4 = new elements.builder.Element4Builder();
+		builder4.setExpect(new elements.Element4.PatternPositive());
+		
+		TrueAndFalse.setGoNext(new GoNext());
+		StopOR stop = new StopOR();
+		stop.setStops(new IStop[]{new StopWhileTrue(), new StopWhileNX(6)});
+		TrueAndFalse.setStop(stop);
+		
+		RowSkip alg12 = new RowSkip();
+		alg12.setBuilders(new IElementBuilder[]{builder5, builder4});
+		alg12.setSwap("XX");
+		
+		List<List<Item>> total = new ArrayList<List<Item>>();
+		for(eAlgorithmWS.ISourceRow single : multi.generate()){
+			eAlgorithmWS.ITrueAndFalse taf = alg12.execute(single);
+			List<Item> source = taf.getSource();
+			total.add(source);
 		}
-		char rtn = elements.get(elements.size()-1).nextItem(elements.get(elements.size()-2));
-		
-		//Element4 element1 = new Element4(new Element4.PatternNegtive(), new char[]{'A','B','A','B'});
-		//Element4 element2 = new Element4(new Element4.PatternNegtive(), new char[]{'A','B','B'});
-		//char rtn = element2.nextItem(element1);
-		System.out.println(rtn);
+
+		String source = "";
+		for(int index=0; index<multi.getSource().length(); index++){
+			int max = 0;
+			for(List<Item> row:total){
+				for(int i=0; i<row.size(); i++){
+					if(row.get(i).getIndex() == index)
+						max = max>row.get(i).getCount()?max:row.get(i).getCount();
+				}
+			}
+			source += multi.getSource().charAt(index);
+			int size = String.format("%d", max).length();
+			for(int i=0; i<size-1; i++)
+				source += " ";
+		}
+		System.out.println(source);
+		for(List<Item> row:total){
+			String result = "";
+			int startOff = 0;
+			for(Item item:row){
+				for(int i=startOff; i<item.getIndex(); i++)
+					result += " ";
+				
+				int count = Math.abs(item.getCount());
+				result += count;
+				
+				startOff = item.getIndex()+1;
+			}
+			System.out.println(result);
+		}
 	}
 }

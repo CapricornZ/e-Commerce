@@ -2,26 +2,44 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<title>Insert title here</title>
+	<title>ABAB...</title>
 	<script type="text/javascript" src="js/jquery/jquery-1.11.2.min.js"></script>
 	<script type="text/javascript">
+	
 	$(function(){
 		$('#txtDataSource').on('input',function(e){
+			
+			var inputSource = $(this).val()+'A';
 			$.post('ajax/helloworld.do',
-					{source:$(this).val()},
+					{source:inputSource},
 					function(data, status){
+						
 						var rtn = eval('('+data+')');
-						$.each(rtn.elements, function(index, item){
-							$('#expect').html(item.algorithm+','+item.nextItem);
-						});
-					});
-		});
-	});
+						var result = '';
+						var source = '';
+						var startOff = 0;
+						//alert(data);
+						$('#size').html('size=' + rtn[0].length);
+						$('#source').html(rtn[0]);
+						$('#sourceFormat').html(rtn[1]);
+						$('#result').html(" ");
+						for(i=2; i<rtn.length; i++){
+							//$('#result'+(i-1)).html(rtn[i]);
+							$('#result').append('<span>'+rtn[i]+'</span><br/>');
+						}
+						
+					});//$.post
+		});//on
+	});//$
 	</script>
 </head>
 <body>
-DataSource<input id="txtDataSource" size="64"/>
+DataSource<input id="txtDataSource" size="64" value="BBABAABBBBBBBAABBBABABAAABBBAABABBBABABAAB"/><span id="size"></span>
 <BR/>
-expects:<div id="expect"></div>
+<pre>
+<span id="sourceFormat"></span>
+<span id="source"></span>
+<span id="result"></span>
+</pre>
 </body>
 </html>

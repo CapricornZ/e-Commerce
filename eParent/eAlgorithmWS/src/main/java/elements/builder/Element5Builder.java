@@ -10,7 +10,7 @@ public class Element5Builder implements IElementBuilder{
 	public IElement createElement(String source, int startOff) {
 		int length = startOff+5<source.length()?5:source.length()-startOff;
 		char[] data = source.substring(startOff, startOff+length).toCharArray();
-		return new Element5(this.getExpect(), data);
+		return new Element5(this.getExpect(), data, startOff);
 	}
 	
 	private IExpect expect;

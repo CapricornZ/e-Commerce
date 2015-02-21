@@ -10,7 +10,7 @@ public interface IElement {
 	char getPositiveItem(int index);
 	char getNegtiveItem(int index);
 	
-	List<Boolean> execute(IElement other);
+	List<eAlgorithmWS.Item> execute(IElement other);
 	char[] getSource();
 	void append(char value);
 }
