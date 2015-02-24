@@ -20,13 +20,13 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import ecommerce.FileAccess;
 import ecommerce.base.Context;
-import ecommerce.base.IResultRow;
+import ecommerce.base.IResultRowX;
 import ecommerce.base.IRow;
 import ecommerce.base.ISourceRow;
 import ecommerce.base.ITrueAndFalse;
-import ecommerce.base.SourceRowConvert;
 import ecommerce.base.stastic.ISequentialStastic;
 import ecommerce.base.stastic.SequentialForSection;
+import ecommerce.eAlgorithm12.SourceRowBuilder.TypeOfPattern;
 
 public class App {
 	
@@ -60,9 +60,9 @@ public class App {
 		OutputStreamWriter htmlWriter = new OutputStreamWriter(new FileOutputStream(params.getOutput()), "GBK");
 		BufferedReader bufferedReader = new BufferedReader(read);
 		String lineTxt = null;
-		List<IResultRow> totalResult = new ArrayList<IResultRow>();
+		List<IResultRowX> totalResult = new ArrayList<IResultRowX>();
 		List<List<ITrueAndFalse>> totalTAF = new ArrayList<List<ITrueAndFalse>>();
-		int maxCountOfTaf = 0;
+		int maxCountOfTaf = 1;
 		int number = 1;
 		int countOfSkip = 0;
 		while ((lineTxt = bufferedReader.readLine()) != null) {
@@ -75,53 +75,82 @@ public class App {
 			
 			Context viewContext = new Context();
 			
-			IRow sRow = null;
-			if(fileType.equals("0"))
-				sRow = new SourceRow(source);
-			else
-				sRow = SourceRowConvert.convert(source, SourceRow.class);
-			
-			logger.warn("{}.\r\n", number);
-			viewContext.put("NO", number++);
-			
-			if(Skip.exam((ISourceRow)sRow)){
-				countOfSkip++;
-				sRow.print();
-				viewContext.mergeContext(sRow.getContext());
+			int subNumber = 0;
+			boolean valid = true;
+			List<ISourceRow> tmpSourceRow = new ArrayList<ISourceRow>();
+			List<IResultRowX> tmpResult = new ArrayList<IResultRowX>();
+			List<List<ITrueAndFalse>> tmpTAF = new ArrayList<List<ITrueAndFalse>>();
+			IRow sourceRow = null;
+			for(int i=0; valid && i<TypeOfPattern.values().length; i++){
+
+				IRow sRow = SourceRowBuilder.create(source, 0, TypeOfPattern.values()[i]);
+				logger.warn("-----{}.{}-----\r\n", number, subNumber);
+				viewContext.put("NO", String.format("-----%d-----", number, subNumber++));
+				
+				while(!IResultRowX.class.isAssignableFrom(sRow.getClass())){
+					//if(subNumber == 1){
+					//	sRow.print();
+					//	sourceRow = sRow;
+						//viewContext.mergeContext(sRow.getContext());
+					//}
+					sRow = sRow.run();
+				}
+				
+				IResultRowX rowResult = (IResultRowX)sRow;
+				List<ITrueAndFalse> rtn = rowResult.getResult();
+				ISourceRow validSourceRow = rowResult.getSource();
+				validSourceRow.print();
+				
+				//sRow.print();
+				//viewContext.mergeContext(sRow.getContext());
+				rtn.get(0).run(0);
+				rtn.get(0).print();
+				//if(rtn.get(0).isValid()){
+				if(rowResult.isStopValid()){
+					tmpSourceRow.add(validSourceRow);
+					tmpResult.add(rowResult);
+					tmpTAF.add(rtn);					
+				} else
+					valid = false;
+				
+				//for(ITrueAndFalse taf : rtn){
+				//	countOfTaf ++ ;
+				//	taf.run(0);
+				//	taf.print();
+				//	viewContext.mergeContext(taf.getContext());
+				//}
+				//if(countOfTaf > maxCountOfTaf)
+				//	maxCountOfTaf = countOfTaf;
+				
+				//totalResult.add(rowResult);
+				//totalTAF.add(rtn);
+				
+				//java.io.StringWriter sw = new java.io.StringWriter();
+				//velocityEngine.mergeTemplate("main.vm", "utf-8", viewContext.getContext(), sw);
+				//String s = sw.toString();
+				//htmlWriter.write(s);
+			}
+			if(valid){
+				totalResult.addAll(tmpResult);
+				totalTAF.addAll(tmpTAF);
+				//viewContext.mergeContext(sourceRow.getContext());
+				ResultRowSkip.CompositeView resultRows = new ResultRowSkip.CompositeView();
+				for(IResultRowX resultRow : tmpResult)
+					resultRows.append(resultRow);
+				viewContext.mergeContext(resultRows.getContext());
+				
+				TrueAndFalseEx.CompositeView tafRows = new TrueAndFalseEx.CompositeView();
+				for(List<ITrueAndFalse> tafs : tmpTAF)
+					tafRows.append(tafs.get(0));
+				viewContext.mergeContext(tafRows.getContext());
+					//viewContext.mergeContext(tafs.get(0).getContext());
+				
 				java.io.StringWriter sw = new java.io.StringWriter();
 				velocityEngine.mergeTemplate("main.vm", "utf-8", viewContext.getContext(), sw);
 				String s = sw.toString();
 				htmlWriter.write(s);
-				continue;
 			}
-
-			while(!IResultRow.class.isAssignableFrom(sRow.getClass())){
-				sRow.print();
-				viewContext.mergeContext(sRow.getContext());
-				sRow = sRow.run();
-			}
-			
-			IResultRow rowResult = (IResultRow)sRow;
-			List<ITrueAndFalse> rtn = rowResult.getResult();
-			sRow.print();
-			viewContext.mergeContext(sRow.getContext());
-			int countOfTaf = 0;
-			for(ITrueAndFalse taf : rtn){
-				countOfTaf ++ ;
-				taf.run(0);
-				taf.print();
-				viewContext.mergeContext(taf.getContext());
-			}
-			if(countOfTaf > maxCountOfTaf)
-				maxCountOfTaf = countOfTaf;
-			
-			totalResult.add(rowResult);
-			totalTAF.add(rtn);
-			
-			java.io.StringWriter sw = new java.io.StringWriter();
-			velocityEngine.mergeTemplate("main.vm", "utf-8", viewContext.getContext(), sw);
-			String s = sw.toString();
-			htmlWriter.write(s);
+			number++;
 		}
 		bufferedReader.close();
 		//htmlWriter.close();
@@ -137,7 +166,7 @@ public class App {
 		//>>>>>>begin
 		int countOfXX=0;
 		Map<String, Integer> repoPositions = new HashMap<String, Integer>();
-		for(IResultRow rowResult:totalResult){
+		for(IResultRowX rowResult:totalResult){
 			List<RelayPosition> positions = ((IGetPositions)rowResult).getRelayPositions();
 			countOfXX+=positions.size();
 			for(RelayPosition pos : positions){

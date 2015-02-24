@@ -8,11 +8,6 @@ import ecommerce.eAlgorithm12.IExpect;
 
 public class Element5 implements IElement{
 	
-	static private IExpect pattern;
-	static public void setExpect(IExpect expect){
-		pattern = expect;
-	}
-	
 	/***
 	 * 期待值总是两个较多元素
 	 * 例如：
@@ -59,8 +54,10 @@ public class Element5 implements IElement{
 	
 	private char[] source;
 	private char[] result;
-	public Element5(char[] source){
+	private IExpect pattern;
+	public Element5(char[] source, IExpect pattern){
 		this.source = source;
+		this.pattern = pattern;
 		this.result = new char[]{'_','_','_','_','_'};
 	}
 	@Override
@@ -152,6 +149,5 @@ public class Element5 implements IElement{
 		this.source = new char[source.length+1];
 		this.source[source.length] = val;
 		System.arraycopy(source, 0, this.source, 0, source.length);
-		
 	}
 }

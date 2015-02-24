@@ -13,5 +13,4 @@ public class StopWhileTrue implements IStop {
 		int pos = taf.getResultPos() - 1;
 		return result.get(pos);
 	}
-
 }

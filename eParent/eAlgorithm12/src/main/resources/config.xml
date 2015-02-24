@@ -1,0 +1,79 @@
+<beans xmlns="http://www.springframework.org/schema/beans"  
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"   
+    xmlns:p="http://www.springframework.org/schema/p"  
+    xsi:schemaLocation="http://www.springframework.org/schema/beans   
+    http://www.springframework.org/schema/beans/spring-beans-3.1.xsd"> 
+    
+    <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="staticMethod" value="ecommerce.eAlgorithm12.SourceRowBuilder.setPositive4"/>
+        <property name="arguments">
+        	<array>
+        		<ref bean="positive4"/>
+        		<ref bean="positive5"/>
+        	</array>
+        </property>
+    </bean>
+    
+    <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="staticMethod" value="ecommerce.eAlgorithm12.SourceRowBuilder.setPositive5"/>
+        <property name="arguments">
+        	<array>
+        		<ref bean="positive5"/>
+        		<ref bean="positive4"/>
+        	</array>
+        </property>
+    </bean>
+    
+    <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="staticMethod" value="ecommerce.eAlgorithm12.SourceRowBuilder.setNegtive4"/>
+        <property name="arguments">
+        	<array>
+        		<ref bean="negtive4"/>
+        		<ref bean="negtive5"/>
+        	</array>
+        </property>
+    </bean>
+    
+    
+    <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="staticMethod" value="ecommerce.eAlgorithm12.SourceRowX.setTypeOfResultRow"/>
+        <property name="arguments">
+        	<bean factory-bean="AppContext" factory-method="getResultRowType"/>
+        </property>
+    </bean>
+    
+    <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="staticMethod" value="ecommerce.eAlgorithm12.SourceRowBuilder.setNegtive5"/>
+        <property name="arguments">
+        	<array>
+        		<ref bean="negtive5"/>
+        		<ref bean="negtive4"/>
+        	</array>
+        </property>
+    </bean>
+
+	<!-- 正4 -->
+	<bean id="positive4" class="ecommerce.eAlgorithm12.element.Element4Builder">
+		<property name="expect">
+			<bean class="ecommerce.eAlgorithm12.element.Element4$PatternPositive"/>
+		</property>
+	</bean>
+	<!-- 正5 -->
+	<bean id="positive5" class="ecommerce.eAlgorithm12.element.Element5Builder">
+		<property name="expect">
+			<bean class="ecommerce.eAlgorithm12.element.Element5$PatternPositive"/>
+		</property>
+	</bean>
+	<!-- 反4 -->
+	<bean id="negtive4" class="ecommerce.eAlgorithm12.element.Element4Builder">
+		<property name="expect">
+			<bean class="ecommerce.eAlgorithm12.element.Element4$PatternNegtive"/>
+		</property>
+	</bean>
+	<!-- 反5 -->
+	<bean id="negtive5" class="ecommerce.eAlgorithm12.element.Element5Builder">
+		<property name="expect">
+			<bean class="ecommerce.eAlgorithm12.element.Element5$PatternNegtive"/>
+		</property>
+	</bean>
+</beans>

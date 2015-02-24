@@ -9,5 +9,4 @@ public class GoNext implements IGoNext {
 	public int GetNext(ITrueAndFalse taf) {
 		return taf.getMetaPos();
 	}
-
 }

@@ -7,12 +7,38 @@ import org.slf4j.LoggerFactory;
 
 import ecommerce.base.Context;
 import ecommerce.base.ITrueAndFalse;
+import ecommerce.base.IView;
 import ecommerce.eAlgorithm12.TrueAndFalse;
 import ecommerce.patterns.trueandfalse.gonext.IGoNext;
 import ecommerce.patterns.trueandfalse.stop.IStop;
 
 
 public class TrueAndFalseEx implements ITrueAndFalse {
+	
+	static public class CompositeView implements IView{
+		private List<IView> views = new ArrayList<IView>();
+		public void append(IView view){
+			this.views.add(view);
+		}
+
+		@Override
+		public Context getContext() {
+			List<Object> tafSource = new ArrayList<Object>();
+			List<Object> tafRow = new ArrayList<Object>();
+			for(IView view:this.views){
+				Context context = view.getContext();
+				Object obj = context.getContext().get("TAF_SOURCE");
+				tafSource.add(obj);
+				obj = context.getContext().get("TAF_ROW");
+				tafRow.add(obj);
+			}
+			
+			Context rtn = new Context();
+			rtn.put("TAF_SOURCE", tafSource);
+			rtn.put("TAF_ROW", tafRow);
+			return rtn;
+		}
+	}
 	
 	private static final Logger logger = LoggerFactory.getLogger(TrueAndFalseEx.class);
 	
@@ -40,7 +66,7 @@ public class TrueAndFalseEx implements ITrueAndFalse {
 				sb.append(val?'o':'x');
 			sb.append(' ');
 		}
-		sb.append("\r\n");
+		//sb.append("\r\n");
 		context.put("TAF_SOURCE", sb.toString());
 		return context;
 	}

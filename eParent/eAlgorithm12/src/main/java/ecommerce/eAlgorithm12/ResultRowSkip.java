@@ -7,11 +7,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import ecommerce.base.Context;
-import ecommerce.base.IResultRow;
+import ecommerce.base.IResultRowX;
 import ecommerce.base.IRow;
+import ecommerce.base.ISourceRow;
 import ecommerce.base.ITrueAndFalse;
+import ecommerce.base.IView;
 import ecommerce.eAlgorithm12.element.IElement;
 import ecommerce.eAlgorithm12.element.IElementBuilder;
+import ecommerce.patterns.resultrow.stop.IStop;
 
 /***
  * 1. 动态生成Element（跟算法11相比）
@@ -20,23 +23,50 @@ import ecommerce.eAlgorithm12.element.IElementBuilder;
  * @author martin
  *
  */
-public class ResultRowSkip implements IResultRow, IGetPositions{
+public class ResultRowSkip implements IResultRowX, IGetPositions{
+	
+	static public class CompositeView implements IView{
+		private List<IView> views = new ArrayList<IView>();
+		public void append(IView view){
+			this.views.add(view);
+		}
+
+		@Override
+		public Context getContext() {
+			List<Object> content = new ArrayList<Object>();
+			for(IView view:this.views){
+				Object obj = view.getContext().getContext().get("RESULT_ROW");
+				content.add(obj);
+			}
+			
+			Context rtn = new Context();
+			rtn.put("RESULT_ROW", content);
+			return rtn;
+		}
+	}
 	
 	//----- static -----
 	static private final Logger logger = LoggerFactory.getLogger(ResultRowSkip.class);
 	
-	static private IElementBuilder[] elementBuilder;
-	static public void setElementBuilder(IElementBuilder[] builder){ResultRowSkip.elementBuilder = builder;}
-	
 	static private Swap swap;
 	static public void setSwap(Swap swap){ResultRowSkip.swap = swap;}
+	
+	static private IStop stop;
+	static public void setStop(IStop stop){ResultRowSkip.stop = stop;}
 	//----- static -----
 
+	private IElementBuilder[] elementBuilder;
+	public void setElementBuilder(IElementBuilder[] builder){this.elementBuilder = builder;}
+	
 	private String source;
 	private List<IElement> elements;
 	private int startOff, indexOfCreateElement;
 	public ResultRowSkip(String source){
 		this.source = source;
+	}
+	public ResultRowSkip(String source, IElementBuilder[] elementBuilder){
+		this.source = source;
+		this.elementBuilder = elementBuilder;
 	}
 	
 	private List<RelayPosition> relayPos;
@@ -51,14 +81,15 @@ public class ResultRowSkip implements IResultRow, IGetPositions{
 		this.startOff = 0;
 		this.indexOfCreateElement = 0;
 		this.elements = new ArrayList<IElement>();
-		IElement element = ResultRowSkip.elementBuilder[indexOfCreateElement].createElement(this.source, this.startOff);
+		IElement element = elementBuilder[indexOfCreateElement].createElement(this.source, this.startOff);
 		startOff += element.getSource().length;
 		this.elements.add(element);
 		Swap swap = ResultRowSkip.swap.createSwap();
 		
-		for(;startOff<source.length();){
+		this.isStop = false;
+		for(;startOff<source.length() && !this.isStop;){
 			
-			IElement current = ResultRowSkip.elementBuilder[indexOfCreateElement].createElement(this.source, this.startOff);
+			IElement current = elementBuilder[indexOfCreateElement].createElement(this.source, this.startOff);
 			IElement last = this.elements.get(this.elements.size()-1);
 			List<Boolean> result = current.execute(last, true);
 			total.add(result);
@@ -73,11 +104,13 @@ public class ResultRowSkip implements IResultRow, IGetPositions{
 				this.relayPos.add(new RelayPosition(startOff-2, startOff-1));
 				if(current.getSource().length == 4){//新建一列
 					
-					IElement newElement = ResultRowSkip.elementBuilder[indexOfCreateElement].createElement(this.source, this.startOff);
+					IElement newElement = elementBuilder[indexOfCreateElement].createElement(this.source, this.startOff);
 					startOff += newElement.getSource().length;
 					this.elements.add(newElement);
 				}
 			}
+			
+			this.isStop = ResultRowSkip.stop.match(total);
 		}
 		
 		List<ITrueAndFalse> rtn = new ArrayList<ITrueAndFalse>();
@@ -120,5 +153,13 @@ public class ResultRowSkip implements IResultRow, IGetPositions{
 		rtn.put("RESULT_ROW", rows);
 		return rtn;
 	}
-
+	
+	private boolean isStop = false;
+	@Override public boolean isStopValid() { return this.isStop; }
+	@Override public ISourceRow getSource() {
+		StringBuilder sb = new StringBuilder();
+		for(IElement element : this.elements)
+			sb.append(element.getSource());
+		return new SourceRow(sb.toString());
+	}
 }
