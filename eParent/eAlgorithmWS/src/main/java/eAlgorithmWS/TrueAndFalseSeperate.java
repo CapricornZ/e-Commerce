@@ -3,16 +3,26 @@ package eAlgorithmWS;
 import java.util.ArrayList;
 import java.util.List;
 
+import elements.patterns.IStop;
+
 public class TrueAndFalseSeperate implements ITrueAndFalse {
 
 	private ITrueAndFalse taf;
 	private List<List<Item>> source;
 	
+	public TrueAndFalseSeperate(List<List<Item>> source, IStop stop){
+		
+		this.source = source;
+		List<Item> continuity = new ArrayList<Item>();
+		for(List<Item> pos:this.source)
+			continuity.addAll(pos);
+		this.taf = new TrueAndFalse(continuity, stop);
+	}
 	public TrueAndFalseSeperate(List<List<Item>> source){
 		this.source = source;
 		List<Item> continuity = new ArrayList<Item>();
 		for(List<Item> pos:this.source)
-				continuity.addAll(pos);
+			continuity.addAll(pos);
 		taf = new TrueAndFalse(continuity);
 	}
 	

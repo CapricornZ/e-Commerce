@@ -26,7 +26,6 @@ import ecommerce.base.ISourceRow;
 import ecommerce.base.ITrueAndFalse;
 import ecommerce.base.stastic.ISequentialStastic;
 import ecommerce.base.stastic.SequentialForSection;
-import ecommerce.eAlgorithm12.SourceRowBuilder.TypeOfPattern;
 
 public class App {
 	
@@ -65,6 +64,8 @@ public class App {
 		int maxCountOfTaf = 1;
 		int number = 1;
 		int countOfSkip = 0;
+		//连续x的个数(6x,7x ... 12x),每个下标代表正4，反4，正5，反5
+		int[] countOfNx = new int[params.getTypeOfPatterns().length];
 		while ((lineTxt = bufferedReader.readLine()) != null) {
 			
 			String source = lineTxt.trim();
@@ -81,9 +82,10 @@ public class App {
 			List<IResultRowX> tmpResult = new ArrayList<IResultRowX>();
 			List<List<ITrueAndFalse>> tmpTAF = new ArrayList<List<ITrueAndFalse>>();
 			IRow sourceRow = null;
-			for(int i=0; valid && i<TypeOfPattern.values().length; i++){
+			
+			for(int i=0; valid && i<params.getTypeOfPatterns().length; i++){
 
-				IRow sRow = SourceRowBuilder.create(source, 0, TypeOfPattern.values()[i]);
+				IRow sRow = SourceRowBuilder.create(source, 0, params.getTypeOfPatterns()[i]);
 				logger.warn("-----{}.{}-----\r\n", number, subNumber);
 				viewContext.put("NO", String.format("-----%d-----", number, subNumber++));
 				
@@ -101,39 +103,21 @@ public class App {
 				ISourceRow validSourceRow = rowResult.getSource();
 				validSourceRow.print();
 				
-				//sRow.print();
-				//viewContext.mergeContext(sRow.getContext());
 				rtn.get(0).run(0);
 				rtn.get(0).print();
-				//if(rtn.get(0).isValid()){
+				if(rtn.get(0).getSum() == params.getSum())
+					countOfNx[i] += 1;
+
 				if(rowResult.isStopValid()){
 					tmpSourceRow.add(validSourceRow);
 					tmpResult.add(rowResult);
 					tmpTAF.add(rtn);					
 				} else
 					valid = false;
-				
-				//for(ITrueAndFalse taf : rtn){
-				//	countOfTaf ++ ;
-				//	taf.run(0);
-				//	taf.print();
-				//	viewContext.mergeContext(taf.getContext());
-				//}
-				//if(countOfTaf > maxCountOfTaf)
-				//	maxCountOfTaf = countOfTaf;
-				
-				//totalResult.add(rowResult);
-				//totalTAF.add(rtn);
-				
-				//java.io.StringWriter sw = new java.io.StringWriter();
-				//velocityEngine.mergeTemplate("main.vm", "utf-8", viewContext.getContext(), sw);
-				//String s = sw.toString();
-				//htmlWriter.write(s);
 			}
 			if(valid){
 				totalResult.addAll(tmpResult);
 				totalTAF.addAll(tmpTAF);
-				//viewContext.mergeContext(sourceRow.getContext());
 				ResultRowSkip.CompositeView resultRows = new ResultRowSkip.CompositeView();
 				for(IResultRowX resultRow : tmpResult)
 					resultRows.append(resultRow);
@@ -143,7 +127,6 @@ public class App {
 				for(List<ITrueAndFalse> tafs : tmpTAF)
 					tafRows.append(tafs.get(0));
 				viewContext.mergeContext(tafRows.getContext());
-					//viewContext.mergeContext(tafs.get(0).getContext());
 				
 				java.io.StringWriter sw = new java.io.StringWriter();
 				velocityEngine.mergeTemplate("main.vm", "utf-8", viewContext.getContext(), sw);
@@ -161,7 +144,12 @@ public class App {
 
 		logger.info("\r\n--------------------------------------------------\r\n");
 		logger.info("---------------------整个文件汇总-------------------\r\n");
-		logger.info("----------------数据源中{}条记录xx跳过----------------\r\n", countOfSkip);
+		logger.info("----------------连续{}X分布情况----------------\r\n", params.getCountOfX());
+		sbStastic.append(String.format("连续 %dX 分布情况\r\n", params.getCountOfX()));
+		for(int i=0; i<params.getTypeOfPatterns().length; i++){
+			logger.info("{}:{}\r\n", params.getTypeOfPatterns()[i], countOfNx[i]);
+			sbStastic.append(String.format("%s : %d\r\n", params.getTypeOfPatterns()[i], countOfNx[i]));
+		}
 		
 		//>>>>>>begin
 		int countOfXX=0;

@@ -11,7 +11,10 @@
 			
 			var inputSource = $(this).val()+'A';
 			$.post('ajax/helloworld.do',
-					{source:inputSource},
+					{
+						"source":inputSource,
+						"continuity":$('#continuity').val()
+					},
 					function(data, status){
 						
 						var rtn = eval('('+data+')');
@@ -34,6 +37,22 @@
 	</script>
 </head>
 <body>
+连续n个X
+<select id="continuity">
+  <option value ="5">5</option>
+  <option value ="6">6</option>
+  <option value="7">7</option>
+  <option value="8">8</option>
+  <option value="9">9</option>
+  <option value="10">10</option>
+  <option value="11">11</option>
+  <option value="12">12</option>
+  <option value="13">13</option>
+  <option value="14">14</option>
+  <option value="15">15</option>
+  <option value="16">16</option>
+  
+</select>
 DataSource<input id="txtDataSource" size="64" value="BBABAABBBBBBBAABBBABABAAABBBAABABBBABABAAB"/><span id="size"></span>
 <BR/>
 <pre>

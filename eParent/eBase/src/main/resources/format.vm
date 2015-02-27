@@ -1,0 +1,13 @@
+<pre>
+#set($row=0)
+#foreach($result in $RESULT_ROW)
+#foreach($row in $result)
+	$row
+#end
+
+${TAF_SOURCE[$row]}
+${TAF_ROW[$row]}
+#set($row=$row+1)
+	
+#end
+</pre>

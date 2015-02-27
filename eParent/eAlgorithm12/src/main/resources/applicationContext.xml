@@ -4,44 +4,43 @@
     xsi:schemaLocation="http://www.springframework.org/schema/beans   
     http://www.springframework.org/schema/beans/spring-beans-3.1.xsd"> 
     
+    <import resource="config.xml"/>
+    
     <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
     	<property name="locations" value="classpath:app.properties"/>
 	</bean>
 	
 	<!-- #####	APP 上下文	##### -->
 	<bean id="AppContext" class="ecommerce.eAlgorithm12.AppContext">
-		
+		<property name="typeOfPatterns">
+			<array>
+				
+				<ref bean="PatternPositive4"/>
+				<ref bean="PatternNegtive4"/>
+				
+				<!-- <ref bean="PatternPositive5"/>
+				<ref bean="PatternNegtive5"/> -->
+				
+			</array>
+		</property>
 		<property name="resultRowType" value="ecommerce.eAlgorithm12.ResultRowSkip"/>
-		<property name="swapType" value="XX-Once"/><!-- XX | XX-Once -->
+		<property name="swapType" value="XX"/><!-- XX | XX-Once -->
 		<property name="destinationFolder" value="/home/martin/"/>
-		<property name="countOfX" value="6"/>
+		<property name="countOfX" value="5"/>
+		<property name="sum" value="-57"/>
 		<property name="expectType" value="POSITIVE"/><!-- "POSITIVE" | "NEGTIVE" -->
 		<property name="elementBuilders">
 			<array>
-        		<bean class="ecommerce.eAlgorithm12.element.Element4Builder"/>
         		<bean class="ecommerce.eAlgorithm12.element.Element5Builder"/>
+        		<bean class="ecommerce.eAlgorithm12.element.Element4Builder"/>
         	</array>
 		</property>
 	</bean>
-	
+
 	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
         <property name="staticMethod" value="ecommerce.FileAccess.setDestFolder"/>
         <property name="arguments">
         	<bean factory-bean="AppContext" factory-method="getDestinationFolder"/>
-        </property>
-    </bean>
-    
-    <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
-        <property name="staticMethod" value="ecommerce.eAlgorithm12.element.Element4.setExpect"/>
-        <property name="arguments">
-        	<bean factory-bean="AppContext" factory-method="getElement4Expect"/>
-        </property>
-    </bean>
-    
-    <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
-        <property name="staticMethod" value="ecommerce.eAlgorithm12.element.Element5.setExpect"/>
-        <property name="arguments">
-        	<bean factory-bean="AppContext" factory-method="getElement5Expect"/>
         </property>
     </bean>
     
@@ -91,17 +90,25 @@
     </bean>
     
     <!-- ResultRowSkip -->
+    <!-- 
     <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
         <property name="staticMethod" value="ecommerce.eAlgorithm12.ResultRowSkip.setElementBuilder"/>
         <property name="arguments">
         	<bean factory-bean="AppContext" factory-method="getElementBuilders"/>
         </property>
     </bean>
+    -->
     <!-- ResultRowSkip -->
     <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
         <property name="staticMethod" value="ecommerce.eAlgorithm12.ResultRowSkip.setSwap"/>
         <property name="arguments">
         	<bean factory-bean="AppContext" factory-method="getSwap"/>
+        </property>
+    </bean>
+    <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="staticMethod" value="ecommerce.eAlgorithm12.ResultRowSkip.setStop"/>
+        <property name="arguments">
+        	<ref bean="stop4resultrow"/>
         </property>
     </bean>
     
@@ -140,6 +147,20 @@
     		<array>
     			<bean class="ecommerce.patterns.trueandfalse.stop.StopWhileTrue"/>
     			<bean class="ecommerce.patterns.trueandfalse.stop.StopWhileNX">
+    				<property name="n">
+    					<bean factory-bean="AppContext" factory-method="getCountOfX"/>
+    				</property>
+    			</bean>
+    		</array>
+    	</property>
+    </bean>
+    
+    <!-- TrueAndFalse 运算何时终止？ -->
+    <bean id="stop4resultrow" class="ecommerce.patterns.resultrow.stop.StopOR">
+    	<property name="stops">
+    		<array>
+    			<bean class="ecommerce.patterns.resultrow.stop.StopWhileTrue"/>
+    			<bean class="ecommerce.patterns.resultrow.stop.StopWhileNX">
     				<property name="n">
     					<bean factory-bean="AppContext" factory-method="getCountOfX"/>
     				</property>

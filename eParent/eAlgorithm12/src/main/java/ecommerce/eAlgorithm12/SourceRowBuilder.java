@@ -6,7 +6,12 @@ import ecommerce.eAlgorithm12.element.IElementBuilder;
 public class SourceRowBuilder {
 	
 	public enum TypeOfPattern{
-		POSITIVE4,POSITIVE5,NEGTIVE4,NEGTIVE5
+		POSITIVE4("正4"),NEGTIVE4("反4"),POSITIVE5("正5"),NEGTIVE5("反5");
+		
+		private String name;
+		private TypeOfPattern(String name){
+			this.name = name;
+		}
 	};
 	
 	// ----- STATIC -----

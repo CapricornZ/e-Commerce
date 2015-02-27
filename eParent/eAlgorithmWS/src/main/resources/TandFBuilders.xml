@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+    	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
+	
+	<bean name="Builder5x" class="eAlgorithmWS.TAFBuilder">
+		<property name="stop">
+			<bean class="elements.patterns.StopOR">
+		    	<property name="stops">
+		    		<array>
+		    			<bean class="elements.patterns.StopWhileTrue"/>
+		    			<bean class="elements.patterns.StopWhileNX">
+		    				<property name="n" value="5"/>
+		    			</bean>
+		    		</array>
+		    	</property>
+		    </bean>
+		</property>
+	</bean>
+	
+	<bean name="Builder6x" class="eAlgorithmWS.TAFBuilder">
+		<property name="stop">
+			<bean class="elements.patterns.StopOR">
+		    	<property name="stops">
+		    		<array>
+		    			<bean class="elements.patterns.StopWhileTrue"/>
+		    			<bean class="elements.patterns.StopWhileNX">
+		    				<property name="n" value="6"/>
+		    			</bean>
+		    		</array>
+		    	</property>
+		    </bean>
+		</property>
+	</bean>
+	
+	<bean name="Builder7x" class="eAlgorithmWS.TAFBuilder">
+		<property name="stop">
+			<bean class="elements.patterns.StopOR">
+		    	<property name="stops">
+		    		<array>
+		    			<bean class="elements.patterns.StopWhileTrue"/>
+		    			<bean class="elements.patterns.StopWhileNX">
+		    				<property name="n" value="7"/>
+		    			</bean>
+		    		</array>
+		    	</property>
+		    </bean>
+		</property>
+	</bean>
+	
+	<bean name="Builder8x" class="eAlgorithmWS.TAFBuilder">
+		<property name="stop">
+			<bean class="elements.patterns.StopOR">
+		    	<property name="stops">
+		    		<array>
+		    			<bean class="elements.patterns.StopWhileTrue"/>
+		    			<bean class="elements.patterns.StopWhileNX">
+		    				<property name="n" value="8"/>
+		    			</bean>
+		    		</array>
+		    	</property>
+		    </bean>
+		</property>
+	</bean>
+	
+	<bean name="Builder9x" class="eAlgorithmWS.TAFBuilder">
+		<property name="stop">
+			<bean  class="elements.patterns.StopOR">
+		    	<property name="stops">
+		    		<array>
+		    			<bean class="elements.patterns.StopWhileTrue"/>
+		    			<bean class="elements.patterns.StopWhileNX">
+		    				<property name="n" value="9"/>
+		    			</bean>
+		    		</array>
+		    	</property>
+		    </bean>
+		</property>
+	</bean>
+	
+	<bean name="Builder10x" class="eAlgorithmWS.TAFBuilder">
+		<property name="stop">
+			<bean class="elements.patterns.StopOR">
+		    	<property name="stops">
+		    		<array>
+		    			<bean class="elements.patterns.StopWhileTrue"/>
+		    			<bean class="elements.patterns.StopWhileNX">
+		    				<property name="n" value="10"/>
+		    			</bean>
+		    		</array>
+		    	</property>
+		    </bean>
+		</property>
+	</bean>
+	
+	<!-- 11 -->
+	<bean name="Builder11x" class="eAlgorithmWS.TAFBuilder">
+		<property name="stop">
+			<bean class="elements.patterns.StopOR">
+		    	<property name="stops">
+		    		<array>
+		    			<bean class="elements.patterns.StopWhileTrue"/>
+		    			<bean class="elements.patterns.StopWhileNX">
+		    				<property name="n" value="11"/>
+		    			</bean>
+		    		</array>
+		    	</property>
+		    </bean>
+		</property>
+	</bean>
+	<!-- 12 -->
+	<bean name="Builder12x" class="eAlgorithmWS.TAFBuilder">
+		<property name="stop">
+			<bean class="elements.patterns.StopOR">
+		    	<property name="stops">
+		    		<array>
+		    			<bean class="elements.patterns.StopWhileTrue"/>
+		    			<bean class="elements.patterns.StopWhileNX">
+		    				<property name="n" value="12"/>
+		    			</bean>
+		    		</array>
+		    	</property>
+		    </bean>
+		</property>
+	</bean>
+	<!-- 13 -->
+	<bean name="Builder13x" class="eAlgorithmWS.TAFBuilder">
+		<property name="stop">
+			<bean class="elements.patterns.StopOR">
+		    	<property name="stops">
+		    		<array>
+		    			<bean class="elements.patterns.StopWhileTrue"/>
+		    			<bean class="elements.patterns.StopWhileNX">
+		    				<property name="n" value="13"/>
+		    			</bean>
+		    		</array>
+		    	</property>
+		    </bean>
+		</property>
+	</bean>
+	<!-- 14 -->
+	<bean name="Builder14x" class="eAlgorithmWS.TAFBuilder">
+		<property name="stop">
+			<bean class="elements.patterns.StopOR">
+		    	<property name="stops">
+		    		<array>
+		    			<bean class="elements.patterns.StopWhileTrue"/>
+		    			<bean class="elements.patterns.StopWhileNX">
+		    				<property name="n" value="14"/>
+		    			</bean>
+		    		</array>
+		    	</property>
+		    </bean>
+		</property>
+	</bean>
+	<!-- 15 -->
+	<bean name="Builder15x" class="eAlgorithmWS.TAFBuilder">
+		<property name="stop">
+			<bean class="elements.patterns.StopOR">
+		    	<property name="stops">
+		    		<array>
+		    			<bean class="elements.patterns.StopWhileTrue"/>
+		    			<bean class="elements.patterns.StopWhileNX">
+		    				<property name="n" value="15"/>
+		    			</bean>
+		    		</array>
+		    	</property>
+		    </bean>
+		</property>
+	</bean>
+	<!-- 16 -->
+	<bean name="Builder16x" class="eAlgorithmWS.TAFBuilder">
+		<property name="stop">
+			<bean class="elements.patterns.StopOR">
+		    	<property name="stops">
+		    		<array>
+		    			<bean class="elements.patterns.StopWhileTrue"/>
+		    			<bean class="elements.patterns.StopWhileNX">
+		    				<property name="n" value="16"/>
+		    			</bean>
+		    		</array>
+		    	</property>
+		    </bean>
+		</property>
+	</bean>
+</beans>

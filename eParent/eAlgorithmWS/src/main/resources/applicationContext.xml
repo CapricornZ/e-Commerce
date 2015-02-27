@@ -17,6 +17,7 @@
     
     <bean id="next" class="elements.patterns.GoNext"/>
     
+    <!--
     <bean id="stop" class="elements.patterns.StopOR">
     	<property name="stops">
     		<array>
@@ -26,7 +27,7 @@
     			</bean>
     		</array>
     	</property>
-    </bean>
+    </bean> 
     
     <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
         <property name="staticMethod" value="eAlgorithmWS.TrueAndFalse.setStop"/>
@@ -34,6 +35,8 @@
         	<ref bean="stop"/>
         </property>
     </bean>
+    -->
+    
     <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
         <property name="staticMethod" value="eAlgorithmWS.TrueAndFalse.setGoNext"/>
         <property name="arguments">

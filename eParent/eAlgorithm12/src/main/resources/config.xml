@@ -4,6 +4,19 @@
     xsi:schemaLocation="http://www.springframework.org/schema/beans   
     http://www.springframework.org/schema/beans/spring-beans-3.1.xsd"> 
     
+    <bean id="PatternPositive4" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
+        <property name="staticField" value="ecommerce.eAlgorithm12.SourceRowBuilder$TypeOfPattern.POSITIVE4" />    
+    </bean>
+    <bean id="PatternNegtive4" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
+        <property name="staticField" value="ecommerce.eAlgorithm12.SourceRowBuilder$TypeOfPattern.NEGTIVE4" />    
+    </bean>
+    <bean id="PatternPositive5" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
+        <property name="staticField" value="ecommerce.eAlgorithm12.SourceRowBuilder$TypeOfPattern.POSITIVE5" />    
+    </bean>
+    <bean id="PatternNegtive5" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
+        <property name="staticField" value="ecommerce.eAlgorithm12.SourceRowBuilder$TypeOfPattern.NEGTIVE5" />    
+    </bean>
+    
     <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
         <property name="staticMethod" value="ecommerce.eAlgorithm12.SourceRowBuilder.setPositive4"/>
         <property name="arguments">

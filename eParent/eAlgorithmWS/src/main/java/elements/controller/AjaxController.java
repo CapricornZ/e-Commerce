@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import eAlgorithmWS.ISourceRow;
 import eAlgorithmWS.Item;
 import elements.algorithmX.IAlgorithm;
 
@@ -35,7 +34,7 @@ public class AjaxController {
 
 	@RequestMapping("/helloworld")
 	@ResponseBody
-    public List<String> helloworld(@RequestParam("source")String source) {
+    public List<String> helloworld(@RequestParam("source")String source, @RequestParam("continuity")int continuity) {
 
 		List<Phase> phases = new ArrayList<Phase>();
 		
@@ -44,7 +43,7 @@ public class AjaxController {
 
 			List<eAlgorithmWS.ITrueAndFalse> tafs = new ArrayList<eAlgorithmWS.ITrueAndFalse>();
 			for(IAlgorithm algorithm : this.algorithms)
-				tafs.add(algorithm.execute(single));
+				tafs.add(algorithm.execute(single, continuity));
 			
 			List<Item> tmp = new ArrayList<Item>();
 			tmp.addAll(tafs.get(0).getSource());
@@ -95,6 +94,8 @@ public class AjaxController {
 			List<Item> row = phase.getResult();			
 			String result = "";
 			int startOff = 1;
+			if(row.size()==0)
+				break;
 			System.out.println(String.format("%d vs %d", row.get(row.size()-1).getIndex(), multi.getSource().length()-1));
 			int size = row.get(row.size()-1).getIndex() == multi.getSource().length()-1 ? row.size()-1:row.size();
 			//int size = row.size();

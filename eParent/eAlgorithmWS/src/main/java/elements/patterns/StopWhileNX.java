@@ -24,7 +24,7 @@ public class StopWhileNX implements IStop {
 		if(pos<this.n-1)
 			return bMatch;
 		
-		for(int i=0;i<this.n&!bMatch;i++)
+		for(int i=0;i<this.n && !bMatch;i++)
 			bMatch = bMatch || result.get(pos-i).getValue();
 		
 		return !bMatch;

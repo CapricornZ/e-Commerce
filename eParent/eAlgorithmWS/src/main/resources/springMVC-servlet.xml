@@ -11,12 +11,8 @@
     	http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
     	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
     	
-    <import resource="ALG.xml"/>
-
-	<!-- 
-	<bean class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor"/>
-	<context:component-scan base-package="elements.controller" />
-	-->
+    <import resource="ALG.xml" />
+    <import resource="TandFBuilders.xml" />
 	
 	<bean class="elements.controller.AjaxController">
 		<property name="algorithms">

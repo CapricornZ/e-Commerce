@@ -3,14 +3,19 @@ package elements.algorithmX;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.BeanFactoryAware;
+
 import eAlgorithmWS.ISourceRow;
 import eAlgorithmWS.ITrueAndFalse;
 import eAlgorithmWS.Item;
+import eAlgorithmWS.TAFBuilder;
 import eAlgorithmWS.TrueAndFalseSeperate;
 import elements.IElement;
 import elements.builder.IElementBuilder;
 
-public class RowSkip implements IAlgorithm {
+public class RowSkip implements IAlgorithm, BeanFactoryAware{
 	
 	private IElementBuilder[] builders;
 	public void setBuilders(IElementBuilder[] builders){
@@ -23,7 +28,7 @@ public class RowSkip implements IAlgorithm {
 	}
 
 	@Override
-	public ITrueAndFalse execute(ISourceRow source) {
+	public ITrueAndFalse execute(ISourceRow source, int continuity) {
 		
 		int startOff = 0;
 		int indexOfBuilder = 0;
@@ -58,10 +63,18 @@ public class RowSkip implements IAlgorithm {
 			}
 		}
 		
-		ITrueAndFalse taf = new TrueAndFalseSeperate(totalResult);
+
+		TAFBuilder tafBuilder = (TAFBuilder)this.factory.getBean(String.format("Builder%dx", continuity));
+		ITrueAndFalse taf = tafBuilder.create(totalResult);
+		//ITrueAndFalse taf = new TrueAndFalseSeperate(totalResult);
 		taf.run(0);
 		
 		return taf;
 	}
 
+	private BeanFactory factory;
+	@Override
+	public void setBeanFactory(BeanFactory factory) throws BeansException {
+		this.factory = factory;
+	}
 }

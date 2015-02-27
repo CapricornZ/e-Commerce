@@ -14,10 +14,11 @@ public class TrueAndFalse implements ITrueAndFalse {
 	static private final Logger logger = LoggerFactory.getLogger(TrueAndFalse.class);
 	private static int[] metaData = new int[] {1,3,7,15,31,63,127,255,511,1023,2047,4095,8191};
 	
-	static private IStop stop;
-	static public void setStop(IStop stop){
-		TrueAndFalse.stop = stop;
-	}
+	//static private IStop stop;
+	//static public void setStop(IStop stop){
+	//	TrueAndFalse.stop = stop;
+	//}
+	private IStop stop;
 	
 	static private IGoNext goNext;
 	static public void setGoNext(IGoNext next){
@@ -26,6 +27,10 @@ public class TrueAndFalse implements ITrueAndFalse {
 	// ----- static -----
 	
 	private List<eAlgorithmWS.Item> source;
+	public TrueAndFalse(List<eAlgorithmWS.Item> source, IStop stop){
+		this.source = source;
+		this.stop = stop;
+	}
 	public TrueAndFalse(List<eAlgorithmWS.Item> source){
 		this.source = source;
 	}
@@ -64,7 +69,7 @@ public class TrueAndFalse implements ITrueAndFalse {
 			this.source.get(this.sourceIndex).setCount(this.current);
 
 			this.metaIndex = TrueAndFalse.goNext.GetNext(this);
-			shouldStop = TrueAndFalse.stop.match(this);
+			shouldStop = this.stop.match(this);
 		}
 	}
 	

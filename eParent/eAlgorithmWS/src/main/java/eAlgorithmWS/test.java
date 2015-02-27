@@ -27,7 +27,7 @@ public class test {
 		TrueAndFalse.setGoNext(new GoNext());
 		StopOR stop = new StopOR();
 		stop.setStops(new IStop[]{new StopWhileTrue(), new StopWhileNX(6)});
-		TrueAndFalse.setStop(stop);
+		//TrueAndFalse.setStop(stop);
 		
 		RowSkip alg12 = new RowSkip();
 		alg12.setBuilders(new IElementBuilder[]{builder5, builder4});
@@ -35,7 +35,7 @@ public class test {
 		
 		List<List<Item>> total = new ArrayList<List<Item>>();
 		for(eAlgorithmWS.ISourceRow single : multi.generate()){
-			eAlgorithmWS.ITrueAndFalse taf = alg12.execute(single);
+			eAlgorithmWS.ITrueAndFalse taf = alg12.execute(single, 6);
 			List<Item> source = taf.getSource();
 			total.add(source);
 		}

@@ -5,15 +5,30 @@ import ecommerce.eAlgorithm12.element.Element5;
 import ecommerce.eAlgorithm12.element.IElementBuilder;
 
 public class AppContext {
+	
+	private ecommerce.eAlgorithm12.SourceRowBuilder.TypeOfPattern[] typeOfPattern;
+	public void setTypeOfPatterns(ecommerce.eAlgorithm12.SourceRowBuilder.TypeOfPattern[] patterns){
+		this.typeOfPattern = patterns;
+	}
+	public ecommerce.eAlgorithm12.SourceRowBuilder.TypeOfPattern[] getTypeOfPatterns(){
+		return this.typeOfPattern;
+	}
 
 	public String getOutput(){
 		StringBuilder sb = new StringBuilder();
 		sb.append(this.destinationFolder + countOfX+"x/");
-		sb.append(this.expectType.equals("POSITIVE")?"正,":"反,");
-		sb.append(this.elementBuilders[0] instanceof ecommerce.eAlgorithm12.element.Element4Builder?"先4":"先5");
+		//sb.append(this.expectType.equals("POSITIVE")?"正,":"反,");
+		//sb.append(this.elementBuilders[0] instanceof ecommerce.eAlgorithm12.element.Element4Builder?"先4":"先5");
+		for(ecommerce.eAlgorithm12.SourceRowBuilder.TypeOfPattern type : this.typeOfPattern){
+			sb.append(type);
+		}
 		sb.append(".html");
 		return sb.toString();
 	}
+	
+	private int sum;
+	public void setSum(int sum){ this.sum = sum; }
+	public int getSum(){ return this.sum; }
 	
 	private int countOfX;
 	public void setCountOfX(int value){
