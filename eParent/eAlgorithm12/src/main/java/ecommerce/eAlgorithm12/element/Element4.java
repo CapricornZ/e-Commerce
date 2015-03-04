@@ -60,9 +60,9 @@ public class Element4 implements IElement{
 		}
 	}
 	
-	private char[] source;
-	private char[] result;
-	private IExpect pattern;
+	protected char[] source;
+	protected char[] result;
+	protected IExpect pattern;
 	public Element4(char[] source, IExpect pattern){
 		this.source = source;
 		this.pattern = pattern;

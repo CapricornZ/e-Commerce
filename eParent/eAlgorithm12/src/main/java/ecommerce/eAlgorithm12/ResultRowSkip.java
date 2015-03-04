@@ -102,7 +102,8 @@ public class ResultRowSkip implements IResultRowX, IGetPositions{
 			if(swap.exam(result)){//swap
 				indexOfCreateElement = (indexOfCreateElement+1)%2;
 				this.relayPos.add(new RelayPosition(startOff-2, startOff-1));
-				if(current.getSource().length == 4){//新建一列
+				int min = this.elementBuilder[0].getLength()<this.elementBuilder[1].getLength() ? this.elementBuilder[0].getLength() : this.elementBuilder[1].getLength();
+				if(current.getSource().length == min){//当前列的长度比后一列短,则新建一列
 					
 					IElement newElement = elementBuilder[indexOfCreateElement].createElement(this.source, this.startOff);
 					startOff += newElement.getSource().length;

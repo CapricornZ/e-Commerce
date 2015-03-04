@@ -4,14 +4,16 @@ import java.lang.reflect.Constructor;
 
 import ecommerce.eAlgorithm12.IExpect;
 
-public class Element4Builder implements IElementBuilder{
+public class Element6Builder implements IElementBuilder{
+	
 	private String typeOfElement;
-	public void setTypeOfElement4(String type) { this.typeOfElement = type; }
+	public void setTypeOfElement6(String type) { this.typeOfElement = type; }
 	
 	@Override
 	public IElement createElement(String source, int startOff) {
+		
 		IElement rtn = null;
-		int length = startOff+4<source.length()?4:source.length()-startOff;
+		int length = startOff+6<source.length()?6:source.length()-startOff;
 		char[] data = source.substring(startOff, startOff+length).toCharArray();
 		
 		try {
@@ -20,12 +22,10 @@ public class Element4Builder implements IElementBuilder{
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		//return new Element4(data, this.expect);
 		return rtn;
 	}
 	
-	@Override public int getLength(){ return 4; }
+	@Override public int getLength(){ return 6; }
 	
 	private IExpect expect;
 	@Override public IExpect getExpect(){ return this.expect; }

@@ -15,6 +15,6 @@ public class StopWhileTrue implements IStop {
 			return false;
 		
 		List<Boolean> last = result.get(result.size()-1);
-		return last.get(last.size()-1);
+		return last.size() == 0?false:last.get(last.size()-1);
 	}
 }

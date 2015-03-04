@@ -1,0 +1,49 @@
+<beans xmlns="http://www.springframework.org/schema/beans"  
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"   
+    xmlns:p="http://www.springframework.org/schema/p"  
+    xsi:schemaLocation="http://www.springframework.org/schema/beans   
+    http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
+    
+    <import resource="config.xml"/>
+    <!-- 54 && 45 -->
+    <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="staticMethod" value="ecommerce.eAlgorithm12.SourceRowBuilder.setPositive45"/>
+        <property name="arguments">
+        	<array>
+        		<ref bean="positive4"/>
+        		<ref bean="positive5"/>
+        	</array>
+        </property>
+    </bean>
+    
+    <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="staticMethod" value="ecommerce.eAlgorithm12.SourceRowBuilder.setPositive54"/>
+        <property name="arguments">
+        	<array>
+        		<ref bean="positive5"/>
+        		<ref bean="positive4"/>
+        	</array>
+        </property>
+    </bean>
+    
+    <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="staticMethod" value="ecommerce.eAlgorithm12.SourceRowBuilder.setNegtive45"/>
+        <property name="arguments">
+        	<array>
+        		<ref bean="negtive4"/>
+        		<ref bean="negtive5"/>
+        	</array>
+        </property>
+    </bean>
+    
+    <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="staticMethod" value="ecommerce.eAlgorithm12.SourceRowBuilder.setNegtive54"/>
+        <property name="arguments">
+        	<array>
+        		<ref bean="negtive5"/>
+        		<ref bean="negtive4"/>
+        	</array>
+        </property>
+    </bean>
+    
+</beans>

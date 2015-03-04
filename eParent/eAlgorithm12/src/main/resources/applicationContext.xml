@@ -4,7 +4,10 @@
     xsi:schemaLocation="http://www.springframework.org/schema/beans   
     http://www.springframework.org/schema/beans/spring-beans-3.1.xsd"> 
     
-    <import resource="config.xml"/>
+    <!-- <import resource="config.xml"/> -->
+    <import resource="config_4_5.xml"/>
+    <import resource="config_5_6.xml"/>
+    <import resource="config_6_7.xml"/>
     
     <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
     	<property name="locations" value="classpath:app.properties"/>
@@ -14,13 +17,20 @@
 	<bean id="AppContext" class="ecommerce.eAlgorithm12.AppContext">
 		<property name="typeOfPatterns">
 			<array>
+				<!-- <ref bean="PatternPositive45"/>
+				<ref bean="PatternNegtive45"/> -->
+				<!-- <ref bean="PatternPositive54"/>
+				<ref bean="PatternNegtive54"/> -->
 				
-				<ref bean="PatternPositive4"/>
-				<ref bean="PatternNegtive4"/>
+				<!-- <ref bean="PatternNegtive56"/>
+				<ref bean="PatternPositive56"/> -->
+				<!-- <ref bean="PatternNegtive65"/>
+				<ref bean="PatternPositive65"/> -->
 				
-				<!-- <ref bean="PatternPositive5"/>
-				<ref bean="PatternNegtive5"/> -->
-				
+				<!-- <ref bean="PatternNegtive67"/>
+				<ref bean="PatternPositive67"/> -->
+				<ref bean="PatternNegtive76"/>
+				<ref bean="PatternPositive76"/>
 			</array>
 		</property>
 		<property name="resultRowType" value="ecommerce.eAlgorithm12.ResultRowSkip"/>
