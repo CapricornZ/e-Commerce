@@ -51,4 +51,5 @@ public interface ITrueAndFalse extends IView{
 	 * @return 是否有效（是否满足终止条件）
 	 */
 	boolean isValid();
+	int getOffset();
 }

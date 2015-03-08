@@ -25,8 +25,8 @@ public class Element4SkipA extends Element4 {
 		
 		Compare[] expects = pattern.expects(depends);//r1&r2得到期待值
 		boolean val = false;
-		if (this.source.length>2 && ((this.source[2] == 'A' && expects[0]==Compare.difference) 
-				|| (this.source[2]=='B' && expects[0]==Compare.same))){
+		if (this.source.length>2 && ((other.getSource()[2] == 'A' && expects[0]==Compare.difference) 
+				|| (other.getSource()[2]=='B' && expects[0]==Compare.same))){
 			
 			val = expects[0] == (this.source[2]==other.getSource()[2]?Compare.same:Compare.difference);
 			rtn.add(val);
@@ -40,8 +40,8 @@ public class Element4SkipA extends Element4 {
 		}
 		
 		if(!val && this.source.length == 4){//若刚才的结果为true,则跳过第二个运算
-			if ((this.source[3] == 'A' && expects[1]==Compare.difference) 
-					|| (this.source[3]=='B' && expects[1]==Compare.same)){
+			if ((other.getSource()[3] == 'A' && expects[1]==Compare.difference) 
+					|| (other.getSource()[3]=='B' && expects[1]==Compare.same)){
 				
 				val = expects[1] == (this.source[3]==other.getSource()[3]?Compare.same:Compare.difference);
 				rtn.add(val);

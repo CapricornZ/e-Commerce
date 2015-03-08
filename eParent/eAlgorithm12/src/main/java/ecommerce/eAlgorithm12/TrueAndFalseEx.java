@@ -122,4 +122,7 @@ public class TrueAndFalseEx implements ITrueAndFalse {
 
 	@Override
 	public boolean isValid() {return this.taf.isValid();}
+
+	@Override
+	public int getOffset() { return this.taf.getOffset(); }
 }

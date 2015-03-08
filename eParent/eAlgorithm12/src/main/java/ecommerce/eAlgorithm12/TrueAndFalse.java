@@ -17,12 +17,14 @@ public class TrueAndFalse implements ITrueAndFalse {
 	/*private static int[] metaData = new int[] { 1, 2, 3, 5, 8, 13, 21, 34,
 		55, 89, 144, 233, 377, 610, 987, 1597, 2584, 4181, 6765, 10946,
 		17711, 28657, 46368 };*/
-	private static int[] metaData = new int[] {1,3,7,15,31,63,127,255,511,1023,2047,4095,8191};
+	private static int[] metaData = new int[] {1,3,7,15,31,63,127,255,511,1023,2047,4095,8191,16383,32767};
 	
 	private List<Boolean> result;
 	private int resultIndex=0, metaIndex=0;
 	private List<Integer> process;
 	private boolean toBePrint = true;
+	private int offset;
+	@Override public int getOffset(){return offset;}
 	
 	public TrueAndFalse(List<Boolean> result){
 		this.result = result;
@@ -73,6 +75,7 @@ public class TrueAndFalse implements ITrueAndFalse {
 		this.max = 0;
 		this.sum = 0;
 		metaIndex = 0;
+		this.offset = offset;
 		boolean shouldStop = false;
 		this.process = new ArrayList<Integer>();
 		for (this.resultIndex = offset; !shouldStop && this.resultIndex < result.size(); this.resultIndex++) {
