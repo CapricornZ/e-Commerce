@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<style type="text/css">
+		.left { float:left;background:#F0F0F0; height:600px; }
+		.right{ float:left;background:#F0F0F0; height:300px;width:700px; }
+		.main { height:600px;background:#FEFEFE;width:0px; }
+		.trSelected{
+			background-color: #51b2f6;			
+			text-align: center;
+			font-size: 12px;
+		}
+    </style>
+	<meta charset="UTF-8">
+	<title>算法1 : ABAB...</title>
+	<link rel="stylesheet" href="css/jquery-ui.css">
+	<script type="text/javascript" src="js/jquery/jquery-1.11.2.min.js"></script>
+	<script type="text/javascript" src="js/jquery/jquery-ui.js"></script>
+
+	<script type="text/javascript">
+	
+	$(function(){
+		
+		$( "#createDate" ).datepicker();
+		$( "#createDate" ).datepicker("option","dateFormat","yy-mm-dd");
+		
+		//$('#UP #selPairType').change(function(){
+		//	var inputSource = $("#UP #txtDataSource").val();
+		//	process($('#UP'), inputSource, "POSITIVE");
+		//});
+		
+		//$('#MIDDLE #selPairType').change(function(){
+		//	var inputSource = $("#MIDDLE #txtDataSource").val();
+		//	processALG4($('#MIDDLE'), inputSource);
+		//});
+		
+		$('#UP #txtDataSource').on('input',function(e){
+			var inputSource = $(this).val();
+			process($('#UP'), inputSource, "POSITIVE");
+			process($('#BOTTOM'), inputSource, "NEGTIVE");
+			processALG4($('#MIDDLE'), inputSource);
+		});//on
+		
+		//$('#MIDDLE #txtDataSource').on('input',function(e){
+		//	var inputSource = $(this).val();
+		//	processALG4($('#MIDDLE'), inputSource);
+		//});//on
+		
+		$('#UP #btnSave').click(function(){
+			var source = $('#UP #txtDataSource').val();
+			$.post('ajax/alg1/save.do',
+				{"source":source},
+				function(data, status){
+					console.log("GET ajax/alg1/save.do : " + status);
+					alert(data);
+				});
+		});
+		
+		//$('#MIDDLE #btnSave').click(function(){
+		//	var source = $('#MIDDLE #txtDataSource').val();
+		//	$.post('ajax/alg1/save.do',
+		//		{"source":source},
+		//		function(data, status){
+		//			console.log("GET ajax/alg1/save.do : " + status);
+		//			alert(data);
+		//		});
+		//});
+		
+		var today = new Date();
+		var y=today.getFullYear();
+		var month=(today.getMonth()+1);
+		if(month<10)
+			month="0"+month;
+		var date=today.getDate();
+		if(date<10)
+			date="0"+date;
+		$('#createDate').val(y+"-"+month+"-"+date);
+		
+		$('#btnQuery').click(function(){
+			
+			$.post('ajax/alg1/search.do?createDate='+$('#createDate').val(),
+				{},
+				function(data, status){
+					
+					console.log("GET ajax/alg1/search.do : " + status);
+					var rtn = eval('('+data+')');
+					$('#queryResult').html("<TR><th>ID</th><th>SOURCE</th><th>OPS</th></TR>");
+					$.each(rtn, function(key, val){
+						var id = "<td>" + val.id + "</td>";
+						var src = "<td>" + val.source.substring(0,10) + "</td>";
+						var ops = "<td><input type='button' value='选中' onclick='loadSource(this);'/><input type='button' value='删除' onclick='deleteRecord(this);'/></td>";
+						$('#queryResult').append("<tr>" + id + src + ops + "</tr>");
+					});
+				});
+		});//btnQuery.click()
+
+	});//$
+	
+	function updateRecord(){
+		
+		var table = $('#queryResult');
+		var selected = table.find(".trSelected");
+		if(selected.length==0){
+			alert("还没有选中记录，无法更新")
+			return;
+		}
+		var tds = $(selected[0]).children();
+		var id = $(tds[0]).html();
+		var source = $('#UP #txtDataSource').val();
+		$.post('ajax/alg1/update.do',
+			{
+				"id":id,
+				"source":source
+			},
+			function(data, status){
+				console.log("GET ajax/alg1/update.do : " + status);
+				alert(data);
+			});
+	}
+	
+	function deleteRecord(element){
+		
+		var tds = $(element).parents("tr").children();
+		var recordID = $(tds[0]).html();
+		$.post('ajax/alg1/delete.do',
+				{id:recordID},
+				function(data, status){
+					$(element).parents("tr").remove();
+				});
+	}
+	
+	function loadSource(element){
+
+		//反选中
+		var table = $(element).parents("table");
+		var selected = table.find(".trSelected");
+		selected.removeClass("trSelected");
+		
+		//选中
+		var tr = $(element).parents("tr");
+		tr.addClass("trSelected");
+		
+		$('#btnUpdate').removeAttr("disabled");
+		
+		var tds = tr.children();
+		var recordID = $(tds[0]).html();
+		$.post('ajax/alg1/obtain.do?id=' + recordID,
+			{},
+			function(data, status){
+				
+				var rtn = eval('('+data+')');
+				$('#UP #txtDataSource').val(rtn.source);
+				var inputSource = rtn.source;
+				process($('#UP'), inputSource, "POSITIVE");
+				process($('#BOTTOM'), inputSource, "NEGTIVE");
+				processALG4($('#MIDDLE'), inputSource);
+			});
+	}
+	
+	function processALG4(container, source){
+		var pairType = container.find('#selPairType').val();
+		$.post('ajax/alg4/accept.do',
+			{
+				"source" : source,
+				"pair"   : pairType
+			},
+			function(data, status){//SUCCESS
+				
+				var rtn = eval('('+data+')');
+				var result = '';
+				var source = '';
+				var startOff = 0;
+				
+				container.find('#source').html(rtn[0]);
+				container.find('#size').html(" [size=" + rtn[0].length + "]");
+				container.find('#expects').html(" [expect=" + rtn[2] + "]");
+				//container.find('#sourceFormat').html(rtn[1]);
+				container.find('#trueANDfalse').html(rtn[3]);
+				container.find('#result0').html(rtn[4]);
+				container.find('#result1').html(rtn[5]);
+				container.find('#result2').html(rtn[6]);
+				container.find('#result3').html(rtn[7]);
+			}).error(function(){//ERROR
+				
+				container.find('#source').html(source);
+				container.find('#size').html(" [size=" + source.length + "]");
+				container.find('#expects').html("");
+				container.find('#sourceFormat').html("");
+				container.find('#trueANDfalse').html("");
+				container.find('#result0').html("");
+				container.find('#result1').html("");
+				container.find('#result2').html("");
+				container.find('#result3').html("");
+			});//$.post
+	}
+	
+	function process(container, source, pairType){
+
+		$.post('ajax/alg1/accept.do',
+			{
+				"source" : source,
+				"pair"   : pairType
+			},
+			function(data, status){//SUCCESS
+				
+				var rtn = eval('('+data+')');
+				var result = '';
+				var source = '';
+				var startOff = 0;
+				
+				container.find('#source').html(rtn[0]);
+				container.find('#size').html(" [size=" + rtn[0].length + "]");
+				container.find('#expects').html(" [expect=" + rtn[2] + "]");
+				container.find('#sourceFormat').html(rtn[1]);
+				container.find('#trueANDfalse').html(rtn[3]);
+				container.find('#result0').html(rtn[4]);
+				container.find('#result1').html(rtn[5]);
+				container.find('#result2').html(rtn[6]);
+				container.find('#result3').html(rtn[7]);
+				//$('#source').html(rtn[0]);
+				//$('#size').html(" [size=" + rtn[0].length + "]");//
+				//$('#expects').html(" [expect=" + rtn[4] + "]");
+				//$('#sourceFormat').html(rtn[1]);
+				//$('#trueANDfalse').html(rtn[2]);
+				//$('#result').html(rtn[3]);
+			}).error(function(){//ERROR
+				
+				container.find('#source').html(source);
+				container.find('#size').html(" [size=" + source.length + "]");
+				container.find('#expects').html("");
+				container.find('#sourceFormat').html("");
+				container.find('#trueANDfalse').html("");
+				container.find('#result0').html("");
+				container.find('#result1').html("");
+				container.find('#result2').html("");
+				container.find('#result3').html("");
+			});//$.post
+	}
+	</script>
+</head>
+<body>
+
+<div style="heigth:200px; margin:auto;">
+	<div style="width:250px; height:800px; float:left; background:#E0E0D0;">
+		<input id="createDate" type="text" size="10"></input>
+		<input id="btnQuery" type="button" value="查询"></input>
+		<table id="queryResult"></table>
+	</div><!-- LEFT -->
+	<div style="width:1000px; height:800px; float:left; background:#F0F0F0;">
+<div id="UP">
+算法1正
+	<select id="selPairType">
+		<option value ="POSITIVE">期待正</option><option value ="NEGTIVE">期待反</option>
+	</select>
+	<input id="txtDataSource" size="70" value="BAAAAAAABAABBBABBBAABBBAABAABBAABABBAAAABAABAABBAABBBABBBBAAAAA"/>
+	<input id="btnSave" type="button" value="保存"/>
+	<input id="btnUpdate" type="button" disabled recordID="" value="更新" onclick="updateRecord();"/>
+	<BR/>
+<font size="5">
+	<pre>
+<span id="sourceFormat"></span>
+<span id="source"></span><span id="size"></span><span><font color="red" id="expects"></font></span>
+<span id="trueANDfalse"></span>
+<span id="result0"></span>
+<span id="result1"></span>
+<span id="result2"></span>
+<span id="result3"></span>
+	</pre>
+</font>
+</div><!-- UP -->
+<hr>
+<div id="MIDDLE">
+算法4<BR/>
+	<!-- <select id="selPairType">
+		<option value ="POSITIVE">期待正</option><option value ="NEGTIVE">期待反</option>
+	</select>
+	<input id="txtDataSource" size="70" value="BAAAAAAABAABBBABBBAABBBAABAABBAABABBAAAABAABAABBAABBBABBBBAAAAA"/>
+	<input id="btnSave" type="button" value="保存"/> -->
+	
+<font size="5">
+	<pre>
+<span id="sourceFormat"></span>
+<span id="source"></span><span id="size"></span><span><font color="red" id="expects"></font></span>
+<span id="trueANDfalse"></span>
+<span id="result0"></span>
+<span id="result1"></span>
+<span id="result2"></span>
+<span id="result3"></span>
+	</pre>
+</font>
+</div><!-- MIDDLE -->
+
+<div id="BOTTOM">
+算法1反<BR/>
+<font size="5">
+	<pre>
+<span id="sourceFormat"></span>
+<span id="source"></span><span id="size"></span><span><font color="red" id="expects"></font></span>
+<span id="trueANDfalse"></span>
+<span id="result0"></span>
+<span id="result1"></span>
+<span id="result2"></span>
+<span id="result3"></span>
+	</pre>
+</font>
+</div><!-- "BOTTOM" -->
+	</div>
+</div>
+</body>
+</html>

@@ -28,13 +28,14 @@
 		<jdk-version>1.6</jdk-version>
 		<junit-version>4.11</junit-version>
 		<spring.version>3.2.10.RELEASE</spring.version>
+		<hibernate.version>4.2.4.Final</hibernate.version>
 		<cxf.version>2.7.12</cxf.version>
 		<jackson.version>1.8.4</jackson.version>
 	</properties>
 
 	<build>
 		<plugins>
-			<plugin>
+			<!-- <plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>2.0.2</version>
@@ -42,7 +43,7 @@
 					<source>1.6</source>
 					<target>1.6</target>
 				</configuration>
-			</plugin>
+			</plugin> -->
 		</plugins>
 	</build>
 

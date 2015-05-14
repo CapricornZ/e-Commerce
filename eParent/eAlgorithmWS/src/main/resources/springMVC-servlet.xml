@@ -13,6 +13,13 @@
     	
     <import resource="ALG.xml" />
     <import resource="TandFBuilders.xml" />
+    
+	<bean class="elements.controller.Alg1Controller">
+		<property name="recordService" ref="recordService"/>
+	</bean>
+	
+	<bean class="elements.controller.Alg4Controller">
+	</bean>
 	
 	<bean class="elements.controller.AjaxController">
 		<property name="algorithms">
@@ -24,6 +31,7 @@
 			</array>
 		</property>
 	</bean>
+	
 	<bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping" />
 	<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
 		<property name="messageConverters">
