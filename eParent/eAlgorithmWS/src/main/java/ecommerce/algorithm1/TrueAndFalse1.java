@@ -21,20 +21,22 @@ public class TrueAndFalse1 implements ITrueAndFalse{
 	public String getType() { return this.type; }
 	
 	@Override
-	public Result execute(int cycleStep){
+	public Result execute(int cycleStep, String type){
 
 		String class3O = "ecommerce.algorithm1.processor.CycleNegtive";
 		String class3X = "ecommerce.algorithm1.processor.CyclePositive";
-		boolean bStop = false;
-		IProcessor processor = Start.findProcessor(source, cycleStep, class3X, class3O);
+		IProcessor processor = null;
+		if("POSITIVE".equals(type))
+			processor = Start.findProcessor(source, cycleStep, class3X, class3O);
+		else
+			processor = Start.findProcessor(source, cycleStep, class3O, class3X);
+				
 		if(null != processor){
-			bStop = processor.execute();
+			int expect = processor.execute();
 			this.type = processor instanceof Processor3O ? "NEGTIVE" : "POSITIVE";
-			return new Result(processor.getProcedure(), processor.getMaxStep(), bStop);
+			return new Result(processor.getProcedure(), processor.getMaxStep(), expect);
 		} else
 			return null;
-		
-		
 	}
 	
 	@Override

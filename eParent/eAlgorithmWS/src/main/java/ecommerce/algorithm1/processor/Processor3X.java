@@ -31,9 +31,8 @@ public class Processor3X implements IProcessor {
 	public List<Integer> getProcedure(){ return this.procedure; }
 	
 	@Override
-	public boolean execute() {
+	public int execute() {
 
-		boolean finished = false;
 		this.procedure = new ArrayList<Integer>();
 		Constructor<ICycle> constructor = null;
 		try {
@@ -45,13 +44,13 @@ public class Processor3X implements IProcessor {
 		}
 
 		int cycleStep = this.cycleStep;
-		logger.debug("3X FOUND");
-		//FileOutput.write("3X FOUND");
+		logger.debug("3X FOUND : ");
 		int totalSum = 0;
 		List<Integer> steps = new ArrayList<Integer>();
+		ICycle cycle = null;
 		for(int i=0; i+offset<this.source.length; i+=cycleStep){
 
-			ICycle cycle = null;
+			//ICycle cycle = null;
 			if(steps.size() == 0){
 				
 				try {
@@ -59,8 +58,8 @@ public class Processor3X implements IProcessor {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-			}
-			else{
+			} else {
+				
 				int step = 2;
 				for(int var : steps)
 					step += Math.abs(var);
@@ -76,6 +75,7 @@ public class Processor3X implements IProcessor {
 			int sum = cycle.getSum();
 			steps.add(sum);
 
+			//bStop 代表 Cycle中间停止
 			boolean bStop = false;
 			for(int index=0; !bStop && index<cycle.getProcess().size(); index++){
 				int val = cycle.getProcess().get(index);
@@ -83,27 +83,46 @@ public class Processor3X implements IProcessor {
 				if(this.maxStep < Math.abs(val))
 					this.maxStep = Math.abs(val);
 				logger.debug(String.format("%s%d", val<0?"":"+", val));
-				//FileOutput.write(String.format("%s%d", val<0?"":"+", val));
 				this.procedure.add(val);
-				if(totalSum >= 2){
+				if(totalSum >= 2)
 					bStop = true;
-					finished = true;
-				}
 			}
-			if(bStop)
-				break;
-			if(i==0 && sum == 0){
-				finished = true;
-				break;
+			
+			//下面两种情况代表了处理结束,这两种情况下是没有期待值的
+			//if(bStop)//1.整个处理的SUM>=2
+			//	break;
+			//if(i==0 && sum == 0 && cycle.getProcess().size()==this.cycleStep){//第一个周期完成,并且SUM==0
+			//	hasExpect = false;
+			//	break;
+			//}
+			
+			//下面两种情况代表了处理结束,这两种情况下是没有期待值的
+			if(bStop){//1.整个处理的SUM>=2
+				logger.debug(String.format("=%d {MAX:%d}\r\n", totalSum, this.maxStep));
+				//return false;
+				return 0;
+			}
+			if(i==0 && sum == 0 && cycle.getProcess().size()==this.cycleStep){//第一个周期完成,并且SUM==0
+				logger.debug(String.format("=%d {MAX:%d}\r\n", totalSum, this.maxStep));
+				//return false;
+				return 0;
 			}
 		}
 
 		logger.debug(String.format("=%d {MAX:%d}\r\n", totalSum, this.maxStep));
-		
-		/*if(this.offset+this.procedure.size()<this.source.length)
-			return true;
-		else
-			return false;*/
-		return finished;
+		if(cycle == null){
+			return 1;
+		}
+		if(cycle.getProcess().size() == this.cycleStep){//当前cycle已完成
+			
+			int step = 2;
+			for(int var : steps)
+				step += Math.abs(var);
+			//return true;
+			return step;
+		} else {//当前Cycle未完成
+			//return true;
+			return cycle.getStep();
+		}
 	}
 }

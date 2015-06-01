@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?><!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
 <log4j:configuration>
+	<appender name="CONSOLE-CLEAN" class="org.apache.log4j.ConsoleAppender">
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%m" />
+		</layout>
+	</appender>
+	
 	<appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern" value="%-5p - %m%n" />
@@ -15,6 +21,13 @@
 			<param name="ConversionPattern" value="%d - %c -%-4r [%t] %-5p %x - %m%n" />
 		</layout>
 	</appender>
+	
+	<logger name="ecommerce.algorithm1" additivity="false">
+		<appender-ref ref="CONSOLE-CLEAN" />
+	</logger>
+	<logger name="ecommerce.algorithm4" additivity="false">
+		<appender-ref ref="CONSOLE-CLEAN" />
+	</logger>
 	
 	<logger name="elements" additivity="false">
 		<level value="DEBUG" />

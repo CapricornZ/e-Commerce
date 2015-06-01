@@ -18,8 +18,9 @@
 		<property name="recordService" ref="recordService"/>
 	</bean>
 	
-	<bean class="elements.controller.Alg4Controller">
-	</bean>
+	<bean class="elements.controller.Alg4Controller"/>
+	
+	<bean class="elements.controller.NewAlgController"/>
 	
 	<bean class="elements.controller.AjaxController">
 		<property name="algorithms">

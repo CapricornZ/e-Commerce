@@ -81,49 +81,94 @@ public class Alg1Controller {
 		return "SUCCESS";
 	}
 	
+	@RequestMapping("/format")
+	@ResponseBody
+	public String format(@RequestParam("source")String source){
+		
+		IPair pairEngine = new PairPositive();
+		SourceRow sourceRow = new SourceRow(source, pairEngine);
+		return sourceRow.getFormatSource();
+	}
+	
 	@RequestMapping("/accept")
 	@ResponseBody
     public List<String> accept(@RequestParam("source")String source, @RequestParam("pair")String pairType) {
 		
 		List<String> rtn = new ArrayList<String>();
-		//IPair pairEngine = new PairComboGenerator().generate(rule);
 		IPair pairEngine = new PairPositive();
 		if("NEGTIVE".equals(pairType))
 			pairEngine = new PairNegtive();
 		SourceRow sourceRow = new SourceRow(source, pairEngine);
 		ITrueAndFalse taf = sourceRow.execute();
-		List<ecommerce.algorithm1.Result> results = new ArrayList<ecommerce.algorithm1.Result>();
-		results.add(taf.execute(6));
-		results.add(taf.execute(7));
-		results.add(taf.execute(8));
-		results.add(taf.execute(9));
+		List<ecommerce.algorithm1.Result> resultsPositive = new ArrayList<ecommerce.algorithm1.Result>();
+		resultsPositive.add(taf.execute(6, "POSITIVE"));
+		resultsPositive.add(taf.execute(7, "POSITIVE"));
+		resultsPositive.add(taf.execute(8, "POSITIVE"));
+		resultsPositive.add(taf.execute(9, "POSITIVE"));
+		
+		List<ecommerce.algorithm1.Result> resultsNegtive = new ArrayList<ecommerce.algorithm1.Result>();
+		resultsNegtive.add(taf.execute(6, "NEGTIVE"));
+		resultsNegtive.add(taf.execute(7, "NEGTIVE"));
+		resultsNegtive.add(taf.execute(8, "NEGTIVE"));
+		resultsNegtive.add(taf.execute(9, "NEGTIVE"));
 
 		//***期待下一位***
 		SourceRow sourceRowGuess = new SourceRow(source+"A", pairEngine);
 		ITrueAndFalse tafGuess = sourceRowGuess.execute();
 		boolean lastVal = tafGuess.getSource()[tafGuess.getSource().length-1];
 		int sumOfExpect = 0;
-		for(ecommerce.algorithm1.Result result : results){
-			if(result != null && !result.getStop() && result.getSource().size()>0)
-				sumOfExpect += Math.abs(result.getSource().get(result.getSource().size()-1));
+		for(ecommerce.algorithm1.Result result : resultsPositive){//正的期待
+			if(result != null && result.hasExpect())
+				sumOfExpect += result.getExpect();
+		}
+		
+		for(ecommerce.algorithm1.Result result : resultsNegtive){//反的期待
+			if(result != null && result.hasExpect())
+				sumOfExpect -= result.getExpect();
 		}
 		
 		rtn.add(source);
-		rtn.add(sourceRow.getFormatSource());
-		if(taf.getType() != null){
+		if("POSITIVE".equals(pairType))
+			rtn.add(sourceRow.getFormatSource());
+		else
+			rtn.add("");
+
+		/*if(taf.getType() != null){
 			if(taf.getType().equals("POSITIVE"))
 				rtn.add(String.format("%s*%d", lastVal?"A":"B", sumOfExpect));
 			else
 				rtn.add(String.format("%s*%d", lastVal?"B":"A", sumOfExpect));
 		} else {
 			rtn.add("");
+		}*/
+		if(taf.getType() != null){
+			if(taf.getType().equals("POSITIVE")){
+				if((lastVal && sumOfExpect > 0) || (!lastVal && sumOfExpect<0))
+					rtn.add(String.format("A*%d", Math.abs(sumOfExpect)));
+				else
+					rtn.add(String.format("B*%d", Math.abs(sumOfExpect)));
+			}
+			else{
+				//rtn.add(String.format("%s*%d", lastVal?"B":"A", sumOfExpect));
+				if((lastVal && sumOfExpect > 0) || (!lastVal && sumOfExpect<0))
+					rtn.add(String.format("B*%d", Math.abs(sumOfExpect)));
+				else
+					rtn.add(String.format("A*%d", Math.abs(sumOfExpect)));
+			}
+				
+		} else {
+			rtn.add("");
 		}
 		rtn.add(taf.getFormated());
 		
-		rtn.add(null == results.get(0) ? "" : results.get(0).getFormated());
-		rtn.add(null == results.get(1) ? "" : results.get(1).getFormated());
-		rtn.add(null == results.get(2) ? "" : results.get(2).getFormated());
-		rtn.add(null == results.get(3) ? "" : results.get(3).getFormated());
+		//rtn.add(null == results.get(0) ? "" : results.get(0).getFormated());
+		//rtn.add(null == results.get(1) ? "" : results.get(1).getFormated());
+		//rtn.add(null == results.get(2) ? "" : results.get(2).getFormated());
+		//rtn.add(null == results.get(3) ? "" : results.get(3).getFormated());
+		for(ecommerce.algorithm1.Result result : resultsPositive)
+			rtn.add(result.getFormated());
+		for(ecommerce.algorithm1.Result result : resultsNegtive)
+			rtn.add(result.getFormated());
 		
 		return rtn;
 	}

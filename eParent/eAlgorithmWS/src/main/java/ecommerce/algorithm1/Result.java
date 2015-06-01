@@ -7,22 +7,25 @@ public class Result {
 	private List<Integer> source;
 	private int sum;
 	private int max;
-	private boolean stop;
-	public Result(List<Integer> source, int sum, int max, boolean stop){
+	private boolean hasExpect;
+	private int expect;
+	public Result(List<Integer> source, int sum, int max, boolean hasExpect){
 		this.source = source;
 		this.sum = sum;
 		this.max = max;
-		this.stop = stop;
+		this.hasExpect = hasExpect;
 	}
 	
 	public List<Integer> getSource(){ return this.source; }
-	public boolean getStop(){ return this.stop; }
+	public boolean hasExpect(){ return this.hasExpect; }
+	public int getExpect(){ return this.expect; }
 	
-	public Result(List<Integer>source, int max, boolean stop){
+	public Result(List<Integer>source, int max, int expect){
 		
 		this.source = source;
 		this.max = max;
-		this.stop = stop;
+		this.hasExpect = expect==0?false:true;
+		this.expect = expect;
 		for(int val : source)
 			this.sum += val;
 	}

@@ -4,7 +4,8 @@ import java.util.List;
 
 public interface IProcessor {
 	
-	boolean execute();
+	//boolean execute();
+	int execute();
 	int getMaxStep();
 	List<Integer> getProcedure();
 }

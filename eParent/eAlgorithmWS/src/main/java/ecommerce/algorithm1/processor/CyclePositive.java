@@ -14,6 +14,7 @@ public class CyclePositive implements ICycle{
 	private List<Integer> process = new ArrayList<Integer>();
 	public List<Integer> getProcess(){ return this.process; }
 	
+	@Override
 	public void execute(boolean[] source, int offset, int length){
 		
 		this.sum = 0;
@@ -27,4 +28,7 @@ public class CyclePositive implements ICycle{
 				this.process.add(-this.step);
 			}
 	}
+
+	@Override
+	public int getStep() { return this.step; }
 }

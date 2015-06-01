@@ -2,14 +2,32 @@
 <html>
 <head>
 	<style type="text/css">
-		.left { float:left;background:#F0F0F0; height:600px; }
-		.right{ float:left;background:#F0F0F0; height:300px;width:700px; }
+		#fdiv{
+			position: fixed;
+			_position: absolute;
+			margin-left:250px;
+			_top: expression(eval(document.documentElement.scrollTop) );
+		}
+		#fdiv img{
+			margin-left: 190px;
+			margin-top: 470px;
+		} 
+
+		.left { float:left;background:#E0E0D0; width:250px; height:800px; }
+		.right{ float:left;background:#F0F0F0; width:1000px; height:800px;  }
 		.main { height:600px;background:#FEFEFE;width:0px; }
 		.trSelected{
 			background-color: #51b2f6;			
 			text-align: center;
 			font-size: 12px;
 		}
+		.menus span{
+            width:20px;
+            height:20px;
+    		position: absolute;
+        	top: -20px;
+        	margin-left: -20px;
+    	}
     </style>
 	<meta charset="UTF-8">
 	<title>算法1 : ABAB...</title>
@@ -19,35 +37,43 @@
 
 	<script type="text/javascript">
 	
+	$.ajaxSetup({  
+	    async : false  
+	});
+	
 	$(function(){
 		
 		$( "#createDate" ).datepicker();
 		$( "#createDate" ).datepicker("option","dateFormat","yy-mm-dd");
-		
-		//$('#UP #selPairType').change(function(){
-		//	var inputSource = $("#UP #txtDataSource").val();
-		//	process($('#UP'), inputSource, "POSITIVE");
-		//});
-		
-		//$('#MIDDLE #selPairType').change(function(){
-		//	var inputSource = $("#MIDDLE #txtDataSource").val();
-		//	processALG4($('#MIDDLE'), inputSource);
-		//});
-		
-		$('#UP #txtDataSource').on('input',function(e){
+
+		$('#txtDataSource').on('input',function(e){
 			var inputSource = $(this).val();
-			process($('#UP'), inputSource, "POSITIVE");
-			process($('#BOTTOM'), inputSource, "NEGTIVE");
-			processALG4($('#MIDDLE'), inputSource);
+			var totalExpect = [];
+			formatSource(inputSource);
+			totalExpect[0] = process($('#UP'), inputSource, "POSITIVE");
+			totalExpect[1] = process($('#MIDDLE'), inputSource, "NEGTIVE");
+			totalExpect[2] = processALG4($('#BOTTOM'), inputSource);
+			totalExpect[3] = processNew($('#NEWALG'), inputSource, "POSITIVE");
+			totalExpect[4] = processNew($('#NEWALG1'), inputSource, "NEGTIVE");
+			
+			var sumOfA = 0;
+			for(i=0; i<totalExpect.length; i++){
+				console.log(totalExpect[i]);
+				var arr = totalExpect[i].split("*");
+				if(arr[0] == 'A')
+					sumOfA += parseInt(arr[1]);
+				else
+					sumOfA -= parseInt(arr[1]);
+			}
+			console.log("A*" + sumOfA);
+			if(sumOfA > 0)
+				$('#totalExpect').html("A*" + sumOfA);
+			else
+				$('#totalExpect').html("B*" + Math.abs(sumOfA));
 		});//on
-		
-		//$('#MIDDLE #txtDataSource').on('input',function(e){
-		//	var inputSource = $(this).val();
-		//	processALG4($('#MIDDLE'), inputSource);
-		//});//on
-		
-		$('#UP #btnSave').click(function(){
-			var source = $('#UP #txtDataSource').val();
+				
+		$('#btnSave').click(function(){
+			var source = $('#txtDataSource').val();
 			$.post('ajax/alg1/save.do',
 				{"source":source},
 				function(data, status){
@@ -55,16 +81,6 @@
 					alert(data);
 				});
 		});
-		
-		//$('#MIDDLE #btnSave').click(function(){
-		//	var source = $('#MIDDLE #txtDataSource').val();
-		//	$.post('ajax/alg1/save.do',
-		//		{"source":source},
-		//		function(data, status){
-		//			console.log("GET ajax/alg1/save.do : " + status);
-		//			alert(data);
-		//		});
-		//});
 		
 		var today = new Date();
 		var y=today.getFullYear();
@@ -106,7 +122,7 @@
 		}
 		var tds = $(selected[0]).children();
 		var id = $(tds[0]).html();
-		var source = $('#UP #txtDataSource').val();
+		var source = $('#txtDataSource').val();
 		$.post('ajax/alg1/update.do',
 			{
 				"id":id,
@@ -149,15 +165,35 @@
 			function(data, status){
 				
 				var rtn = eval('('+data+')');
-				$('#UP #txtDataSource').val(rtn.source);
+				$('#txtDataSource').val(rtn.source);
 				var inputSource = rtn.source;
-				process($('#UP'), inputSource, "POSITIVE");
-				process($('#BOTTOM'), inputSource, "NEGTIVE");
-				processALG4($('#MIDDLE'), inputSource);
+				var totalExpect = [];
+				formatSource(inputSource);
+				totalExpect[0] = process($('#UP'), inputSource, "POSITIVE");
+				totalExpect[1] = process($('#MIDDLE'), inputSource, "NEGTIVE");
+				totalExpect[2] = processALG4($('#BOTTOM'), inputSource);
+				totalExpect[3] = processNew($('#NEWALG'), inputSource, "POSITIVE");
+				totalExpect[4] = processNew($('#NEWALG1'), inputSource, "NEGTIVE");
+				
+				var sumOfA = 0;
+				for(i=0; i<totalExpect.length; i++){
+					console.log(totalExpect[i]);
+					var arr = totalExpect[i].split("*");
+					if(arr[0] == 'A')
+						sumOfA += parseInt(arr[1]);
+					else
+						sumOfA -= parseInt(arr[1]);
+				}
+				console.log("A*" + sumOfA);
+				if(sumOfA > 0)
+					$('#totalExpect').html("A*" + sumOfA);
+				else
+					$('#totalExpect').html("B*" + Math.abs(sumOfA));
 			});
 	}
 	
 	function processALG4(container, source){
+		var rtnVal = "A*0";
 		var pairType = container.find('#selPairType').val();
 		$.post('ajax/alg4/accept.do',
 			{
@@ -173,29 +209,50 @@
 				
 				container.find('#source').html(rtn[0]);
 				container.find('#size').html(" [size=" + rtn[0].length + "]");
-				container.find('#expects').html(" [expect=" + rtn[2] + "]");
+				container.find('#expects').html(" [expect=" + rtn[2] + "]"); rtnVal = rtn[2];
 				//container.find('#sourceFormat').html(rtn[1]);
 				container.find('#trueANDfalse').html(rtn[3]);
 				container.find('#result0').html(rtn[4]);
 				container.find('#result1').html(rtn[5]);
 				container.find('#result2').html(rtn[6]);
 				container.find('#result3').html(rtn[7]);
+				container.find('#result4').html(rtn[8]);
+				container.find('#result5').html(rtn[9]);
+				container.find('#result6').html(rtn[10]);
+				container.find('#result7').html(rtn[11]);
 			}).error(function(){//ERROR
 				
 				container.find('#source').html(source);
 				container.find('#size').html(" [size=" + source.length + "]");
 				container.find('#expects').html("");
-				container.find('#sourceFormat').html("");
+				//container.find('#sourceFormat').html("");
 				container.find('#trueANDfalse').html("");
 				container.find('#result0').html("");
 				container.find('#result1').html("");
 				container.find('#result2').html("");
 				container.find('#result3').html("");
+				container.find('#result4').html("");
+				container.find('#result5').html("");
+				container.find('#result6').html("");
+				container.find('#result7').html("");
 			});//$.post
+		return rtnVal;
+	}
+	
+	function formatSource(source){
+
+		$.post('ajax/alg1/format.do',
+			{"source" : source},
+			function(data, status){//SUCCESS
+				var rtn = eval('(' + data + ')');
+				$('#sourceFormat').html(rtn);
+			}
+		);
 	}
 	
 	function process(container, source, pairType){
 
+		var rtnVal = "A*0";
 		$.post('ajax/alg1/accept.do',
 			{
 				"source" : source,
@@ -210,101 +267,198 @@
 				
 				container.find('#source').html(rtn[0]);
 				container.find('#size').html(" [size=" + rtn[0].length + "]");
-				container.find('#expects').html(" [expect=" + rtn[2] + "]");
-				container.find('#sourceFormat').html(rtn[1]);
+				container.find('#expects').html(" [expect=" + rtn[2] + "]"); rtnVal = rtn[2];
+				//container.find('#sourceFormat').html(rtn[1]);
+				//$('#sourceFormat').html(rtn[1]);
 				container.find('#trueANDfalse').html(rtn[3]);
 				container.find('#result0').html(rtn[4]);
 				container.find('#result1').html(rtn[5]);
 				container.find('#result2').html(rtn[6]);
 				container.find('#result3').html(rtn[7]);
-				//$('#source').html(rtn[0]);
-				//$('#size').html(" [size=" + rtn[0].length + "]");//
-				//$('#expects').html(" [expect=" + rtn[4] + "]");
-				//$('#sourceFormat').html(rtn[1]);
-				//$('#trueANDfalse').html(rtn[2]);
-				//$('#result').html(rtn[3]);
+				container.find('#result4').html(rtn[8]);
+				container.find('#result5').html(rtn[9]);
+				container.find('#result6').html(rtn[10]);
+				container.find('#result7').html(rtn[11]);
+
 			}).error(function(){//ERROR
 				
 				container.find('#source').html(source);
 				container.find('#size').html(" [size=" + source.length + "]");
 				container.find('#expects').html("");
-				container.find('#sourceFormat').html("");
+				//container.find('#sourceFormat').html("");
+				//$('#sourceFormat').html("");
 				container.find('#trueANDfalse').html("");
 				container.find('#result0').html("");
 				container.find('#result1').html("");
 				container.find('#result2').html("");
 				container.find('#result3').html("");
+				container.find('#result4').html("");
+				container.find('#result5').html("");
+				container.find('#result6').html("");
+				container.find('#result7').html("");
 			});//$.post
+		return rtnVal;
+	}
+	
+	function processNew(container, source, pairType){
+
+		var rtnVal = "A*0";
+		$.post('ajax/newAlg/accept.do',
+			{
+				"source" : source,
+				"pair"   : pairType
+			},
+			function(data, status){//SUCCESS
+				
+				var rtn = eval('('+data+')');
+				var result = '';
+				var source = '';
+				var startOff = 0;
+				
+				container.find('#source').html(rtn[0]);
+				container.find('#size').html(" [size=" + rtn[0].length + "]");
+				container.find('#expects').html(" [expect=" + rtn[2] + "]"); rtnVal = rtn[2];
+				//container.find('#sourceFormat').html(rtn[1]);
+				container.find('#trueANDfalse').html(rtn[3]);
+				container.find('#result0').html(rtn[4]);
+				container.find('#result1').html(rtn[5]);
+				container.find('#result2').html(rtn[6]);
+				container.find('#result3').html(rtn[7]);
+				container.find('#result4').html(rtn[8]);
+				container.find('#result5').html(rtn[9]);
+				container.find('#result6').html(rtn[10]);
+				container.find('#result7').html(rtn[11]);
+
+			}).error(function(){//ERROR
+				
+				container.find('#source').html(source);
+				container.find('#size').html(" [size=" + source.length + "]");
+				container.find('#expects').html("");
+				//container.find('#sourceFormat').html("");
+				container.find('#trueANDfalse').html("");
+				container.find('#result0').html("");
+				container.find('#result1').html("");
+				container.find('#result2').html("");
+				container.find('#result3').html("");
+				container.find('#result4').html("");
+				container.find('#result5').html("");
+				container.find('#result6').html("");
+				container.find('#result7').html("");
+			});//$.post
+		return rtnVal;
+	}
+	
+	function toggle(container){
+		var parent = $(container).parent();
+		var title = $(container);
+		if("[-]" == title.html()){
+			title.html("[+]");
+			parent.find('#area').hide();
+		} else {
+			title.html("[-]");
+			parent.find('#area').show();
+		}
 	}
 	</script>
 </head>
 <body>
 
-<div style="heigth:200px; margin:auto;">
-	<div style="width:250px; height:800px; float:left; background:#E0E0D0;">
+<div id="fdiv">
+	<div>
+		<select id="selPairType">
+			<option value ="POSITIVE">期待正</option>
+			<option value ="NEGTIVE">期待反</option>
+		</select>
+		<input id="txtDataSource" size="70" value="BAAAAAAABAABBBABBBAABBBAABAABBAABABBAAAABAABAABBAABBBABBBBAAAAA"/>
+		<input id="btnSave" type="button" value="保存"/>
+		<input id="btnUpdate" type="button" disabled recordID="" value="更新" onclick="updateRecord();"/>
+		<span id="totalExpect">EXPECT:</span>
+	</div>
+	<div style="float:right;"><pre><span id="sourceFormat"></span></pre></div>
+</div>
+
+<div style="heigth:200px;">
+	<div class="left">
 		<input id="createDate" type="text" size="10"></input>
 		<input id="btnQuery" type="button" value="查询"></input>
-		<table id="queryResult"></table>
+		<table id="queryResult" style="font-size: 12px;"></table>
 	</div><!-- LEFT -->
-	<div style="width:1000px; height:800px; float:left; background:#F0F0F0;">
+	<div class="right">
 <div id="UP">
-算法1正
-	<select id="selPairType">
-		<option value ="POSITIVE">期待正</option><option value ="NEGTIVE">期待反</option>
-	</select>
-	<input id="txtDataSource" size="70" value="BAAAAAAABAABBBABBBAABBBAABAABBAABABBAAAABAABAABBAABBBABBBBAAAAA"/>
-	<input id="btnSave" type="button" value="保存"/>
-	<input id="btnUpdate" type="button" disabled recordID="" value="更新" onclick="updateRecord();"/>
-	<BR/>
-<font size="5">
-	<pre>
-<span id="sourceFormat"></span>
-<span id="source"></span><span id="size"></span><span><font color="red" id="expects"></font></span>
+	<BR/><pre><span id="sourceFormatX"></span></pre>
+算法1
+<pre><span id="source"></span><span id="size"></span><span><font color="red" id="expects" class="expects"></font></span>
 <span id="trueANDfalse"></span>
-<span id="result0"></span>
+<div style="background:#E0E0E0;" id="x">正<span onclick="return toggle(this);">[-]</span><div id="area" style="background:#E0E0E0;"><span id="result0"></span>
 <span id="result1"></span>
 <span id="result2"></span>
-<span id="result3"></span>
-	</pre>
-</font>
+<span id="result3"></span></div></div><div style="background:#F0F0F0;">反<span onclick="return toggle(this);">[-]</span><div id="area"><span id="result4"></span>
+<span id="result5"></span>
+<span id="result6"></span>
+<span id="result7"></span></div></div></pre>
 </div><!-- UP -->
+<!-- <hr style="border-top-width: 0px; border-right-width: 0px; margin-top: 0px; margin-bottom: 0px;"> -->
 <hr>
 <div id="MIDDLE">
-算法4<BR/>
-	<!-- <select id="selPairType">
-		<option value ="POSITIVE">期待正</option><option value ="NEGTIVE">期待反</option>
-	</select>
-	<input id="txtDataSource" size="70" value="BAAAAAAABAABBBABBBAABBBAABAABBAABABBAAAABAABAABBAABBBABBBBAAAAA"/>
-	<input id="btnSave" type="button" value="保存"/> -->
-	
-<font size="5">
+算法1'
 	<pre>
-<span id="sourceFormat"></span>
-<span id="source"></span><span id="size"></span><span><font color="red" id="expects"></font></span>
+<span id="source"></span><span id="size"></span><span><font color="red" id="expects" class="expects"></font></span>
 <span id="trueANDfalse"></span>
-<span id="result0"></span>
+<div style="background:#E0E0E0;">正<span onclick="return toggle(this);">[-]</span><div id="area"><span id="result0"></span>
 <span id="result1"></span>
 <span id="result2"></span>
-<span id="result3"></span>
-	</pre>
-</font>
+<span id="result3"></span></div></div><div style="background:#F0F0F0;">反<span onclick="return toggle(this);">[-]</span><div id="area"><span id="result4"></span>
+<span id="result5"></span>
+<span id="result6"></span>
+<span id="result7"></span></div></div></pre>
 </div><!-- MIDDLE -->
 
+<hr>
 <div id="BOTTOM">
-算法1反<BR/>
-<font size="5">
+算法4
 	<pre>
-<span id="sourceFormat"></span>
-<span id="source"></span><span id="size"></span><span><font color="red" id="expects"></font></span>
+<span id="source"></span><span id="size"></span><span><font color="red" id="expects" class="expects"></font></span>
 <span id="trueANDfalse"></span>
-<span id="result0"></span>
+<div style="background:#E0E0E0;">正<span onclick="return toggle(this);">[-]</span><div id="area"><span id="result0"></span>
 <span id="result1"></span>
 <span id="result2"></span>
-<span id="result3"></span>
-	</pre>
-</font>
+<span id="result3"></span></div></div><div style="background:#F0F0F0;">反<span onclick="return toggle(this);">[-]</span><div id="area"><span id="result4"></span>
+<span id="result5"></span>
+<span id="result6"></span>
+<span id="result7"></span></div></div></pre>
+
 </div><!-- "BOTTOM" -->
-	</div>
+
+<div id="NEWALG">
+新算法
+	<pre>
+<span id="source"></span><span id="size"></span><span><font color="red" id="expects" class="expects"></font></span>
+<span id="trueANDfalse"></span>
+<div style="background:#E0E0E0;">正<span onclick="return toggle(this);">[-]</span><div id="area"><span id="result0"></span>
+<span id="result1"></span>
+<span id="result2"></span>
+<span id="result3"></span></div></div><div style="background:#F0F0F0;">反<span onclick="return toggle(this);">[-]</span><div id="area"><span id="result4"></span>
+<span id="result5"></span>
+<span id="result6"></span>
+<span id="result7"></span></div></div></pre>
+
+</div><!-- "NEWALG" -->
+
+<div id="NEWALG1">
+新算法`
+	<pre>
+<span id="source"></span><span id="size"></span><span><font color="red" id="expects" class="expects"></font></span>
+<span id="trueANDfalse"></span>
+<div style="background:#E0E0E0;">正<span onclick="return toggle(this);">[-]</span><div id="area"><span id="result0"></span>
+<span id="result1"></span>
+<span id="result2"></span>
+<span id="result3"></span></div></div><div style="background:#F0F0F0;">反<span onclick="return toggle(this);">[-]</span><div id="area"><span id="result4"></span>
+<span id="result5"></span>
+<span id="result6"></span>
+<span id="result7"></span></div></div></pre>
+
+</div><!-- "NEWALG1" -->
+	</div><!-- "right" -->
 </div>
 </body>
 </html>

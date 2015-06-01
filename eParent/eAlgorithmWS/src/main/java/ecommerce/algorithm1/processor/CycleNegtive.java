@@ -27,4 +27,7 @@ public class CycleNegtive implements ICycle{
 				this.process.add(this.step);
 			}
 	}
+
+	@Override
+	public int getStep() { return this.step; }
 }

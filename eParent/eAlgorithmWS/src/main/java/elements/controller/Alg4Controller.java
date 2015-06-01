@@ -52,57 +52,115 @@ public class Alg4Controller {
 			for(int i=0; i<taf.getResult().size(); i++)
 				result[i] = taf.getResult().get(i);
 			
-			List<Result> results = new ArrayList<Result>();
+			List<Result> resultsPositive = new ArrayList<Result>();
+			List<Result> resultsNegtive = new ArrayList<Result>();
 			//*** 6 ***
-			boolean bStop = false;
+			int expect = 0;
 			Result finalRes = null;
 			IProcessor processor = Start.findProcessor(result, 6, class3X, class3O);
 			if(null != processor){
-				bStop = processor.execute();
-				finalRes = new Result(processor.getProcedure(), processor.getMaxStep(), bStop);
+				expect = processor.execute();
+				finalRes = new Result(processor.getProcedure(), processor.getMaxStep(), expect);
 			}
-			results.add(finalRes);
+			resultsPositive.add(finalRes);
 			rtnAccept.add(null==finalRes? "" : finalRes.getFormated());
 			
 			//*** 7 ***
 			finalRes = null;
 			processor = Start.findProcessor(result, 7, class3X, class3O);
 			if(null != processor){
-				bStop = processor.execute();
-				finalRes = new Result(processor.getProcedure(), processor.getMaxStep(), bStop);
+				expect = processor.execute();
+				finalRes = new Result(processor.getProcedure(), processor.getMaxStep(), expect);
 			}
-			results.add(finalRes);
+			resultsPositive.add(finalRes);
 			rtnAccept.add(null==finalRes? "" : finalRes.getFormated());
 			
 			//*** 8 ***
 			finalRes = null;
 			processor = Start.findProcessor(result, 8, class3X, class3O);
 			if(null != processor){
-				bStop = processor.execute();
-				finalRes = new Result(processor.getProcedure(), processor.getMaxStep(), bStop);
+				expect = processor.execute();
+				finalRes = new Result(processor.getProcedure(), processor.getMaxStep(), expect);
 			}
-			results.add(finalRes);
+			resultsPositive.add(finalRes);
 			rtnAccept.add(null==finalRes? "" : finalRes.getFormated());
 			
 			//*** 9 ***
 			finalRes = null;
 			processor = Start.findProcessor(result, 9, class3X, class3O);
 			if(null != processor){
-				bStop = processor.execute();
-				finalRes = new Result(processor.getProcedure(), processor.getMaxStep(), bStop);
+				expect = processor.execute();
+				finalRes = new Result(processor.getProcedure(), processor.getMaxStep(), expect);
 			}
-			results.add(finalRes);
+			resultsPositive.add(finalRes);
+			rtnAccept.add(null==finalRes? "" : finalRes.getFormated());
+			
+			//*** 6 反 ***
+			finalRes = null;
+			processor = Start.findProcessor(result, 6, class3O, class3X);
+			if(null != processor){
+				expect = processor.execute();
+				finalRes = new Result(processor.getProcedure(), processor.getMaxStep(), expect);
+			}
+			resultsNegtive.add(finalRes);
+			rtnAccept.add(null==finalRes? "" : finalRes.getFormated());
+			
+			//*** 7 反 ***
+			finalRes = null;
+			processor = Start.findProcessor(result, 7, class3O, class3X);
+			if(null != processor){
+				expect = processor.execute();
+				finalRes = new Result(processor.getProcedure(), processor.getMaxStep(), expect);
+			}
+			resultsNegtive.add(finalRes);
+			rtnAccept.add(null==finalRes? "" : finalRes.getFormated());
+			
+			//*** 8 反 ***
+			finalRes = null;
+			processor = Start.findProcessor(result, 8, class3O, class3X);
+			if(null != processor){
+				expect = processor.execute();
+				finalRes = new Result(processor.getProcedure(), processor.getMaxStep(), expect);
+			}
+			resultsNegtive.add(finalRes);
+			rtnAccept.add(null==finalRes? "" : finalRes.getFormated());
+			
+			//*** 9 反 ***
+			finalRes = null;
+			processor = Start.findProcessor(result, 9, class3O, class3X);
+			if(null != processor){
+				expect = processor.execute();
+				finalRes = new Result(processor.getProcedure(), processor.getMaxStep(), expect);
+			}
+			resultsNegtive.add(finalRes);
 			rtnAccept.add(null==finalRes? "" : finalRes.getFormated());
 			
 			int sumOfExpect = 0;
-			for(Result item : results){
-				if(null!=item && !item.getStop() && item.getSource().size()>0)
-					sumOfExpect += Math.abs(item.getSource().get(item.getSource().size()-1));
+			for(Result item : resultsPositive){//正
+				if(null!=item && item.hasExpect())
+					sumOfExpect += item.getExpect();
+			}
+			for(Result item : resultsNegtive){//反
+				if(null!=item && item.hasExpect())
+					sumOfExpect -= item.getExpect();
 			}
 			
-			if(processor instanceof ecommerce.algorithm4.processor.Processor3O)
-				rtnAccept.set(2, "A".equals(rtnAccept.get(2)) ? "B" : "A");
-			rtnAccept.set(2, String.format("%s*%d", rtnAccept.get(2), sumOfExpect));
+			//if(processor instanceof ecommerce.algorithm4.processor.Processor3O)
+			//	rtnAccept.set(2, "A".equals(rtnAccept.get(2)) ? "B" : "A");
+			//rtnAccept.set(2, String.format("%s*%d", rtnAccept.get(2), sumOfExpect));
+			
+			if(processor instanceof ecommerce.algorithm4.processor.Processor3X){
+				if((lastVal && sumOfExpect > 0) || (!lastVal && sumOfExpect<0))
+					rtnAccept.set(2, String.format("A*%d", Math.abs(sumOfExpect)));
+				else
+					rtnAccept.set(2, String.format("B*%d", Math.abs(sumOfExpect)));
+			}
+			else{
+				if((lastVal && sumOfExpect > 0) || (!lastVal && sumOfExpect<0))
+					rtnAccept.set(2, String.format("B*%d", Math.abs(sumOfExpect)));
+				else
+					rtnAccept.set(2, String.format("A*%d", Math.abs(sumOfExpect)));
+			}
 		}
 		
 		return rtnAccept;

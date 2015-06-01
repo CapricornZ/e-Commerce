@@ -9,7 +9,8 @@ public class CycleNegtive implements ICycle{
 	public CycleNegtive(int step){ this.step = step; }
 	
 	private int sum = 0;
-	public int getSum(){ return this.sum; }
+	@Override public int getSum(){ return this.sum; }
+	@Override public int getStep() { return this.step; }
 	
 	private List<Integer> process = new ArrayList<Integer>();
 	public List<Integer> getProcess(){ return this.process; }
