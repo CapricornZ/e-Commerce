@@ -18,6 +18,10 @@
 		<property name="recordService" ref="recordService"/>
 	</bean>
 	
+	<bean class="elements.controller.Alg1xController"/>
+	<bean class="elements.controller.Alg4xController"/>
+	<bean class="elements.controller.NewAlgxController"/>
+	
 	<bean class="elements.controller.Alg4Controller"/>
 	
 	<bean class="elements.controller.NewAlgController"/>
@@ -44,6 +48,7 @@
 	<bean id="mappingJacksonHttpMessageConverter" class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
 		<property name="supportedMediaTypes">
 			<list>
+				<value>application/json;charset=UTF-8</value>
 				<value>text/html;charset=UTF-8</value>
 			</list>
 		</property>

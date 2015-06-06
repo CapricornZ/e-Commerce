@@ -1,0 +1,49 @@
+<html>
+<head>
+<style>
+    .menus{
+         position: relative;
+    }
+    .menus span{
+            width:20px;
+            height:20px;
+    position: absolute;
+        top: -20px;
+        margin-left: -20px;
+             
+    }
+</style>
+<script type="text/javascript" src="js/jquery/jquery-1.11.2.min.js"></script>
+<script>
+	$(function(){
+		
+		$.post('ajax/alg/4/accept.do',
+			{ 
+				"source" : "BAAAAAAABAABBBAB",
+				"expects": [
+					"++++++++++++++++++++",
+					"++++++++++++++++++++",
+					"++++++++++++++++++++",
+					"++++++++++++++++++++"
+				]
+			},
+			function(data, status){//SUCCESS
+
+				console.log(data);
+				
+			}).error(function(){//ERROR
+				console.log("ERROR");
+			});//$.post
+	});
+</script>
+</head>
+<body>
+<br/><br/><br/>
+<div class="menus" id="menu">
+ 	<a href="#" >待解决</a>&nbsp;
+	<a href="#" >已解决</a>&nbsp;
+	<a href="#" >推荐[精华]</a>
+	<span onclick="return show($('#menu'));">+</span>
+</div>
+</body>
+</html> 

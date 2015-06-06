@@ -202,7 +202,8 @@
 			},
 			function(data, status){//SUCCESS
 				
-				var rtn = eval('('+data+')');
+				//var rtn = eval('('+data+')');
+				var rtn = data;
 				var result = '';
 				var source = '';
 				var startOff = 0;
@@ -244,7 +245,8 @@
 		$.post('ajax/alg1/format.do',
 			{"source" : source},
 			function(data, status){//SUCCESS
-				var rtn = eval('(' + data + ')');
+				//var rtn = eval('(' + data + ')');
+				var rtn = data;
 				$('#sourceFormat').html(rtn);
 			}
 		);
@@ -260,7 +262,8 @@
 			},
 			function(data, status){//SUCCESS
 				
-				var rtn = eval('('+data+')');
+				//var rtn = eval('('+data+')');
+				var rtn = data;
 				var result = '';
 				var source = '';
 				var startOff = 0;
@@ -310,7 +313,8 @@
 			},
 			function(data, status){//SUCCESS
 				
-				var rtn = eval('('+data+')');
+				//var rtn = eval('('+data+')');
+				var rtn = data;
 				var result = '';
 				var source = '';
 				var startOff = 0;

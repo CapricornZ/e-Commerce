@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -18,6 +19,60 @@ import ecommerce.algorithm4.processor.Start;
 @Controller
 @RequestMapping("/ajax/alg4")
 public class Alg4Controller {
+	
+	@RequestMapping("/preAccept")
+	@ResponseBody
+	public String format(@RequestParam("source")String source){
+		
+		List<String> rtnAccept = new ArrayList<String>();
+
+		SourceRow sRow = new SourceRow(source);
+		sRow.print();
+		IRow row = sRow.run();
+		List<TrueAndFalse> rtn = row.run();
+		
+		//rtnAccept.add(String.format("%s [size=%d]", source, source.length()));
+		//rtnAccept.add(sRow.getFormatSource());
+		rtnAccept.add(rtn.get(0).getFormated());
+		return rtn.get(0).getFormated();
+	}
+	
+	@RequestMapping("/accept/{cycle}")
+	@ResponseBody
+	public Result xAccept(@PathVariable("cycle")int cycle, @RequestParam("source")String source, @RequestParam("expect")String expectPattern){
+		
+		SourceRow sRow = new SourceRow(source);
+		sRow.print();
+		IRow row = sRow.run();
+		List<TrueAndFalse> rtn = row.run();
+		
+		//***期待下一位***
+		SourceRow sourceRowGuess = new SourceRow(source+"A");
+		TrueAndFalse tafGuess = sourceRowGuess.run().run().get(0);
+		boolean lastVal = tafGuess.getResult().get(tafGuess.getResult().size()-1);
+		//rtnAccept.add(lastVal?"A":"B");
+		
+		TrueAndFalse taf = rtn.get(0);
+		taf.print();
+		taf.run();
+		
+		boolean[] result = new boolean[taf.getResult().size()];
+		for(int i=0; i<taf.getResult().size(); i++)
+			result[i] = taf.getResult().get(i);
+
+		int expect = 0;
+		Result finalRes = null;
+		ecommerce.algorithm4.processor.v2.IProcessor processor = 
+				ecommerce.algorithm4.processor.v2.Start.findProcessor(result, cycle, expectPattern.toCharArray());
+		if(null != processor){
+			expect = processor.execute();
+			finalRes = new Result(processor.getProcedure(), processor.getMaxStep(), expect, 'X');
+		}
+		//resultsPositive.add(finalRes);
+		//rtnAccept.add(null==finalRes? "" : finalRes.getFormated());
+		
+		return finalRes;
+	}
 	
 	@RequestMapping("/accept")
 	@ResponseBody

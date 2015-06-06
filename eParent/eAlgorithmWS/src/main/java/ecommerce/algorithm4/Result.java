@@ -9,16 +9,14 @@ public class Result {
 	private int max;
 	private boolean hasExpect;
 	private int expect;
+	private char expectItem;
+
 	public Result(List<Integer> source, int sum, int max, boolean hasExpect){
 		this.source = source;
 		this.sum = sum;
 		this.max = max;
 		this.hasExpect = hasExpect;
 	}
-	
-	public List<Integer> getSource(){ return this.source; }
-	public boolean hasExpect(){ return this.hasExpect; }
-	public int getExpect(){ return this.expect; }
 	
 	public Result(List<Integer>source, int max, int expect){
 		
@@ -29,6 +27,31 @@ public class Result {
 		for(int val : source)
 			this.sum += val;
 	}
+
+	public Result(List<Integer>source, int max, int expect, char item){
+		
+		this.source = source;
+		this.max = max;
+		this.hasExpect = expect==0?false:true;
+		this.expect = expect;
+		for(int val : source)
+			this.sum += val;
+		this.expectItem = item;
+	}
+	
+	public List<Integer> getSource(){ return this.source; }
+	/***
+	 * 是否有期待（算法是否结束）
+	 * @return
+	 */
+	public boolean hasExpect(){ return this.hasExpect; }
+	/***
+	 * 期待的个数
+	 * @return
+	 */
+	public int getExpect(){ return this.expect; }
+	
+	public char getExpectItem() { return expectItem; }
 	
 	public String getFormated(){
 		

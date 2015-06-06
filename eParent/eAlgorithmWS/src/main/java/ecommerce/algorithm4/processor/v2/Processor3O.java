@@ -1,6 +1,5 @@
-package ecommerce.algorithm4.processor;
+package ecommerce.algorithm4.processor.v2;
 
-import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,62 +7,46 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class Processor3O implements IProcessor {
-
+	
 	private static final Logger logger = LoggerFactory.getLogger(Processor3O.class);
 
 	private int offset;
 	private boolean[] source;
+	private char[] expect;
 	private int cycleStep;
-	private String class3O;
-	public Processor3O(boolean[] source, int offset, int cycleStep, String class3O){
+	private int maxStep;
+	private List<Integer> procedure;
+	
+	public Processor3O(boolean[] source, int offset, int cycleStep, char[] expect){
 		this.offset = offset;
 		this.source = source;
 		this.cycleStep = cycleStep;
-		this.class3O = class3O;
+		this.expect = expect;
 	}
 	
-	private int maxStep;
-	@Override
-	public int getMaxStep() { return maxStep; }
-	
-	private List<Integer> procedure;
-	@Override
-	public List<Integer> getProcedure(){ return this.procedure; }
+	@Override public int getMaxStep() { return maxStep; }	
+	@Override public List<Integer> getProcedure(){ return this.procedure; }
 	
 	@Override
 	public int execute() {
-
-		this.procedure = new ArrayList<Integer>();
-		Constructor<ICycle> constructor = null;
-		try {
-			@SuppressWarnings("unchecked")
-			Class<ICycle> Cycle = (Class<ICycle>) Class.forName(this.class3O);
-			constructor = Cycle.getConstructor(int.class);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		logger.debug("3O FOUND : ");
+		
 		int totalSum = 0;
+		this.procedure = new ArrayList<Integer>();
 		List<Integer> steps = new ArrayList<Integer>();
 		ICycle cycle = null;
 		for(int i=0; i+offset<this.source.length; i+=cycleStep){
 			
+			char[] subExpect = new char[cycleStep];
+			for(int tmp=0; tmp<cycleStep && tmp+i<this.expect.length; tmp++)
+				subExpect[tmp] = this.expect[tmp+i];
+
 			if(steps.size() == 0){
-				try {
-					cycle = (ICycle) constructor.newInstance(1);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+				cycle = new Cycle(1, subExpect);
 			} else {
 				int step = 2;
 				for(int var : steps)
 					step += Math.abs(var);
-				try {
-					cycle = (ICycle) constructor.newInstance(step);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+				cycle = new Cycle(step, subExpect);
 			}
 			
 			int length = this.offset+i+(cycleStep-1)<=this.source.length ? cycleStep : this.source.length-(this.offset+i);
@@ -99,6 +82,7 @@ public class Processor3O implements IProcessor {
 		if(cycle == null){
 			return 1;
 		}
+		
 		if(cycle.getProcess().size() == this.cycleStep){//当前cycle已完成
 			
 			int step = 2;
@@ -109,5 +93,4 @@ public class Processor3O implements IProcessor {
 			return cycle.getStep();
 		}
 	}
-
 }

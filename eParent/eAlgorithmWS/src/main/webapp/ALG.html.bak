@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<style type="text/css">
+		#fdiv{
+			position: fixed;
+			_position: absolute;
+			margin-left:250px;
+			_top: expression(eval(document.documentElement.scrollTop) );
+		}
+		#fdiv img{
+			margin-left: 190px;
+			margin-top: 470px;
+		}
+
+		.left { float:left;background:#E0E0D0; width:250px; height:800px; }
+		.right{ float:left;background:#F0F0F0; width:1000px; height:800px;  }
+		.main { height:600px;background:#FEFEFE;width:0px; }
+		.trSelected{
+			background-color: #51b2f6;			
+			text-align: center;
+			font-size: 12px;
+		}
+		.menus span{
+            width:20px;
+            height:20px;
+    		position: absolute;
+        	top: -20px;
+        	margin-left: -20px;
+    	}
+    	
+    	input.ui-button { padding: 1px 5px !important; }
+    </style>
+	<meta charset="UTF-8">
+	<title>算法1 : ABAB...</title>
+	<link rel="stylesheet" href="css/jquery-ui.css">
+	<link rel="stylesheet" href="css/jqx.base.css">
+	<link rel="stylesheet" href="css/alg.css">
+	<script type="text/javascript" src="js/jquery/jquery-1.11.2.min.js"></script>
+	<script type="text/javascript" src="js/jquery/jquery-ui.js"></script>
+	<script type="text/javascript" src="js/jqxcore.js"></script>
+	<script type="text/javascript" src="js/jqxswitchbutton.js"></script>
+
+	<script type="text/javascript">
+		$.ajaxSetup({
+			async : false,
+		});
+		
+		$(function(){
+			
+			$("div[toggle-class='switch'][positive]").jqxSwitchButton({
+				height: 25,
+				width: 61, 
+				checked: true,
+				disabled:true,
+				onLabel: "正",
+				offLabel:"反"
+			});
+			
+			$("div[toggle-class='switch'][negtive]").jqxSwitchButton({
+				height: 25,
+				width: 61, 
+				checked: false,
+				disabled:true,
+				onLabel: "正",
+				offLabel:"反"
+			});
+			
+			$('#btnA').button().click(function(){
+				
+				var val = $('#txtDataSource').val() + 'A';
+				$('#txtDataSource').val(val);
+				
+				preProcessALG1($('#ALG1'), val, 'POSITIVE');
+				processAlg1x($('div[name=ALG1-6P]'), val, 'A', 6, 'POSITIVE');
+				processAlg1x($('div[name=ALG1-7P]'), val, 'A', 7, 'POSITIVE');
+				processAlg1x($('div[name=ALG1-8P]'), val, 'A', 8, 'POSITIVE');
+				processAlg1x($('div[name=ALG1-9P]'), val, 'A', 9, 'POSITIVE');
+				
+				processAlg1x($('div[name=ALG1-6N]'), val, 'A', 6, 'POSITIVE');
+				processAlg1x($('div[name=ALG1-7N]'), val, 'A', 7, 'POSITIVE');
+				processAlg1x($('div[name=ALG1-8N]'), val, 'A', 8, 'POSITIVE');
+				processAlg1x($('div[name=ALG1-9N]'), val, 'A', 9, 'POSITIVE');
+				
+				preProcessALG1($('#ALG1N'), val, 'NEGTIVE');
+				processAlg1x($('div[name=ALG1N-6P]'), val, 'A', 6, 'NEGTIVE');
+				processAlg1x($('div[name=ALG1N-7P]'), val, 'A', 7, 'NEGTIVE');
+				processAlg1x($('div[name=ALG1N-8P]'), val, 'A', 8, 'NEGTIVE');
+				processAlg1x($('div[name=ALG1N-9P]'), val, 'A', 9, 'NEGTIVE');
+				
+				processAlg1x($('div[name=ALG1N-6N]'), val, 'A', 6, 'NEGTIVE');
+				processAlg1x($('div[name=ALG1N-7N]'), val, 'A', 7, 'NEGTIVE');
+				processAlg1x($('div[name=ALG1N-8N]'), val, 'A', 8, 'NEGTIVE');
+				processAlg1x($('div[name=ALG1N-9N]'), val, 'A', 9, 'NEGTIVE');
+				
+				preProcessALG4($('#ALG4'), val);
+				processALG4x($('div[name=ALG4-6P]'), val, 'A', 6);
+				processALG4x($('div[name=ALG4-7P]'), val, 'A', 7);
+				processALG4x($('div[name=ALG4-8P]'), val, 'A', 8);
+				processALG4x($('div[name=ALG4-9P]'), val, 'A', 9);
+				
+				processALG4x($('div[name=ALG4-6N]'), val, 'A', 6);
+				processALG4x($('div[name=ALG4-7N]'), val, 'A', 7);
+				processALG4x($('div[name=ALG4-8N]'), val, 'A', 8);
+				processALG4x($('div[name=ALG4-9N]'), val, 'A', 9);
+				
+				container = $('#NEWALG');
+				preProcessNewALG(container, val, 'POSITIVE');
+				processNewAlgx(container.find('div[name=ALG-6P]'), val, 'A', 6, 'POSITIVE');
+				processNewAlgx(container.find('div[name=ALG-7P]'), val, 'A', 7, 'POSITIVE');
+				processNewAlgx(container.find('div[name=ALG-8P]'), val, 'A', 8, 'POSITIVE');
+				processNewAlgx(container.find('div[name=ALG-9P]'), val, 'A', 9, 'POSITIVE');
+				
+				processNewAlgx(container.find('div[name=ALG-6N]'), val, 'A', 6, 'POSITIVE');
+				processNewAlgx(container.find('div[name=ALG-7N]'), val, 'A', 7, 'POSITIVE');
+				processNewAlgx(container.find('div[name=ALG-8N]'), val, 'A', 8, 'POSITIVE');
+				processNewAlgx(container.find('div[name=ALG-9N]'), val, 'A', 9, 'POSITIVE');
+				
+				container = $('#NEWALGN');
+				preProcessNewALG(container, val, 'NEGTIVE');
+				processNewAlgx(container.find('div[name=ALG-6P]'), val, 'A', 6, 'NEGTIVE');
+				processNewAlgx(container.find('div[name=ALG-7P]'), val, 'A', 7, 'NEGTIVE');
+				processNewAlgx(container.find('div[name=ALG-8P]'), val, 'A', 8, 'NEGTIVE');
+				processNewAlgx(container.find('div[name=ALG-9P]'), val, 'A', 9, 'NEGTIVE');
+				
+				processNewAlgx(container.find('div[name=ALG-6N]'), val, 'A', 6, 'NEGTIVE');
+				processNewAlgx(container.find('div[name=ALG-7N]'), val, 'A', 7, 'NEGTIVE');
+				processNewAlgx(container.find('div[name=ALG-8N]'), val, 'A', 8, 'NEGTIVE');
+				processNewAlgx(container.find('div[name=ALG-9N]'), val, 'A', 9, 'NEGTIVE');
+			});
+			
+			$('#btnB').button().click(function(){
+				
+				var val = $('#txtDataSource').val() + 'B';
+				$('#txtDataSource').val(val);
+				
+				preProcessALG1($('#ALG1'), val);
+				processAlg1x($('div[name=ALG1-6P]'), val, 'B', 6, "POSITIVE");
+				processAlg1x($('div[name=ALG1-7P]'), val, 'B', 7, "POSITIVE");
+				processAlg1x($('div[name=ALG1-8P]'), val, 'B', 8, "POSITIVE");
+				processAlg1x($('div[name=ALG1-9P]'), val, 'B', 9, "POSITIVE");
+				
+				processAlg1x($('div[name=ALG1-6N]'), val, 'B', 6, 'POSITIVE');
+				processAlg1x($('div[name=ALG1-7N]'), val, 'B', 7, 'POSITIVE');
+				processAlg1x($('div[name=ALG1-8N]'), val, 'B', 8, 'POSITIVE');
+				processAlg1x($('div[name=ALG1-9N]'), val, 'B', 9, 'POSITIVE');
+				
+				preProcessALG1($('#ALG1N'), val, 'NEGTIVE');
+				processAlg1x($('div[name=ALG1N-6P]'), val, 'B', 6, 'NEGTIVE');
+				processAlg1x($('div[name=ALG1N-7P]'), val, 'B', 7, 'NEGTIVE');
+				processAlg1x($('div[name=ALG1N-8P]'), val, 'B', 8, 'NEGTIVE');
+				processAlg1x($('div[name=ALG1N-9P]'), val, 'B', 9, 'NEGTIVE');
+				
+				processAlg1x($('div[name=ALG1N-6N]'), val, 'B', 6, 'NEGTIVE');
+				processAlg1x($('div[name=ALG1N-7N]'), val, 'B', 7, 'NEGTIVE');
+				processAlg1x($('div[name=ALG1N-8N]'), val, 'B', 8, 'NEGTIVE');
+				processAlg1x($('div[name=ALG1N-9N]'), val, 'B', 9, 'NEGTIVE');
+				
+				preProcessALG4($('#ALG4'), val);
+				processALG4x($('div[name=ALG4-6P]'), val, 'B', 6);
+				processALG4x($('div[name=ALG4-7P]'), val, 'B', 7);
+				processALG4x($('div[name=ALG4-8P]'), val, 'B', 8);
+				processALG4x($('div[name=ALG4-9P]'), val, 'B', 9);
+				
+				processALG4x($('div[name=ALG4-6N]'), val, 'B', 6);
+				processALG4x($('div[name=ALG4-7N]'), val, 'B', 7);
+				processALG4x($('div[name=ALG4-8N]'), val, 'B', 8);
+				processALG4x($('div[name=ALG4-9N]'), val, 'B', 9);
+				
+				container = $('#NEWALG');
+				preProcessNewALG(container, val, 'POSITIVE');
+				processNewAlgx(container.find('div[name=ALG-6P]'), val, 'B', 6, 'POSITIVE');
+				processNewAlgx(container.find('div[name=ALG-7P]'), val, 'B', 7, 'POSITIVE');
+				processNewAlgx(container.find('div[name=ALG-8P]'), val, 'B', 8, 'POSITIVE');
+				processNewAlgx(container.find('div[name=ALG-9P]'), val, 'B', 9, 'POSITIVE');
+				
+				processNewAlgx(container.find('div[name=ALG-6N]'), val, 'B', 6, 'POSITIVE');
+				processNewAlgx(container.find('div[name=ALG-7N]'), val, 'B', 7, 'POSITIVE');
+				processNewAlgx(container.find('div[name=ALG-8N]'), val, 'B', 8, 'POSITIVE');
+				processNewAlgx(container.find('div[name=ALG-9N]'), val, 'B', 9, 'POSITIVE');
+				
+				container = $('#NEWALGN');
+				preProcessNewALG(container, val, 'NEGTIVE');
+				processNewAlgx(container.find('div[name=ALG-6P]'), val, 'B', 6, 'NEGTIVE');
+				processNewAlgx(container.find('div[name=ALG-7P]'), val, 'B', 7, 'NEGTIVE');
+				processNewAlgx(container.find('div[name=ALG-8P]'), val, 'B', 8, 'NEGTIVE');
+				processNewAlgx(container.find('div[name=ALG-9P]'), val, 'B', 9, 'NEGTIVE');
+				
+				processNewAlgx(container.find('div[name=ALG-6N]'), val, 'B', 6, 'NEGTIVE');
+				processNewAlgx(container.find('div[name=ALG-7N]'), val, 'B', 7, 'NEGTIVE');
+				processNewAlgx(container.find('div[name=ALG-8N]'), val, 'B', 8, 'NEGTIVE');
+				processNewAlgx(container.find('div[name=ALG-9N]'), val, 'B', 9, 'NEGTIVE');
+			});
+			
+			$('#btnBack').button().click(function(){
+				var val = $('#txtDataSource').val();
+				val = val.substring(0, val.length-1);
+				$('#txtDataSource').val(val);
+				
+				preProcessALG1($('#ALG1'), val);
+				processAlg1x($('div[name=ALG1-6P]'), val, 'DEL', 6, "POSITIVE");
+				processAlg1x($('div[name=ALG1-7P]'), val, 'DEL', 7, "POSITIVE");
+				processAlg1x($('div[name=ALG1-8P]'), val, 'DEL', 8, "POSITIVE");
+				processAlg1x($('div[name=ALG1-9P]'), val, 'DEL', 9, "POSITIVE");
+				
+				processAlg1x($('div[name=ALG1-6N]'), val, 'DEL', 6, 'POSITIVE');
+				processAlg1x($('div[name=ALG1-7N]'), val, 'DEL', 7, 'POSITIVE');
+				processAlg1x($('div[name=ALG1-8N]'), val, 'DEL', 8, 'POSITIVE');
+				processAlg1x($('div[name=ALG1-9N]'), val, 'DEL', 9, 'POSITIVE');
+				
+				preProcessALG1($('#ALG1N'), val, 'NEGTIVE');
+				processAlg1x($('div[name=ALG1N-6P]'), val, 'DEL', 6, 'NEGTIVE');
+				processAlg1x($('div[name=ALG1N-7P]'), val, 'DEL', 7, 'NEGTIVE');
+				processAlg1x($('div[name=ALG1N-8P]'), val, 'DEL', 8, 'NEGTIVE');
+				processAlg1x($('div[name=ALG1N-9P]'), val, 'DEL', 9, 'NEGTIVE');
+				
+				processAlg1x($('div[name=ALG1N-6N]'), val, 'DEL', 6, 'NEGTIVE');
+				processAlg1x($('div[name=ALG1N-7N]'), val, 'DEL', 7, 'NEGTIVE');
+				processAlg1x($('div[name=ALG1N-8N]'), val, 'DEL', 8, 'NEGTIVE');
+				processAlg1x($('div[name=ALG1N-9N]'), val, 'DEL', 9, 'NEGTIVE');
+				
+				preProcessALG4($('#ALG4'), val);
+				processALG4x($('div[name=ALG4-6P]'), val, 'DEL', 6);
+				processALG4x($('div[name=ALG4-7P]'), val, 'DEL', 7);
+				processALG4x($('div[name=ALG4-8P]'), val, 'DEL', 8);
+				processALG4x($('div[name=ALG4-9P]'), val, 'DEL', 9);
+				
+				processALG4x($('div[name=ALG4-6N]'), val, 'DEL', 6);
+				processALG4x($('div[name=ALG4-7N]'), val, 'DEL', 7);
+				processALG4x($('div[name=ALG4-8N]'), val, 'DEL', 8);
+				processALG4x($('div[name=ALG4-9N]'), val, 'DEL', 9);
+				
+				container = $('#NEWALG');
+				preProcessNewALG(container, val, 'POSITIVE');
+				processNewAlgx(container.find('div[name=ALG-6P]'), val, 'DEL', 6, 'POSITIVE');
+				processNewAlgx(container.find('div[name=ALG-7P]'), val, 'DEL', 7, 'POSITIVE');
+				processNewAlgx(container.find('div[name=ALG-8P]'), val, 'DEL', 8, 'POSITIVE');
+				processNewAlgx(container.find('div[name=ALG-9P]'), val, 'DEL', 9, 'POSITIVE');
+				
+				processNewAlgx(container.find('div[name=ALG-6N]'), val, 'DEL', 6, 'POSITIVE');
+				processNewAlgx(container.find('div[name=ALG-7N]'), val, 'DEL', 7, 'POSITIVE');
+				processNewAlgx(container.find('div[name=ALG-8N]'), val, 'DEL', 8, 'POSITIVE');
+				processNewAlgx(container.find('div[name=ALG-9N]'), val, 'DEL', 9, 'POSITIVE');
+				
+				container = $('#NEWALGN');
+				preProcessNewALG(container, val, 'NEGTIVE');
+				processNewAlgx(container.find('div[name=ALG-6P]'), val, 'DEL', 6, 'NEGTIVE');
+				processNewAlgx(container.find('div[name=ALG-7P]'), val, 'DEL', 7, 'NEGTIVE');
+				processNewAlgx(container.find('div[name=ALG-8P]'), val, 'DEL', 8, 'NEGTIVE');
+				processNewAlgx(container.find('div[name=ALG-9P]'), val, 'DEL', 9, 'NEGTIVE');
+				
+				processNewAlgx(container.find('div[name=ALG-6N]'), val, 'DEL', 6, 'NEGTIVE');
+				processNewAlgx(container.find('div[name=ALG-7N]'), val, 'DEL', 7, 'NEGTIVE');
+				processNewAlgx(container.find('div[name=ALG-8N]'), val, 'DEL', 8, 'NEGTIVE');
+				processNewAlgx(container.find('div[name=ALG-9N]'), val, 'DEL', 9, 'NEGTIVE');
+			});		
+
+			$( "#createDate" ).datepicker();
+			$( "#createDate" ).datepicker("option","dateFormat","yy-mm-dd");
+
+			$('#txtDataSource').keyup(function(event){
+				
+				if('A' == event.key){console.log('A');}
+				if('B' == event.key){console.log('B');}
+				if("Backspace" == event.key){console.log('BACKSPACE');}
+				return false;
+			});
+		});
+		
+		function toggle(container){
+			var parent = $(container).parent();
+			var title = $(container);
+			if("[-]" == title.html()){
+				title.html("[+]");
+				parent.find('#area').hide();
+			} else {
+				title.html("[-]");
+				parent.find('#area').show();
+			}
+		}
+		
+		function preProcessNewALG(container, source, expect){
+			
+			$.post('ajax/alg/new/preAccept/' + expect + '.do',
+				{ "source" : source },
+				function(data, status){//SUCCESS
+
+					console.log(data);
+					container.find('#trueANDfalse').html(data);
+					
+				}).error(function(){//ERROR
+					console.log("ERROR");
+				});//$.post
+		}
+		function preProcessALG1(container, source, expect){
+			
+			$.post('ajax/alg/1/preAccept/' + expect + '.do',
+				{ "source" : source },
+				function(data, status){//SUCCESS
+
+					console.log(data);
+					container.find('#trueANDfalse').html(data);
+					
+				}).error(function(){//ERROR
+					console.log("ERROR");
+				});//$.post
+		}
+		function preProcessALG4(container, source){
+			
+			$.post('ajax/alg4/preAccept.do',
+				{ "source" : source },
+				function(data, status){//SUCCESS
+
+					console.log(data);
+					container.find('#trueANDfalse').html(data);
+					
+				}).error(function(){//ERROR
+					console.log("ERROR");
+				});//$.post
+		}
+		/***
+		** container : html-container
+		** inputType : 'A'|'B'|'DEL'
+		*/
+		function processNewAlgx(container, source, inputType, cycle, expectPattern){
+			
+			var rtnVal = "A*0";
+			if('A' == inputType || 'B' == inputType){
+				if(!container.find("div[toggle-class=switch]").jqxSwitchButton('disabled')){
+					var check = container.find("div[toggle-class=switch]").val()?"+":"-";
+					var expect = container.find('#expect').html() + check;
+					container.find('#expect').html(expect);
+				}
+			}
+			if('DEL' == inputType){
+				if(!container.find("div[toggle-class=switch]").jqxSwitchButton('disabled')){
+					var expect = container.find('#expect').html();
+					if(expect.length>0)
+						expect = expect.substring(0, expect.length-1);
+					container.find('#expect').html(expect);
+				}
+				var start = container.find("div[toggle-class=switch]").attr("start");
+				if(null != start && start == 0){
+					var expect = container.find('#expect').html();
+					if(expect.length>0)
+						expect = expect.substring(0, expect.length-1);
+					container.find('#expect').html(expect);
+				}
+			}
+			
+			var expect = container.find('#expect').html();
+			$.post('ajax/alg/new/accept/' + expectPattern + '/' + cycle + '.do',
+				{
+					"source" : source,
+					"expect" : expect
+				},
+				function(data, status){//SUCCESS
+					if(data==""){
+						container.find("div[toggle-class=switch]").jqxSwitchButton({ disabled:true });
+						container.find("div[toggle-class=switch]").removeAttr("start");
+					} else {
+						
+						//var rtn = eval('('+data+')');
+						var rtn = data;
+						if(rtn.expect != 0){
+							container.find("div[toggle-class=switch]").jqxSwitchButton({ disabled:false });
+							container.find("div[toggle-class=switch]").attr("start", -1);
+						}
+						else{
+							container.find("div[toggle-class=switch]").jqxSwitchButton({ disabled:true });
+							var count = parseInt(container.find("div[toggle-class=switch]").attr("start"));
+							count += inputType=="DEL"?-1:+1;
+							container.find("div[toggle-class=switch]").attr("start", count);
+						}
+						container.find("#result").html(rtn.formated);
+					}
+				}).error(function(){//ERROR
+					console.log("ERROR");
+				});//$.post
+		}
+		function processAlg1x(container, source, inputType, cycle, expectPattern){
+			
+			var rtnVal = "A*0";
+			if('A' == inputType || 'B' == inputType){
+				if(!container.find("div[toggle-class=switch]").jqxSwitchButton('disabled')){
+					var check = container.find("div[toggle-class=switch]").val()?"+":"-";
+					var expect = container.find('#expect').html() + check;
+					container.find('#expect').html(expect);
+				}
+			}
+			if('DEL' == inputType){
+				if(!container.find("div[toggle-class=switch]").jqxSwitchButton('disabled')){
+					var expect = container.find('#expect').html();
+					if(expect.length>0)
+						expect = expect.substring(0, expect.length-1);
+					container.find('#expect').html(expect);
+				}
+				var start = container.find("div[toggle-class=switch]").attr("start");
+				if(null != start && start == 0){
+					var expect = container.find('#expect').html();
+					if(expect.length>0)
+						expect = expect.substring(0, expect.length-1);
+					container.find('#expect').html(expect);
+				}
+			}
+			
+			var expect = container.find('#expect').html();
+			$.post('ajax/alg/1/accept/' + expectPattern + '/' + cycle + '.do',
+				{
+					"source" : source,
+					"expect" : expect
+				},
+				function(data, status){//SUCCESS
+					if(data==""){
+						container.find("div[toggle-class=switch]").jqxSwitchButton({ disabled:true });
+						container.find("div[toggle-class=switch]").removeAttr("start");
+					} else {
+						
+						//var rtn = eval('('+data+')');
+						var rtn = data;
+						if(rtn.expect != 0){
+							container.find("div[toggle-class=switch]").jqxSwitchButton({ disabled:false });
+							container.find("div[toggle-class=switch]").attr("start", -1);
+						}
+						else{
+							container.find("div[toggle-class=switch]").jqxSwitchButton({ disabled:true });
+							var count = parseInt(container.find("div[toggle-class=switch]").attr("start"));
+							count += inputType=="DEL"?-1:+1;
+							container.find("div[toggle-class=switch]").attr("start", count);
+						}
+						container.find("#result").html(rtn.formated);
+					}
+				}).error(function(){//ERROR
+					console.log("ERROR");
+				});//$.post
+		}
+		function processALG4x(container, source, inputType, cycle){
+
+			var rtnVal = "A*0";
+			if('A' == inputType || 'B' == inputType){
+				if(!container.find("div[toggle-class=switch]").jqxSwitchButton('disabled')){
+					var check = container.find("div[toggle-class=switch]").val()?"+":"-";
+					var expect = container.find('#expect').html() + check;
+					container.find('#expect').html(expect);
+				}
+			}
+			if('DEL' == inputType){
+				if(!container.find("div[toggle-class=switch]").jqxSwitchButton('disabled')){
+					var expect = container.find('#expect').html();
+					if(expect.length>0)
+						expect = expect.substring(0, expect.length-1);
+					container.find('#expect').html(expect);
+				}
+				var start = container.find("div[toggle-class=switch]").attr("start");
+				if(null != start && start == 0){
+					var expect = container.find('#expect').html();
+					if(expect.length>0)
+						expect = expect.substring(0, expect.length-1);
+					container.find('#expect').html(expect);
+				}
+			}
+			
+			var expect = container.find('#expect').html();
+			var pairType = container.find('#selPairType').val();
+			$.post('ajax/alg4/accept/' + cycle + '.do',
+				{
+					"source" : source,
+					"expect" : expect,
+					"pair"   : pairType
+				},
+				function(data, status){//SUCCESS
+					
+					if(data==""){
+						container.find("div[toggle-class=switch]").jqxSwitchButton({ disabled:true });
+						container.find("div[toggle-class=switch]").removeAttr("start");
+					} else {
+						
+						//var rtn = eval('('+data+')');
+						var rtn = data;
+						if(rtn.expect != 0){
+							container.find("div[toggle-class=switch]").jqxSwitchButton({ disabled:false });
+							container.find("div[toggle-class=switch]").attr("start", -1);
+						}
+						else{
+							container.find("div[toggle-class=switch]").jqxSwitchButton({ disabled:true });
+							var count = parseInt(container.find("div[toggle-class=switch]").attr("start"));
+							count += inputType=="DEL"?-1:+1;
+							container.find("div[toggle-class=switch]").attr("start", count);
+						}
+						container.find("#result").html(rtn.formated);
+					}
+				}).error(function(){//ERROR
+					
+					console.log("ERROR");
+				});//$.post
+			return rtnVal;
+		}
+	</script>
+</head>
+<body>
+<div>
+</div>
+	<div id="fdiv"><!-- FLOAT -->
+		<div>
+			<input id="txtDataSource" size="70" value="" onkeyup="value=value.replace(/[^A,B]/g,'')"/>
+			<input id="btnA" type="button" value="A"/><input id="btnB" type="button" value="B"/>
+			<input id="btnBack" type="button" value="<-"/>
+			<input id="btnSave" type="button" value="保存"/>
+			<input id="btnUpdate" type="button" disabled recordID="" value="更新" onclick="updateRecord();"/>
+			<span id="totalExpect">EXPECT:</span>
+		</div>
+		<div style="float:right;"><pre><span id="sourceFormat"></span></pre></div>
+	</div><!-- END OF FLOAT -->
+	
+	<div style="heigth:200px;">
+		<div class="left">
+			<input id="createDate" type="text" size="10"></input>
+			<input id="btnQuery" type="button" value="查询"></input>
+			<table id="queryResult" style="font-size: 12px;"></table>
+		</div><!-- END of LEFT -->
+		<div class="right">
+<BR>
+<pre><span id="sourceFormatX"></span></pre>
+
+<div id="ALG1">
+<BR>
+算法1<BR>
+<span id="source"></span><span id="size"></span><span><font color="red" id="expects" class="expects"></font></span>
+<span id="trueANDfalse"></span>
+<div style="background:#E0E0E0;">正<span onclick="return toggle(this);">[-]</span>
+	<div id="area">
+		<div class="settings-section" name="ALG1-6P"><!-- 算法1.周期6 -->
+		    <div class="settings-setter"><div toggle-class="switch" positive></div></div>
+		    <div class="settings-label"><span id="result"></span><br><span id="expect"></span></div>
+		</div><!-- END of 算法4.周期6 -->
+		<div class="settings-section" name="ALG1-7P"><!-- 算法1.周期7 -->
+		    <div class="settings-setter"><div toggle-class="switch" positive></div></div>
+		    <div class="settings-label"><span id="result"></span><br><span id="expect"></span></div>
+		</div><!-- END of 算法4.周期7 -->
+		<div class="settings-section" name="ALG1-8P"><!-- 算法1.周期8 -->
+		    <div class="settings-setter"><div toggle-class="switch" positive></div></div>
+		    <div class="settings-label"><span id="result"></span><br><span id="expect"></span></div>
+		</div><!-- END of 算法4.周期8 -->
+		<div class="settings-section" name="ALG1-9P"><!-- 算法1.周期9 -->
+		    <div class="settings-setter"><div toggle-class="switch" positive></div></div>
+		    <div class="settings-label"><span id="result"></span><br><span id="expect"></span></div>
+		</div><!-- END of 算法4.周期9 -->
+	</div>
+</div>
+<div style="background:#F0F0F0;">反<span onclick="return toggle(this);">[-]</span>
+	<div id="area">
+		<div class="settings-section" name="ALG1-6N"><!-- 算法4.周期6 -->
+		    <div class="settings-setter"><div toggle-class="switch" negtive></div></div>
+		    <div class="settings-label"><span id="result"></span><br><span id="expect"></span></div>
+		</div><!-- END of 算法4.周期6 -->
+		<div class="settings-section" name="ALG1-7N"><!-- 算法4.周期7 -->
+		    <div class="settings-setter"><div toggle-class="switch" negtive></div></div>
+		    <div class="settings-label"><span id="result"></span><br><span id="expect"></span></div>
+		</div><!-- END of 算法4.周期7 -->
+		<div class="settings-section" name="ALG1-8N"><!-- 算法4.周期8 -->
+		    <div class="settings-setter"><div toggle-class="switch" negtive></div></div>
+		    <div class="settings-label"><span id="result"></span><br><span id="expect"></span></div>
+		</div><!-- END of 算法4.周期8 -->
+		<div class="settings-section" name="ALG1-9N"><!-- 算法4.周期9 -->
+		    <div class="settings-setter"><div toggle-class="switch" negtive></div></div>
+		    <div class="settings-label"><span id="result"></span><br><span id="expect"></span></div>
+		</div><!-- END of 算法4.周期9 -->
+	</div>
+</div>
+</div><!-- END of ALG1 -->
+
+<div id="ALG1N">
+<BR>
+算法1`<BR>
+<span id="source"></span><span id="size"></span><span><font color="red" id="expects" class="expects"></font></span>
+<span id="trueANDfalse"></span>
+<div style="background:#E0E0E0;">正<span onclick="return toggle(this);">[-]</span>
+	<div id="area">
+		<div class="settings-section" name="ALG1N-6P"><!-- 算法1.周期6 -->
+		    <div class="settings-setter"><div toggle-class="switch" positive></div></div>
+		    <div class="settings-label"><span id="result"></span><br><span id="expect"></span></div>
+		</div><!-- END of 算法4.周期6 -->
+		<div class="settings-section" name="ALG1N-7P"><!-- 算法1.周期7 -->
+		    <div class="settings-setter"><div toggle-class="switch" positive></div></div>
+		    <div class="settings-label"><span id="result"></span><br><span id="expect"></span></div>
+		</div><!-- END of 算法4.周期7 -->
+		<div class="settings-section" name="ALG1N-8P"><!-- 算法1.周期8 -->
+		    <div class="settings-setter"><div toggle-class="switch" positive></div></div>
+		    <div class="settings-label"><span id="result"></span><br><span id="expect"></span></div>
+		</div><!-- END of 算法4.周期8 -->
+		<div class="settings-section" name="ALG1N-9P"><!-- 算法1.周期9 -->
+		    <div class="settings-setter"><div toggle-class="switch" positive></div></div>
+		    <div class="settings-label"><span id="result"></span><br><span id="expect"></span></div>
+		</div><!-- END of 算法4.周期9 -->
+	</div>
+</div>
+<div style="background:#F0F0F0;">反<span onclick="return toggle(this);">[-]</span>
+	<div id="area">
+		<div class="settings-section" name="ALG1N-6N"><!-- 算法4.周期6 -->
+		    <div class="settings-setter"><div toggle-class="switch" negtive></div></div>
+		    <div class="settings-label"><span id="result"></span><br><span id="expect"></span></div>
+		</div><!-- END of 算法4.周期6 -->
+		<div class="settings-section" name="ALG1N-7N"><!-- 算法4.周期7 -->
+		    <div class="settings-setter"><div toggle-class="switch" negtive></div></div>
+		    <div class="settings-label"><span id="result"></span><br><span id="expect"></span></div>
+		</div><!-- END of 算法4.周期7 -->
+		<div class="settings-section" name="ALG1N-8N"><!-- 算法4.周期8 -->
+		    <div class="settings-setter"><div toggle-class="switch" negtive></div></div>
+		    <div class="settings-label"><span id="result"></span><br><span id="expect"></span></div>
+		</div><!-- END of 算法4.周期8 -->
+		<div class="settings-section" name="ALG1N-9N"><!-- 算法4.周期9 -->
+		    <div class="settings-setter"><div toggle-class="switch" negtive></div></div>
+		    <div class="settings-label"><span id="result"></span><br><span id="expect"></span></div>
+		</div><!-- END of 算法4.周期9 -->
+	</div>
+</div>
+</div><!-- END of ALG1` -->
+
+<div id="ALG4">
+<BR>
+算法4<BR>
+<span id="source"></span><span id="size"></span><span><font color="red" id="expects" class="expects"></font></span>
+<span id="trueANDfalse"></span>
+<div style="background:#E0E0E0;">正<span onclick="return toggle(this);">[-]</span>
+	<div id="area">
+		<div class="settings-section" name="ALG4-6P"><!-- 算法4.周期6 -->
+		    <div class="settings-setter"><div toggle-class="switch" positive></div></div>
+		    <div class="settings-label"><span id="result"></span><br><span id="expect"></span></div>
+		</div><!-- END of 算法4.周期6 -->
+		<div class="settings-section" name="ALG4-7P"><!-- 算法4.周期7 -->
+		    <div class="settings-setter"><div toggle-class="switch" positive></div></div>
+		    <div class="settings-label"><span id="result"></span><br><span id="expect"></span></div>
+		</div><!-- END of 算法4.周期7 -->
+		<div class="settings-section" name="ALG4-8P"><!-- 算法4.周期8 -->
+		    <div class="settings-setter"><div toggle-class="switch" positive></div></div>
+		    <div class="settings-label"><span id="result"></span><br><span id="expect"></span></div>
+		</div><!-- END of 算法4.周期8 -->
+		<div class="settings-section" name="ALG4-9P"><!-- 算法4.周期9 -->
+		    <div class="settings-setter"><div toggle-class="switch" positive></div></div>
+		    <div class="settings-label"><span id="result"></span><br><span id="expect"></span></div>
+		</div><!-- END of 算法4.周期9 -->
+	</div>
+</div>
+<div style="background:#F0F0F0;">反<span onclick="return toggle(this);">[-]</span>
+	<div id="area">
+		<div class="settings-section" name="ALG4-6N"><!-- 算法4.周期6 -->
+		    <div class="settings-setter"><div toggle-class="switch" negtive></div></div>
+		    <div class="settings-label"><span id="result"></span><br><span id="expect"></span></div>
+		</div><!-- END of 算法4.周期6 -->
+		<div class="settings-section" name="ALG4-7N"><!-- 算法4.周期7 -->
+		    <div class="settings-setter"><div toggle-class="switch" negtive></div></div>
+		    <div class="settings-label"><span id="result"></span><br><span id="expect"></span></div>
+		</div><!-- END of 算法4.周期7 -->
+		<div class="settings-section" name="ALG4-8N"><!-- 算法4.周期8 -->
+		    <div class="settings-setter"><div toggle-class="switch" negtive></div></div>
+		    <div class="settings-label"><span id="result"></span><br><span id="expect"></span></div>
+		</div><!-- END of 算法4.周期8 -->
+		<div class="settings-section" name="ALG4-9N"><!-- 算法4.周期9 -->
+		    <div class="settings-setter"><div toggle-class="switch" negtive></div></div>
+		    <div class="settings-label"><span id="result"></span><br><span id="expect"></span></div>
+		</div><!-- END of 算法4.周期9 -->
+	</div>
+</div>
+</div><!-- END of ALG4 -->
+
+<div id="NEWALG">
+<BR>
+新算法<BR>
+<span id="source"></span><span id="size"></span><span><font color="red" id="expects" class="expects"></font></span>
+<span id="trueANDfalse"></span>
+<div style="background:#E0E0E0;">正<span onclick="return toggle(this);">[-]</span>
+	<div id="area">
+		<div class="settings-section" name="ALG-6P"><!-- 算法4.周期6 -->
+		    <div class="settings-setter"><div toggle-class="switch" positive></div></div>
+		    <div class="settings-label"><span id="result"></span><br><span id="expect"></span></div>
+		</div><!-- END of 算法4.周期6 -->
+		<div class="settings-section" name="ALG-7P"><!-- 算法4.周期7 -->
+		    <div class="settings-setter"><div toggle-class="switch" positive></div></div>
+		    <div class="settings-label"><span id="result"></span><br><span id="expect"></span></div>
+		</div><!-- END of 算法4.周期7 -->
+		<div class="settings-section" name="ALG-8P"><!-- 算法4.周期8 -->
+		    <div class="settings-setter"><div toggle-class="switch" positive></div></div>
+		    <div class="settings-label"><span id="result"></span><br><span id="expect"></span></div>
+		</div><!-- END of 算法4.周期8 -->
+		<div class="settings-section" name="ALG-9P"><!-- 算法4.周期9 -->
+		    <div class="settings-setter"><div toggle-class="switch" positive></div></div>
+		    <div class="settings-label"><span id="result"></span><br><span id="expect"></span></div>
+		</div><!-- END of 算法4.周期9 -->
+	</div>
+</div>
+<div style="background:#F0F0F0;">反<span onclick="return toggle(this);">[-]</span>
+	<div id="area">
+		<div class="settings-section" name="ALG-6N"><!-- 算法4.周期6 -->
+		    <div class="settings-setter"><div toggle-class="switch" negtive></div></div>
+		    <div class="settings-label"><span id="result"></span><br><span id="expect"></span></div>
+		</div><!-- END of 算法4.周期6 -->
+		<div class="settings-section" name="ALG-7N"><!-- 算法4.周期7 -->
+		    <div class="settings-setter"><div toggle-class="switch" negtive></div></div>
+		    <div class="settings-label"><span id="result"></span><br><span id="expect"></span></div>
+		</div><!-- END of 算法4.周期7 -->
+		<div class="settings-section" name="ALG-8N"><!-- 算法4.周期8 -->
+		    <div class="settings-setter"><div toggle-class="switch" negtive></div></div>
+		    <div class="settings-label"><span id="result"></span><br><span id="expect"></span></div>
+		</div><!-- END of 算法4.周期8 -->
+		<div class="settings-section" name="ALG-9N"><!-- 算法4.周期9 -->
+		    <div class="settings-setter"><div toggle-class="switch" negtive></div></div>
+		    <div class="settings-label"><span id="result"></span><br><span id="expect"></span></div>
+		</div><!-- END of 算法4.周期9 -->
+	</div>
+</div>
+</div><!-- END of NEWALG -->
+
+<div id="NEWALGN">
+<BR>
+新算法`<BR>
+<span id="source"></span><span id="size"></span><span><font color="red" id="expects" class="expects"></font></span>
+<span id="trueANDfalse"></span>
+<div style="background:#E0E0E0;">正<span onclick="return toggle(this);">[-]</span>
+	<div id="area">
+		<div class="settings-section" name="ALG-6P"><!-- 算法4.周期6 -->
+		    <div class="settings-setter"><div toggle-class="switch" positive></div></div>
+		    <div class="settings-label"><span id="result"></span><br><span id="expect"></span></div>
+		</div><!-- END of 算法4.周期6 -->
+		<div class="settings-section" name="ALG-7P"><!-- 算法4.周期7 -->
+		    <div class="settings-setter"><div toggle-class="switch" positive></div></div>
+		    <div class="settings-label"><span id="result"></span><br><span id="expect"></span></div>
+		</div><!-- END of 算法4.周期7 -->
+		<div class="settings-section" name="ALG-8P"><!-- 算法4.周期8 -->
+		    <div class="settings-setter"><div toggle-class="switch" positive></div></div>
+		    <div class="settings-label"><span id="result"></span><br><span id="expect"></span></div>
+		</div><!-- END of 算法4.周期8 -->
+		<div class="settings-section" name="ALG-9P"><!-- 算法4.周期9 -->
+		    <div class="settings-setter"><div toggle-class="switch" positive></div></div>
+		    <div class="settings-label"><span id="result"></span><br><span id="expect"></span></div>
+		</div><!-- END of 算法4.周期9 -->
+	</div>
+</div>
+<div style="background:#F0F0F0;">反<span onclick="return toggle(this);">[-]</span>
+	<div id="area">
+		<div class="settings-section" name="ALG-6N"><!-- 算法4.周期6 -->
+		    <div class="settings-setter"><div toggle-class="switch" negtive></div></div>
+		    <div class="settings-label"><span id="result"></span><br><span id="expect"></span></div>
+		</div><!-- END of 算法4.周期6 -->
+		<div class="settings-section" name="ALG-7N"><!-- 算法4.周期7 -->
+		    <div class="settings-setter"><div toggle-class="switch" negtive></div></div>
+		    <div class="settings-label"><span id="result"></span><br><span id="expect"></span></div>
+		</div><!-- END of 算法4.周期7 -->
+		<div class="settings-section" name="ALG-8N"><!-- 算法4.周期8 -->
+		    <div class="settings-setter"><div toggle-class="switch" negtive></div></div>
+		    <div class="settings-label"><span id="result"></span><br><span id="expect"></span></div>
+		</div><!-- END of 算法4.周期8 -->
+		<div class="settings-section" name="ALG-9N"><!-- 算法4.周期9 -->
+		    <div class="settings-setter"><div toggle-class="switch" negtive></div></div>
+		    <div class="settings-label"><span id="result"></span><br><span id="expect"></span></div>
+		</div><!-- END of 算法4.周期9 -->
+	</div>
+</div>
+</div><!-- END of NEWALGN -->
+		</div><!-- END of RIGHT -->
+	</div>
+</body>
+</html>

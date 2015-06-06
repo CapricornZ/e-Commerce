@@ -29,6 +29,14 @@ public class TrueAndFalse {
 	private Map<Integer, Integer> max = new TreeMap<Integer, Integer>();
 	private Map<Integer, Boolean> bFoundMax = new TreeMap<Integer, Boolean>();
 	
+	public boolean[] getSource(){
+
+		boolean[] result = new boolean[this.result.size()];
+		for(int i=0; i<this.result.size(); i++)
+			result[i] = this.result.get(i);
+		return result;
+	}
+	
 	public void run(){
 		
 		this.max.put(10, 0);this.max.put(15, 0);this.max.put(20, 0);
