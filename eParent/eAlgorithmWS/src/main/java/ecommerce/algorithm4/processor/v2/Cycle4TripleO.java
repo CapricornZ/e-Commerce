@@ -4,23 +4,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 /***
- * Cycle for 3x
+ * Cycle for 3o
+ * 遇到X -step
+ * 遇到O +step
  * 根据给定的expect,动态运算每一位
  * @author martin
  *
  */
-public class Cycle implements ICycle {
+public class Cycle4TripleO implements ICycle {
 	
 	private int step;
 	private int sum = 0;
 	private List<Integer> process = new ArrayList<Integer>();
 	
 	private char[] expect;
-	public Cycle(int step){
+	public Cycle4TripleO(int step){
 		this.step = step;
 	}
 	
-	public Cycle(int step, char[] expect){
+	public Cycle4TripleO(int step, char[] expect){
 		this.step = step; 
 		this.expect = expect;
 	}
@@ -40,7 +42,7 @@ public class Cycle implements ICycle {
 				if(source[offset+i]){// "+"&"true" -> +step
 					this.sum += this.step;
 					this.process.add(this.step);
-				} else {// "+"&"false" -> +step
+				} else {// "+"&"false" -> -step
 					this.sum -= this.step;
 					this.process.add(-this.step);
 				}
@@ -49,7 +51,7 @@ public class Cycle implements ICycle {
 				if(source[offset+i]){// "-"&"true" -> +step
 					this.sum -= this.step;
 					this.process.add(-this.step);
-				} else {// "-"&"false" -> +step
+				} else {// "-"&"false" -> -step
 					this.sum += this.step;
 					this.process.add(this.step);
 				}

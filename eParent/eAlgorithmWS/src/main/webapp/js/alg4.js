@@ -4,27 +4,28 @@ function preProcessALG4Single(container, inputType){
 	
 	if('A' == inputType || 'B' == inputType){
 		if(!container.find("div[toggle-class=switch]").jqxSwitchButton('disabled')){
-			var check = container.find("div[toggle-class=switch]").val()?"+":"-";
-			var expect = container.find('#expect').html() + check;
-			container.find('#expect').html(expect);
+			
+			var check = container.find("div[toggle-class=switch]").attr("expect");
+			var expect = container.find('#expects').html() + check;
+			container.find('#expects').html(expect);
 		}
 	}
 	if('DEL' == inputType){
 		if(!container.find("div[toggle-class=switch]").jqxSwitchButton('disabled')){
-			var expect = container.find('#expect').html();
+			var expect = container.find('#expects').html();
 			if(expect.length>0)
 				expect = expect.substring(0, expect.length-1);
-			container.find('#expect').html(expect);
+			container.find('#expects').html(expect);
 		}
 		var start = container.find("div[toggle-class=switch]").attr("start");
 		if(null != start && start == 0){
-			var expect = container.find('#expect').html();
+			var expect = container.find('#expects').html();
 			if(expect.length>0)
 				expect = expect.substring(0, expect.length-1);
-			container.find('#expect').html(expect);
+			container.find('#expects').html(expect);
 		}
 	}
-	var expect = container.find('#expect').html();
+	var expect = container.find('#expects').html();
 	return expect;
 }
 
@@ -33,8 +34,11 @@ function postProcessALG4Single(container, data, inputType){
 	if(data==null){
 		container.find("div[toggle-class=switch]").jqxSwitchButton({ disabled:true });
 		container.find("div[toggle-class=switch]").removeAttr("start");
-		container.find("#expect").html("");
+		container.find("#expects").html("");
 		container.find("#result").html("");
+		container.find("#rowexpect").html("");
+		return {'item':'X', 'count':0};
+
 	} else {
 
 		var rtn = data;
@@ -48,7 +52,19 @@ function postProcessALG4Single(container, data, inputType){
 			count += inputType=="DEL"?-1:+1;
 			container.find("div[toggle-class=switch]").attr("start", count);
 		}
+		var expectItem = 'N/A';
+		if(container.find("div[toggle-class=switchExpect]").val())
+			expectItem = rtn.expectItem;
+		else{
+			if('A' == rtn.expectItem)
+				expectItem = 'B';
+			if('B' == rtn.expectItem)
+				expectItem = 'A';
+		}
+		//container.find("#result").html(rtn.formated + ' [' + expectItem + '*' + rtn.expect + ']');
 		container.find("#result").html(rtn.formated);
+		container.find("#rowexpect").html(expectItem + '*' + rtn.expect);
+		return {'item':expectItem, 'count':rtn.expect};
 	}
 }
 
@@ -83,7 +99,7 @@ function processALG4(container, inputType, source){
 			var countA = 0;
 			var countB = 0;
 			for(i=0; i<divs.length; i++){
-				var expectObj = postProcessNEWALGSingle(divs[i], data[i], inputType);
+				var expectObj = postProcessALG4Single(divs[i], data[i], inputType);
 				if(expectObj.count != 0){
 					if('A'==expectObj.item)
 						countA += expectObj.count;
@@ -113,8 +129,9 @@ function processALG4(container, inputType, source){
 				
 				divs[i].find("div[toggle-class=switch]").jqxSwitchButton({ disabled:true });
 				divs[i].find("div[toggle-class=switch]").removeAttr("start");
-				divs[i].find("#expect").html("");
+				divs[i].find("#expects").html("");
 				divs[i].find("#result").html("");
+				divs[i].find("#rowexpect").html("");
 			}
 			return {'item':'X', 'count':0};
 		});

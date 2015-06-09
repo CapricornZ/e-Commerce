@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<style type="text/css">
+		#fdiv{
+			position: fixed;
+			_position: absolute;
+			margin-left:350px;
+			width:1250px;
+			_top: expression(eval(document.documentElement.scrollTop) );
+		}
+		#fdiv img{
+			margin-left: 190px;
+			margin-top: 470px;
+		}
+
+		.left { float:left;background:#E0E0D0; width:250px; height:800px; }
+		.right{ float:left;background:#F0F0F0; width:1000px; height:800px;  }
+		.main { height:600px;background:#FEFEFE;width:0px; }
+		.trSelected{
+			background-color: #51b2f6;			
+			text-align: center;
+			font-size: 12px;
+		}
+		.menus span{
+            width:20px;
+            height:20px;
+    		position: absolute;
+        	top: -20px;
+        	margin-left: -20px;
+    	}
+    	
+    	input.ui-button { padding: 1px 5px !important; }
+    </style>
+	<meta charset="UTF-8">
+	<title>算法1 : ABAB...</title>
+	<link rel="stylesheet" href="css/jquery-ui.css">
+	<link rel="stylesheet" href="css/jqx.base.css">
+	<link rel="stylesheet" href="css/alg.css">
+	<script type="text/javascript" src="js/jquery/jquery-1.11.2.min.js"></script>
+	<script type="text/javascript" src="js/jquery/jquery-ui.js"></script>
+	<script type="text/javascript" src="js/jqxcore.js"></script>
+	<script type="text/javascript" src="js/jqxswitchbutton.js"></script>
+	<script type="text/javascript" src="js/alg4.js"></script>
+	<script type="text/javascript" src="js/alg1.js"></script>
+	<script type="text/javascript" src="js/newalg.js"></script>
+
+	<script type="text/javascript">
+		$.ajaxSetup({
+			async : false,
+		});
+		
+		function getExpect(container){
+			
+			var rtn = {'item':'X', 'count':0};
+			var expect = container.html();
+			if(null != expect){
+				var array = expect.split("*");
+				if('0' != array[1] && 'A' == array[0])
+					rtn = {'item':'A', 'count':parseInt(array[1])};
+				if('0' != array[1] && 'B' == array[0])
+					rtn = {'item':'B', 'count':parseInt(array[1])};
+			}
+			return rtn;
+		}
+		
+		function updateExpect(){
+			var algs = ["#ALG1", "#ALG1N", "#ALG4", "#NEWALG", "#NEWALGN"];
+			var totalA = 0;
+			var totalB = 0;
+			for(i=0; i<algs.length; i++){
+				
+				var countA=0;
+				var countB=0;
+				var idRowExpect = algs[i] + " #rowexpect";
+				var idAlgExpect = algs[i] + " #algexpect";
+				$(idRowExpect).each(function(){
+					expectObj = getExpect($(this));
+					if(expectObj.count != 0){
+						if('A'==expectObj.item)
+							countA+=expectObj.count;
+						if('B'==expectObj.item)
+							countB+=expectObj.count;
+					}
+				});
+				if(countA>countB){
+					$(idAlgExpect).html('A*' + (countA-countB));
+					totalA += (countA-countB);
+				}
+				if(countB>countA){
+					$(idAlgExpect).html('B*' + (countB-countA));
+					totalB += (countB-countA);
+				}
+				if(countA==countB)
+					$(idAlgExpect).html('N/A*0]');
+			}
+			
+			if(totalA>totalB)
+				$('#totalExpect').html('A*' + (totalA-totalB));
+			if(totalB>totalA)
+				$('#totalExpect').html('B*' + (totalB-totalA));
+			if(totalA==totalB)
+				$('#totalExpect').html('N/A*0');
+		}
+		
+		function toggleExpect(container){
+			var expectObj = getExpect(container);
+			if(expectObj.count != 0){
+				expectObj.item = ('A'==expectObj.item?'B':'A');
+				container.html(expectObj.item + '*' + expectObj.count);
+			}
+			updateExpect();
+		}
+		$(function(){
+
+			$("div[toggle-class='switch']").jqxSwitchButton({
+				height: 25,
+				width: 61, 
+				checked: true,
+				disabled:false,
+				onLabel: "正",
+				offLabel:"反"
+			}).bind('change', function(event){
+				'+'==$(this).attr('expect')?$(this).attr('expect','-'):$(this).attr('expect','+');
+				toggleExpect($(this).parent().siblings().find('#rowexpect'));
+			});
+			
+			//$("div[toggle-class='switch'][positive]").hide();
+			//$("div[toggle-class='switch'][negtive]").hide();
+			
+			$("div[toggle-class='switchExpect']").jqxSwitchButton({
+				height: 25,
+				width: 61, 
+				checked: true,
+				onLabel: "正",
+				offLabel:"反"
+			});
+			$("div[toggle-class='switchExpect']").hide();
+			
+			$('#btnA').button().click(function(){
+				
+				var val = $('#txtDataSource').val() + 'A';
+				$('#txtDataSource').val(val);
+				
+				var countA=0;
+				var countB=0;
+				processALG1($('#ALG1'), 'A', val, 'POSITIVE');
+				processALG1($('#ALG1N'), 'A', val, 'NEGTIVE');
+				processALG4($('#ALG4'), 'A', val);
+				processNEWALG($('#NEWALG'), 'A', val, 'POSITIVE');
+				processNEWALG($('#NEWALGN'), 'A', val, 'NEGTIVE');
+				$("span[name='algexpect']").each(function(){
+					var expect = $(this).html();
+					if(null != expect){
+						var array = expect.split("*");
+						if('0' != array[1] && 'A' == array[0])
+							countA+=parseInt(array[1]);
+						if('0' != array[1] && 'B' == array[0])
+							countB+=parseInt(array[1]);
+					}
+				});//end of EACH
+				if(countA>countB)
+					$('#totalExpect').html("EXPECT:A*" + (countA-countB));
+				if(countB>countA)
+					$('#totalExpect').html("EXPECT:B*" + (countB-countA));
+				if(countB==countA)
+					$('#totalExpect').html("EXPECT:A=B=" + countA);
+			});
+			
+			$('#btnB').button().click(function(){
+				
+				var val = $('#txtDataSource').val() + 'B';
+				$('#txtDataSource').val(val);
+				
+				var countA=0;
+				var countB=0;
+				
+				processALG1($('#ALG1'), 'B', val, 'POSITIVE');
+				processALG1($('#ALG1N'), 'B', val, 'NEGTIVE');
+				processALG4($('#ALG4'), 'B', val);
+				processNEWALG($('#NEWALG'), 'B', val, 'POSITIVE');
+				processNEWALG($('#NEWALGN'), 'B', val, 'NEGTIVE');
+				$("span[name='algexpect']").each(function(){
+					var expect = $(this).html();
+					if(null != expect){
+						var array = expect.split("*");
+						if('0' != array[1] && 'A' == array[0])
+							countA+=parseInt(array[1]);
+						if('0' != array[1] && 'B' == array[0])
+							countB+=parseInt(array[1]);
+					}
+				});//end of EACH
+				if(countA>countB)
+					$('#totalExpect').html("EXPECT:A*" + (countA-countB));
+				if(countB>countA)
+					$('#totalExpect').html("EXPECT:B*" + (countB-countA));
+				if(countB==countA)
+					$('#totalExpect').html("EXPECT:A=B=" + countA);
+			});
+			
+			$('#btnBack').button().click(function(){
+				var val = $('#txtDataSource').val();
+				val = val.substring(0, val.length-1);
+				$('#txtDataSource').val(val);
+
+				var countA=0;
+				var countB=0;
+				processALG1($('#ALG1'), 'DEL', val, 'POSITIVE');
+				processALG1($('#ALG1N'), 'DEL', val, 'NEGTIVE');
+				processALG4($('#ALG4'), 'DEL', val);
+				processNEWALG($('#NEWALG'), 'DEL', val, 'POSITIVE');
+				processNEWALG($('#NEWALGN'), 'DEL', val, 'NEGTIVE');
+				$("span[name='algexpect']").each(function(){
+					var expect = $(this).html();
+					if(null != expect){
+						var array = expect.split("*");
+						if('0' != array[1] && 'A' == array[0])
+							countA+=parseInt(array[1]);
+						if('0' != array[1] && 'B' == array[0])
+							countB+=parseInt(array[1]);
+					}
+				});//end of EACH
+				if(countA>countB)
+					$('#totalExpect').html("EXPECT:A*" + (countA-countB));
+				if(countB>countA)
+					$('#totalExpect').html("EXPECT:B*" + (countB-countA));
+				if(countB==countA)
+					$('#totalExpect').html("EXPECT:A=B=" + countA);
+			});		
+
+			$( "#createDate" ).datepicker();
+			$( "#createDate" ).datepicker("option","dateFormat","yy-mm-dd");
+
+			$('#txtDataSource').keyup(function(event){
+				
+				if('A' == event.key){console.log('A');}
+				if('B' == event.key){console.log('B');}
+				if("Backspace" == event.key){console.log('BACKSPACE');}
+				return false;
+			});
+		});
+		
+		function toggle(container){
+			var parent = $(container).parent();
+			var title = $(container);
+			if("[-]" == title.html()){
+				title.html("[+]");
+				parent.find('#area').hide();
+			} else {
+				title.html("[-]");
+				parent.find('#area').show();
+			}
+		}
+		
+		function toggleAlg(container){
+			var parent = $(container).parent();
+			var title = $(container);
+			if("[-]" == title.html()){
+				title.html("[+]");
+				parent.siblings('#dualArea').hide();
+			} else {
+				title.html("[-]");
+				parent.siblings('#dualArea').show();
+			}
+		}
+	</script>
+</head>
+<body>
+<div>
+</div>
+	<div id="fdiv"><!-- FLOAT -->
+		<div>
+			<input id="txtDataSource" size="70" value="" onkeyup="value=value.replace(/[^A,B]/g,'')"/>
+			<input id="btnA" type="button" value="A"/><input id="btnB" type="button" value="B"/>
+			<input id="btnBack" type="button" value="<-"/>
+			<input id="btnSave" type="button" value="保存"/>
+			<input id="btnUpdate" type="button" disabled recordID="" value="更新" onclick="updateRecord();"/>
+			<span id="totalExpect">EXPECT:</span>
+		</div>
+	</div><!-- END OF FLOAT -->
+	
+	<div style="heigth:200px;">
+		<div class="left">
+			<div style="float:right;"><pre><span id="sourceFormat" style="font-size: 18px;"></span></pre></div>
+			<input id="createDate" type="text" size="10"></input>
+			<input id="btnQuery" type="button" value="查询"></input>
+			<table id="queryResult" style="font-size: 12px;"></table>
+		</div><!-- END of LEFT -->
+		<div class="right">
+<BR>
+<pre><span id="sourceFormatX"></span></pre>
+
+<div id="ALG1">
+<div>算法1 <span onclick="return toggleAlg(this);">[-]</span></div>
+<div id="dualArea"><!-- 算法1DIV -->
+<span id="trueANDfalse"></span>[<span id="algexpect" name="algexpect"></span>]
+<div style="background:#E0E0E0;">正<span onclick="return toggle(this);">[-]</span>
+	<div id="area">
+		<div class="settings-section" name="ALG"><!-- 算法1.周期6 -->
+		    <div class="settings-setter"><div toggle-class="switchExpect"></div><div toggle-class="switch" expect="+"></div></div>
+		    <div class="settings-label"><span id="result"></span>[<span id="rowexpect"></span>]<br><span id="expects"></span></div>
+		</div><!-- END of 算法4.周期6 -->
+		<div class="settings-section" name="ALG"><!-- 算法1.周期7 -->
+		    <div class="settings-setter"><div toggle-class="switchExpect"></div><div toggle-class="switch" expect="+"></div></div>
+		    <div class="settings-label"><span id="result"></span>[<span id="rowexpect"></span>]<br><span id="expects"></span></div>
+		</div><!-- END of 算法4.周期7 -->
+		<div class="settings-section" name="ALG"><!-- 算法1.周期8 -->
+		    <div class="settings-setter"><div toggle-class="switchExpect"></div><div toggle-class="switch" expect="+"></div></div>
+		    <div class="settings-label"><span id="result"></span>[<span id="rowexpect"></span>]<br><span id="expects"></span></div>
+		</div><!-- END of 算法4.周期8 -->
+		<div class="settings-section" name="ALG"><!-- 算法1.周期9 -->
+		    <div class="settings-setter"><div toggle-class="switchExpect"></div><div toggle-class="switch" expect="+"></div></div>
+		    <div class="settings-label"><span id="result"></span>[<span id="rowexpect"></span>]<br><span id="expects"></span></div>
+		</div><!-- END of 算法4.周期9 -->
+	</div>
+</div>
+<div style="background:#F0F0F0;">反<span onclick="return toggle(this);">[-]</span>
+	<div id="area">
+		<div class="settings-section" name="ALG"><!-- 算法1.周期6 -->
+		    <div class="settings-setter"><div toggle-class="switchExpect"></div><div toggle-class="switch" expect="-"></div></div>
+		    <div class="settings-label"><span id="result"></span>[<span id="rowexpect"></span>]<br><span id="expects"></span></div>
+		</div><!-- END of 算法4.周期6 -->
+		<div class="settings-section" name="ALG"><!-- 算法1.周期7 -->
+		    <div class="settings-setter"><div toggle-class="switchExpect"></div><div toggle-class="switch" expect="-"></div></div>
+		    <div class="settings-label"><span id="result"></span>[<span id="rowexpect"></span>]<br><span id="expects"></span></div>
+		</div><!-- END of 算法4.周期7 -->
+		<div class="settings-section" name="ALG"><!-- 算法1.周期8 -->
+		    <div class="settings-setter"><div toggle-class="switchExpect"></div><div toggle-class="switch" expect="-"></div></div>
+		    <div class="settings-label"><span id="result"></span>[<span id="rowexpect"></span>]<br><span id="expects"></span></div>
+		</div><!-- END of 算法4.周期8 -->
+		<div class="settings-section" name="ALG"><!-- 算法1.周期9 -->
+		    <div class="settings-setter"><div toggle-class="switchExpect"></div><div toggle-class="switch" expect="-"></div></div>
+		    <div class="settings-label"><span id="result"></span>[<span id="rowexpect"></span>]<br><span id="expects"></span></div>
+		</div><!-- END of 算法4.周期9 -->
+	</div>
+</div>
+</div><!-- 算法1DIV -->
+</div><!-- END of ALG1 -->
+
+<div id="ALG1N">
+<div>算法1` <span onclick="return toggleAlg(this);">[-]</span></div>
+<div id="dualArea"><!-- 算法1`DIV -->
+<span id="trueANDfalse"></span>[<span id="algexpect" name="algexpect"></span>]
+<div style="background:#E0E0E0;">正<span onclick="return toggle(this);">[-]</span>
+	<div id="area">
+		<div class="settings-section" name="ALG"><!-- 算法1.周期6 -->
+		    <div class="settings-setter"><div toggle-class="switchExpect"></div><div toggle-class="switch" expect="+"></div></div>
+		    <div class="settings-label"><span id="result"></span>[<span id="rowexpect"></span>]<br><span id="expects"></span></div>
+		</div><!-- END of 算法4.周期6 -->
+		<div class="settings-section" name="ALG"><!-- 算法1.周期7 -->
+		    <div class="settings-setter"><div toggle-class="switchExpect"></div><div toggle-class="switch" expect="+"></div></div>
+		    <div class="settings-label"><span id="result"></span>[<span id="rowexpect"></span>]<br><span id="expects"></span></div>
+		</div><!-- END of 算法4.周期7 -->
+		<div class="settings-section" name="ALG"><!-- 算法1.周期8 -->
+		    <div class="settings-setter"><div toggle-class="switchExpect"></div><div toggle-class="switch" expect="+"></div></div>
+		    <div class="settings-label"><span id="result"></span>[<span id="rowexpect"></span>]<br><span id="expects"></span></div>
+		</div><!-- END of 算法4.周期8 -->
+		<div class="settings-section" name="ALG"><!-- 算法1.周期9 -->
+		    <div class="settings-setter"><div toggle-class="switchExpect"></div><div toggle-class="switch" expect="+"></div></div>
+		    <div class="settings-label"><span id="result"></span>[<span id="rowexpect"></span>]<br><span id="expects"></span></div>
+		</div><!-- END of 算法4.周期9 -->
+	</div>
+</div>
+<div style="background:#F0F0F0;">反<span onclick="return toggle(this);">[-]</span>
+	<div id="area">
+		<div class="settings-section" name="ALG"><!-- 算法4.周期6 -->
+		    <div class="settings-setter"><div toggle-class="switchExpect"></div><div toggle-class="switch" expect="-"></div></div>
+		    <div class="settings-label"><span id="result"></span>[<span id="rowexpect"></span>]<br><span id="expects"></span></div>
+		</div><!-- END of 算法4.周期6 -->
+		<div class="settings-section" name="ALG"><!-- 算法4.周期7 -->
+		    <div class="settings-setter"><div toggle-class="switchExpect"></div><div toggle-class="switch" expect="-"></div></div>
+		    <div class="settings-label"><span id="result"></span>[<span id="rowexpect"></span>]<br><span id="expects"></span></div>
+		</div><!-- END of 算法4.周期7 -->
+		<div class="settings-section" name="ALG"><!-- 算法4.周期8 -->
+		    <div class="settings-setter"><div toggle-class="switchExpect"></div><div toggle-class="switch" expect="-"></div></div>
+		    <div class="settings-label"><span id="result"></span>[<span id="rowexpect"></span>]<br><span id="expects"></span></div>
+		</div><!-- END of 算法4.周期8 -->
+		<div class="settings-section" name="ALG"><!-- 算法4.周期9 -->
+		    <div class="settings-setter"><div toggle-class="switchExpect"></div><div toggle-class="switch" expect="-"></div></div>
+		    <div class="settings-label"><span id="result"></span>[<span id="rowexpect"></span>]<br><span id="expects"></span></div>
+		</div><!-- END of 算法4.周期9 -->
+	</div>
+</div>
+</div><!-- 算法1`DIV -->
+</div><!-- END of ALG1` -->
+
+<div id="ALG4">
+<div>算法4 <span onclick="return toggleAlg(this);">[-]</span></div>
+<div id="dualArea"><!-- 算法4DIV -->
+<span id="trueANDfalse"></span>[<span id="algexpect" name="algexpect"></span>]
+<div style="background:#E0E0E0;">正<span onclick="return toggle(this);">[-]</span>
+	<div id="area">
+		<div class="settings-section" name="ALG"><!-- 算法1.周期6 -->
+		    <div class="settings-setter"><div toggle-class="switchExpect"></div><div toggle-class="switch" expect="+"></div></div>
+		    <div class="settings-label"><span id="result"></span>[<span id="rowexpect"></span>]<br><span id="expects"></span></div>
+		</div><!-- END of 算法4.周期6 -->
+		<div class="settings-section" name="ALG"><!-- 算法1.周期7 -->
+		    <div class="settings-setter"><div toggle-class="switchExpect"></div><div toggle-class="switch" expect="+"></div></div>
+		    <div class="settings-label"><span id="result"></span>[<span id="rowexpect"></span>]<br><span id="expects"></span></div>
+		</div><!-- END of 算法4.周期7 -->
+		<div class="settings-section" name="ALG"><!-- 算法1.周期8 -->
+		    <div class="settings-setter"><div toggle-class="switchExpect"></div><div toggle-class="switch" expect="+"></div></div>
+		    <div class="settings-label"><span id="result"></span>[<span id="rowexpect"></span>]<br><span id="expects"></span></div>
+		</div><!-- END of 算法4.周期8 -->
+		<div class="settings-section" name="ALG"><!-- 算法1.周期9 -->
+		    <div class="settings-setter"><div toggle-class="switchExpect"></div><div toggle-class="switch" expect="+"></div></div>
+		    <div class="settings-label"><span id="result"></span>[<span id="rowexpect"></span>]<br><span id="expects"></span></div>
+		</div><!-- END of 算法4.周期9 -->
+	</div>
+</div>
+<div style="background:#F0F0F0;">反<span onclick="return toggle(this);">[-]</span>
+	<div id="area">
+		<div class="settings-section" name="ALG"><!-- 算法1.周期6 -->
+		    <div class="settings-setter"><div toggle-class="switchExpect"></div><div toggle-class="switch" expect="-"></div></div>
+		    <div class="settings-label"><span id="result"></span>[<span id="rowexpect"></span>]<br><span id="expects"></span></div>
+		</div><!-- END of 算法4.周期6 -->
+		<div class="settings-section" name="ALG"><!-- 算法1.周期7 -->
+		    <div class="settings-setter"><div toggle-class="switchExpect"></div><div toggle-class="switch" expect="-"></div></div>
+		    <div class="settings-label"><span id="result"></span>[<span id="rowexpect"></span>]<br><span id="expects"></span></div>
+		</div><!-- END of 算法4.周期7 -->
+		<div class="settings-section" name="ALG"><!-- 算法1.周期8 -->
+		    <div class="settings-setter"><div toggle-class="switchExpect"></div><div toggle-class="switch" expect="-"></div></div>
+		    <div class="settings-label"><span id="result"></span>[<span id="rowexpect"></span>]<br><span id="expects"></span></div>
+		</div><!-- END of 算法4.周期8 -->
+		<div class="settings-section" name="ALG"><!-- 算法1.周期9 -->
+		    <div class="settings-setter"><div toggle-class="switchExpect"></div><div toggle-class="switch" expect="-"></div></div>
+		    <div class="settings-label"><span id="result"></span>[<span id="rowexpect"></span>]<br><span id="expects"></span></div>
+		</div><!-- END of 算法4.周期9 -->
+	</div>
+</div>
+</div><!-- 算法4DIV -->
+</div><!-- END of ALG4 -->
+
+<div id="NEWALG">
+<div>新算法 <span onclick="return toggleAlg(this);">[-]</span></div>
+<div id="dualArea"><!-- 算法4DIV -->
+<span id="trueANDfalse"></span>[<span id="algexpect" name="algexpect"></span>]
+<div style="background:#E0E0E0;">正<span onclick="return toggle(this);">[-]</span>
+	<div id="area">
+		<div class="settings-section" name="ALG"><!-- 算法1.周期6 -->
+		    <div class="settings-setter"><div toggle-class="switchExpect"></div><div toggle-class="switch" expect="+"></div></div>
+		    <div class="settings-label"><span id="result"></span>[<span id="rowexpect"></span>]<br><span id="expects"></span></div>
+		</div><!-- END of 算法4.周期6 -->
+		<div class="settings-section" name="ALG"><!-- 算法1.周期7 -->
+		    <div class="settings-setter"><div toggle-class="switchExpect"></div><div toggle-class="switch" expect="+"></div></div>
+		    <div class="settings-label"><span id="result"></span>[<span id="rowexpect"></span>]<br><span id="expects"></span></div>
+		</div><!-- END of 算法4.周期7 -->
+		<div class="settings-section" name="ALG"><!-- 算法1.周期8 -->
+		    <div class="settings-setter"><div toggle-class="switchExpect"></div><div toggle-class="switch" expect="+"></div></div>
+		    <div class="settings-label"><span id="result"></span>[<span id="rowexpect"></span>]<br><span id="expects"></span></div>
+		</div><!-- END of 算法4.周期8 -->
+		<div class="settings-section" name="ALG"><!-- 算法1.周期9 -->
+		    <div class="settings-setter"><div toggle-class="switchExpect"></div><div toggle-class="switch" expect="+"></div></div>
+		    <div class="settings-label"><span id="result"></span>[<span id="rowexpect"></span>]<br><span id="expects"></span></div>
+		</div><!-- END of 算法4.周期9 -->
+	</div>
+</div>
+<div style="background:#F0F0F0;">反<span onclick="return toggle(this);">[-]</span>
+	<div id="area">
+		<div class="settings-section" name="ALG"><!-- 算法1.周期6 -->
+		    <div class="settings-setter"><div toggle-class="switchExpect"></div><div toggle-class="switch" expect="-"></div></div>
+		    <div class="settings-label"><span id="result"></span>[<span id="rowexpect"></span>]<br><span id="expects"></span></div>
+		</div><!-- END of 算法4.周期6 -->
+		<div class="settings-section" name="ALG"><!-- 算法1.周期7 -->
+		    <div class="settings-setter"><div toggle-class="switchExpect"></div><div toggle-class="switch" expect="-"></div></div>
+		    <div class="settings-label"><span id="result"></span>[<span id="rowexpect"></span>]<br><span id="expects"></span></div>
+		</div><!-- END of 算法4.周期7 -->
+		<div class="settings-section" name="ALG"><!-- 算法1.周期8 -->
+		    <div class="settings-setter"><div toggle-class="switchExpect"></div><div toggle-class="switch" expect="-"></div></div>
+		    <div class="settings-label"><span id="result"></span>[<span id="rowexpect"></span>]<br><span id="expects"></span></div>
+		</div><!-- END of 算法4.周期8 -->
+		<div class="settings-section" name="ALG"><!-- 算法1.周期9 -->
+		    <div class="settings-setter"><div toggle-class="switchExpect"></div><div toggle-class="switch" expect="-"></div></div>
+		    <div class="settings-label"><span id="result"></span>[<span id="rowexpect"></span>]<br><span id="expects"></span></div>
+		</div><!-- END of 算法4.周期9 -->
+	</div>
+</div>
+</div><!-- 算法4DIV -->
+</div><!-- END of NEWALG -->
+
+<div id="NEWALGN">
+<div>新算法 <span onclick="return toggleAlg(this);">[-]</span></div>
+<div id="dualArea"><!-- 算法4DIV -->
+<span id="trueANDfalse"></span>[<span id="algexpect" name="algexpect"></span>]
+<div style="background:#E0E0E0;">正<span onclick="return toggle(this);">[-]</span>
+	<div id="area">
+		<div class="settings-section" name="ALG"><!-- 算法1.周期6 -->
+		    <div class="settings-setter"><div toggle-class="switchExpect"></div><div toggle-class="switch" expect="+"></div></div>
+		    <div class="settings-label"><span id="result"></span>[<span id="rowexpect"></span>]<br><span id="expects"></span></div>
+		</div><!-- END of 算法4.周期6 -->
+		<div class="settings-section" name="ALG"><!-- 算法1.周期7 -->
+		    <div class="settings-setter"><div toggle-class="switchExpect"></div><div toggle-class="switch" expect="+"></div></div>
+		    <div class="settings-label"><span id="result"></span>[<span id="rowexpect"></span>]<br><span id="expects"></span></div>
+		</div><!-- END of 算法4.周期7 -->
+		<div class="settings-section" name="ALG"><!-- 算法1.周期8 -->
+		    <div class="settings-setter"><div toggle-class="switchExpect"></div><div toggle-class="switch" expect="+"></div></div>
+		    <div class="settings-label"><span id="result"></span>[<span id="rowexpect"></span>]<br><span id="expects"></span></div>
+		</div><!-- END of 算法4.周期8 -->
+		<div class="settings-section" name="ALG"><!-- 算法1.周期9 -->
+		    <div class="settings-setter"><div toggle-class="switchExpect"></div><div toggle-class="switch" expect="+"></div></div>
+		    <div class="settings-label"><span id="result"></span>[<span id="rowexpect"></span>]<br><span id="expects"></span></div>
+		</div><!-- END of 算法4.周期9 -->
+	</div>
+</div>
+<div style="background:#F0F0F0;">反<span onclick="return toggle(this);">[-]</span>
+	<div id="area">
+		<div class="settings-section" name="ALG"><!-- 算法1.周期6 -->
+		    <div class="settings-setter"><div toggle-class="switchExpect"></div><div toggle-class="switch" expect="-"></div></div>
+		    <div class="settings-label"><span id="result"></span>[<span id="rowexpect"></span>]<br><span id="expects"></span></div>
+		</div><!-- END of 算法4.周期6 -->
+		<div class="settings-section" name="ALG"><!-- 算法1.周期7 -->
+		    <div class="settings-setter"><div toggle-class="switchExpect"></div><div toggle-class="switch" expect="-"></div></div>
+		    <div class="settings-label"><span id="result"></span>[<span id="rowexpect"></span>]<br><span id="expects"></span></div>
+		</div><!-- END of 算法4.周期7 -->
+		<div class="settings-section" name="ALG"><!-- 算法1.周期8 -->
+		    <div class="settings-setter"><div toggle-class="switchExpect"></div><div toggle-class="switch" expect="-"></div></div>
+		    <div class="settings-label"><span id="result"></span>[<span id="rowexpect"></span>]<br><span id="expects"></span></div>
+		</div><!-- END of 算法4.周期8 -->
+		<div class="settings-section" name="ALG"><!-- 算法1.周期9 -->
+		    <div class="settings-setter"><div toggle-class="switchExpect"></div><div toggle-class="switch" expect="-"></div></div>
+		    <div class="settings-label"><span id="result"></span>[<span id="rowexpect"></span>]<br><span id="expects"></span></div>
+		</div><!-- END of 算法4.周期9 -->
+	</div>
+</div>
+</div><!-- 算法4DIV -->
+</div><!-- END of NEWALGN -->
+		</div><!-- END of RIGHT -->
+	</div>
+</body>
+</html>

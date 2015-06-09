@@ -56,7 +56,7 @@
 				height: 25,
 				width: 61, 
 				checked: true,
-				disabled:true,
+				disabled:false,
 				onLabel: "正",
 				offLabel:"反"
 			});
@@ -69,6 +69,22 @@
 				onLabel: "正",
 				offLabel:"反"
 			});
+			
+			$("div[toggle-class='switch'][positive]").bind('change', function(event){
+				alert($(this).val());
+			});
+			
+			//$("div[toggle-class='switch'][positive]").hide();
+			//$("div[toggle-class='switch'][negtive]").hide();
+			
+			$("div[toggle-class='switchExpect']").jqxSwitchButton({
+				height: 25,
+				width: 61, 
+				checked: true,
+				onLabel: "正",
+				offLabel:"反"
+			});
+			$("div[toggle-class='switchExpect']").hide();
 			
 			$('#btnA').button().click(function(){
 				
@@ -212,11 +228,11 @@
 			<input id="btnUpdate" type="button" disabled recordID="" value="更新" onclick="updateRecord();"/>
 			<span id="totalExpect">EXPECT:</span>
 		</div>
-		<div style="float:right;"><pre><span id="sourceFormat" style="font-size: 18px;"></span></pre></div>
 	</div><!-- END OF FLOAT -->
 	
 	<div style="heigth:200px;">
 		<div class="left">
+			<div style="float:right;"><pre><span id="sourceFormat" style="font-size: 18px;"></span></pre></div>
 			<input id="createDate" type="text" size="10"></input>
 			<input id="btnQuery" type="button" value="查询"></input>
 			<table id="queryResult" style="font-size: 12px;"></table>
@@ -232,40 +248,40 @@
 <div style="background:#E0E0E0;">正<span onclick="return toggle(this);">[-]</span>
 	<div id="area">
 		<div class="settings-section" name="ALG"><!-- 算法1.周期6 -->
-		    <div class="settings-setter"><div toggle-class="switch" positive></div></div>
-		    <div class="settings-label"><span id="result"></span><br><span id="expect"></span></div>
+		    <div class="settings-setter"><div toggle-class="switchExpect"></div><div toggle-class="switch" positive></div></div>
+		    <div class="settings-label"><span id="result"></span>[<span id="rowexpect"></span>]<br><span id="expects"></span></div>
 		</div><!-- END of 算法4.周期6 -->
 		<div class="settings-section" name="ALG"><!-- 算法1.周期7 -->
-		    <div class="settings-setter"><div toggle-class="switch" positive></div></div>
-		    <div class="settings-label"><span id="result"></span><br><span id="expect"></span></div>
+		    <div class="settings-setter"><div toggle-class="switchExpect"></div><div toggle-class="switch" positive></div></div>
+		    <div class="settings-label"><span id="result"></span>[<span id="rowexpect"></span>]<br><span id="expects"></span></div>
 		</div><!-- END of 算法4.周期7 -->
 		<div class="settings-section" name="ALG"><!-- 算法1.周期8 -->
-		    <div class="settings-setter"><div toggle-class="switch" positive></div></div>
-		    <div class="settings-label"><span id="result"></span><br><span id="expect"></span></div>
+		    <div class="settings-setter"><div toggle-class="switchExpect"></div><div toggle-class="switch" positive></div></div>
+		    <div class="settings-label"><span id="result"></span>[<span id="rowexpect"></span>]<br><span id="expects"></span></div>
 		</div><!-- END of 算法4.周期8 -->
 		<div class="settings-section" name="ALG"><!-- 算法1.周期9 -->
-		    <div class="settings-setter"><div toggle-class="switch" positive></div></div>
-		    <div class="settings-label"><span id="result"></span><br><span id="expect"></span></div>
+		    <div class="settings-setter"><div toggle-class="switchExpect"></div><div toggle-class="switch" positive></div></div>
+		    <div class="settings-label"><span id="result"></span>[<span id="rowexpect"></span>]<br><span id="expects"></span></div>
 		</div><!-- END of 算法4.周期9 -->
 	</div>
 </div>
 <div style="background:#F0F0F0;">反<span onclick="return toggle(this);">[-]</span>
 	<div id="area">
 		<div class="settings-section" name="ALG"><!-- 算法1.周期6 -->
-		    <div class="settings-setter"><div toggle-class="switch" negtive></div></div>
-		    <div class="settings-label"><span id="result"></span><br><span id="expect"></span></div>
+		    <div class="settings-setter"><div toggle-class="switchExpect"></div><div toggle-class="switch" negtive></div></div>
+		    <div class="settings-label"><span id="result"></span>[<span id="rowexpect"></span>]<br><span id="expects"></span></div>
 		</div><!-- END of 算法4.周期6 -->
 		<div class="settings-section" name="ALG"><!-- 算法1.周期7 -->
-		    <div class="settings-setter"><div toggle-class="switch" negtive></div></div>
-		    <div class="settings-label"><span id="result"></span><br><span id="expect"></span></div>
+		    <div class="settings-setter"><div toggle-class="switchExpect"></div><div toggle-class="switch" negtive></div></div>
+		    <div class="settings-label"><span id="result"></span>[<span id="rowexpect"></span>]<br><span id="expects"></span></div>
 		</div><!-- END of 算法4.周期7 -->
 		<div class="settings-section" name="ALG"><!-- 算法1.周期8 -->
-		    <div class="settings-setter"><div toggle-class="switch" negtive></div></div>
-		    <div class="settings-label"><span id="result"></span><br><span id="expect"></span></div>
+		    <div class="settings-setter"><div toggle-class="switchExpect"></div><div toggle-class="switch" negtive></div></div>
+		    <div class="settings-label"><span id="result"></span>[<span id="rowexpect"></span>]<br><span id="expects"></span></div>
 		</div><!-- END of 算法4.周期8 -->
 		<div class="settings-section" name="ALG"><!-- 算法1.周期9 -->
-		    <div class="settings-setter"><div toggle-class="switch" negtive></div></div>
-		    <div class="settings-label"><span id="result"></span><br><span id="expect"></span></div>
+		    <div class="settings-setter"><div toggle-class="switchExpect"></div><div toggle-class="switch" negtive></div></div>
+		    <div class="settings-label"><span id="result"></span>[<span id="rowexpect"></span>]<br><span id="expects"></span></div>
 		</div><!-- END of 算法4.周期9 -->
 	</div>
 </div>
@@ -279,40 +295,40 @@
 <div style="background:#E0E0E0;">正<span onclick="return toggle(this);">[-]</span>
 	<div id="area">
 		<div class="settings-section" name="ALG"><!-- 算法1.周期6 -->
-		    <div class="settings-setter"><div toggle-class="switch" positive></div></div>
-		    <div class="settings-label"><span id="result"></span><br><span id="expect"></span></div>
+		    <div class="settings-setter"><div toggle-class="switchExpect"></div><div toggle-class="switch" positive></div></div>
+		    <div class="settings-label"><span id="result"></span>[<span id="rowexpect"></span>]<br><span id="expects"></span></div>
 		</div><!-- END of 算法4.周期6 -->
 		<div class="settings-section" name="ALG"><!-- 算法1.周期7 -->
-		    <div class="settings-setter"><div toggle-class="switch" positive></div></div>
-		    <div class="settings-label"><span id="result"></span><br><span id="expect"></span></div>
+		    <div class="settings-setter"><div toggle-class="switchExpect"></div><div toggle-class="switch" positive></div></div>
+		    <div class="settings-label"><span id="result"></span>[<span id="rowexpect"></span>]<br><span id="expects"></span></div>
 		</div><!-- END of 算法4.周期7 -->
 		<div class="settings-section" name="ALG"><!-- 算法1.周期8 -->
-		    <div class="settings-setter"><div toggle-class="switch" positive></div></div>
-		    <div class="settings-label"><span id="result"></span><br><span id="expect"></span></div>
+		    <div class="settings-setter"><div toggle-class="switchExpect"></div><div toggle-class="switch" positive></div></div>
+		    <div class="settings-label"><span id="result"></span>[<span id="rowexpect"></span>]<br><span id="expects"></span></div>
 		</div><!-- END of 算法4.周期8 -->
 		<div class="settings-section" name="ALG"><!-- 算法1.周期9 -->
-		    <div class="settings-setter"><div toggle-class="switch" positive></div></div>
-		    <div class="settings-label"><span id="result"></span><br><span id="expect"></span></div>
+		    <div class="settings-setter"><div toggle-class="switchExpect"></div><div toggle-class="switch" positive></div></div>
+		    <div class="settings-label"><span id="result"></span>[<span id="rowexpect"></span>]<br><span id="expects"></span></div>
 		</div><!-- END of 算法4.周期9 -->
 	</div>
 </div>
 <div style="background:#F0F0F0;">反<span onclick="return toggle(this);">[-]</span>
 	<div id="area">
 		<div class="settings-section" name="ALG"><!-- 算法4.周期6 -->
-		    <div class="settings-setter"><div toggle-class="switch" negtive></div></div>
-		    <div class="settings-label"><span id="result"></span><br><span id="expect"></span></div>
+		    <div class="settings-setter"><div toggle-class="switchExpect"></div><div toggle-class="switch" negtive></div></div>
+		    <div class="settings-label"><span id="result"></span>[<span id="rowexpect"></span>]<br><span id="expects"></span></div>
 		</div><!-- END of 算法4.周期6 -->
 		<div class="settings-section" name="ALG"><!-- 算法4.周期7 -->
-		    <div class="settings-setter"><div toggle-class="switch" negtive></div></div>
-		    <div class="settings-label"><span id="result"></span><br><span id="expect"></span></div>
+		    <div class="settings-setter"><div toggle-class="switchExpect"></div><div toggle-class="switch" negtive></div></div>
+		    <div class="settings-label"><span id="result"></span>[<span id="rowexpect"></span>]<br><span id="expects"></span></div>
 		</div><!-- END of 算法4.周期7 -->
 		<div class="settings-section" name="ALG"><!-- 算法4.周期8 -->
-		    <div class="settings-setter"><div toggle-class="switch" negtive></div></div>
-		    <div class="settings-label"><span id="result"></span><br><span id="expect"></span></div>
+		    <div class="settings-setter"><div toggle-class="switchExpect"></div><div toggle-class="switch" negtive></div></div>
+		    <div class="settings-label"><span id="result"></span>[<span id="rowexpect"></span>]<br><span id="expects"></span></div>
 		</div><!-- END of 算法4.周期8 -->
 		<div class="settings-section" name="ALG"><!-- 算法4.周期9 -->
-		    <div class="settings-setter"><div toggle-class="switch" negtive></div></div>
-		    <div class="settings-label"><span id="result"></span><br><span id="expect"></span></div>
+		    <div class="settings-setter"><div toggle-class="switchExpect"></div><div toggle-class="switch" negtive></div></div>
+		    <div class="settings-label"><span id="result"></span>[<span id="rowexpect"></span>]<br><span id="expects"></span></div>
 		</div><!-- END of 算法4.周期9 -->
 	</div>
 </div>
@@ -326,19 +342,19 @@
 <div style="background:#E0E0E0;">正<span onclick="return toggle(this);">[-]</span>
 	<div id="area">
 		<div class="settings-section" name="ALG"><!-- 算法4.周期6 -->
-		    <div class="settings-setter"><div toggle-class="switch" positive></div></div>
+		    <div class="settings-setter"><div toggle-class="switchExpect"></div><div toggle-class="switch" positive></div></div>
 		    <div class="settings-label"><span id="result"></span><br><span id="expect"></span></div>
 		</div><!-- END of 算法4.周期6 -->
 		<div class="settings-section" name="ALG"><!-- 算法4.周期7 -->
-		    <div class="settings-setter"><div toggle-class="switch" positive></div></div>
+		    <div class="settings-setter"><div toggle-class="switchExpect"></div><div toggle-class="switch" positive></div></div>
 		    <div class="settings-label"><span id="result"></span><br><span id="expect"></span></div>
 		</div><!-- END of 算法4.周期7 -->
 		<div class="settings-section" name="ALG"><!-- 算法4.周期8 -->
-		    <div class="settings-setter"><div toggle-class="switch" positive></div></div>
+		    <div class="settings-setter"><div toggle-class="switchExpect"></div><div toggle-class="switch" positive></div></div>
 		    <div class="settings-label"><span id="result"></span><br><span id="expect"></span></div>
 		</div><!-- END of 算法4.周期8 -->
 		<div class="settings-section" name="ALG"><!-- 算法4.周期9 -->
-		    <div class="settings-setter"><div toggle-class="switch" positive></div></div>
+		    <div class="settings-setter"><div toggle-class="switchExpect"></div><div toggle-class="switch" positive></div></div>
 		    <div class="settings-label"><span id="result"></span><br><span id="expect"></span></div>
 		</div><!-- END of 算法4.周期9 -->
 	</div>
@@ -346,19 +362,19 @@
 <div style="background:#F0F0F0;">反<span onclick="return toggle(this);">[-]</span>
 	<div id="area">
 		<div class="settings-section" name="ALG"><!-- 算法4.周期6 -->
-		    <div class="settings-setter"><div toggle-class="switch" negtive></div></div>
+		    <div class="settings-setter"><div toggle-class="switchExpect"></div><div toggle-class="switch" negtive></div></div>
 		    <div class="settings-label"><span id="result"></span><br><span id="expect"></span></div>
 		</div><!-- END of 算法4.周期6 -->
 		<div class="settings-section" name="ALG"><!-- 算法4.周期7 -->
-		    <div class="settings-setter"><div toggle-class="switch" negtive></div></div>
+		    <div class="settings-setter"><div toggle-class="switchExpect"></div><div toggle-class="switch" negtive></div></div>
 		    <div class="settings-label"><span id="result"></span><br><span id="expect"></span></div>
 		</div><!-- END of 算法4.周期7 -->
 		<div class="settings-section" name="ALG"><!-- 算法4.周期8 -->
-		    <div class="settings-setter"><div toggle-class="switch" negtive></div></div>
+		    <div class="settings-setter"><div toggle-class="switchExpect"></div><div toggle-class="switch" negtive></div></div>
 		    <div class="settings-label"><span id="result"></span><br><span id="expect"></span></div>
 		</div><!-- END of 算法4.周期8 -->
 		<div class="settings-section" name="ALG"><!-- 算法4.周期9 -->
-		    <div class="settings-setter"><div toggle-class="switch" negtive></div></div>
+		    <div class="settings-setter"><div toggle-class="switchExpect"></div><div toggle-class="switch" negtive></div></div>
 		    <div class="settings-label"><span id="result"></span><br><span id="expect"></span></div>
 		</div><!-- END of 算法4.周期9 -->
 	</div>
@@ -373,19 +389,19 @@
 <div style="background:#E0E0E0;">正<span onclick="return toggle(this);">[-]</span>
 	<div id="area">
 		<div class="settings-section" name="ALG"><!-- 算法4.周期6 -->
-		    <div class="settings-setter"><div toggle-class="switch" positive></div></div>
+		    <div class="settings-setter"><div toggle-class="switchExpect"></div><div toggle-class="switch" positive></div></div>
 		    <div class="settings-label"><span id="result"></span><br><span id="expect"></span></div>
 		</div><!-- END of 算法4.周期6 -->
 		<div class="settings-section" name="ALG"><!-- 算法4.周期7 -->
-		    <div class="settings-setter"><div toggle-class="switch" positive></div></div>
+		    <div class="settings-setter"><div toggle-class="switchExpect"></div><div toggle-class="switch" positive></div></div>
 		    <div class="settings-label"><span id="result"></span><br><span id="expect"></span></div>
 		</div><!-- END of 算法4.周期7 -->
 		<div class="settings-section" name="ALG"><!-- 算法4.周期8 -->
-		    <div class="settings-setter"><div toggle-class="switch" positive></div></div>
+		    <div class="settings-setter"><div toggle-class="switchExpect"></div><div toggle-class="switch" positive></div></div>
 		    <div class="settings-label"><span id="result"></span><br><span id="expect"></span></div>
 		</div><!-- END of 算法4.周期8 -->
 		<div class="settings-section" name="ALG"><!-- 算法4.周期9 -->
-		    <div class="settings-setter"><div toggle-class="switch" positive></div></div>
+		    <div class="settings-setter"><div toggle-class="switchExpect"></div><div toggle-class="switch" positive></div></div>
 		    <div class="settings-label"><span id="result"></span><br><span id="expect"></span></div>
 		</div><!-- END of 算法4.周期9 -->
 	</div>
@@ -393,19 +409,19 @@
 <div style="background:#F0F0F0;">反<span onclick="return toggle(this);">[-]</span>
 	<div id="area">
 		<div class="settings-section" name="ALG"><!-- 算法4.周期6 -->
-		    <div class="settings-setter"><div toggle-class="switch" negtive></div></div>
+		    <div class="settings-setter"><div toggle-class="switchExpect"></div><div toggle-class="switch" negtive></div></div>
 		    <div class="settings-label"><span id="result"></span><br><span id="expect"></span></div>
 		</div><!-- END of 算法4.周期6 -->
 		<div class="settings-section" name="ALG"><!-- 算法4.周期7 -->
-		    <div class="settings-setter"><div toggle-class="switch" negtive></div></div>
+		    <div class="settings-setter"><div toggle-class="switchExpect"></div><div toggle-class="switch" negtive></div></div>
 		    <div class="settings-label"><span id="result"></span><br><span id="expect"></span></div>
 		</div><!-- END of 算法4.周期7 -->
 		<div class="settings-section" name="ALG"><!-- 算法4.周期8 -->
-		    <div class="settings-setter"><div toggle-class="switch" negtive></div></div>
+		    <div class="settings-setter"><div toggle-class="switchExpect"></div><div toggle-class="switch" negtive></div></div>
 		    <div class="settings-label"><span id="result"></span><br><span id="expect"></span></div>
 		</div><!-- END of 算法4.周期8 -->
 		<div class="settings-section" name="ALG"><!-- 算法4.周期9 -->
-		    <div class="settings-setter"><div toggle-class="switch" negtive></div></div>
+		    <div class="settings-setter"><div toggle-class="switchExpect"></div><div toggle-class="switch" negtive></div></div>
 		    <div class="settings-label"><span id="result"></span><br><span id="expect"></span></div>
 		</div><!-- END of 算法4.周期9 -->
 	</div>
@@ -420,19 +436,19 @@
 <div style="background:#E0E0E0;">正<span onclick="return toggle(this);">[-]</span>
 	<div id="area">
 		<div class="settings-section" name="ALG"><!-- 算法4.周期6 -->
-		    <div class="settings-setter"><div toggle-class="switch" positive></div></div>
+		    <div class="settings-setter"><div toggle-class="switchExpect"></div><div toggle-class="switch" positive></div></div>
 		    <div class="settings-label"><span id="result"></span><br><span id="expect"></span></div>
 		</div><!-- END of 算法4.周期6 -->
 		<div class="settings-section" name="ALG"><!-- 算法4.周期7 -->
-		    <div class="settings-setter"><div toggle-class="switch" positive></div></div>
+		    <div class="settings-setter"><div toggle-class="switchExpect"></div><div toggle-class="switch" positive></div></div>
 		    <div class="settings-label"><span id="result"></span><br><span id="expect"></span></div>
 		</div><!-- END of 算法4.周期7 -->
 		<div class="settings-section" name="ALG"><!-- 算法4.周期8 -->
-		    <div class="settings-setter"><div toggle-class="switch" positive></div></div>
+		    <div class="settings-setter"><div toggle-class="switchExpect"></div><div toggle-class="switch" positive></div></div>
 		    <div class="settings-label"><span id="result"></span><br><span id="expect"></span></div>
 		</div><!-- END of 算法4.周期8 -->
 		<div class="settings-section" name="ALG"><!-- 算法4.周期9 -->
-		    <div class="settings-setter"><div toggle-class="switch" positive></div></div>
+		    <div class="settings-setter"><div toggle-class="switchExpect"></div><div toggle-class="switch" positive></div></div>
 		    <div class="settings-label"><span id="result"></span><br><span id="expect"></span></div>
 		</div><!-- END of 算法4.周期9 -->
 	</div>
@@ -440,19 +456,19 @@
 <div style="background:#F0F0F0;">反<span onclick="return toggle(this);">[-]</span>
 	<div id="area">
 		<div class="settings-section" name="ALG"><!-- 算法4.周期6 -->
-		    <div class="settings-setter"><div toggle-class="switch" negtive></div></div>
+		    <div class="settings-setter"><div toggle-class="switchExpect"></div><div toggle-class="switch" negtive></div></div>
 		    <div class="settings-label"><span id="result"></span><br><span id="expect"></span></div>
 		</div><!-- END of 算法4.周期6 -->
 		<div class="settings-section" name="ALG"><!-- 算法4.周期7 -->
-		    <div class="settings-setter"><div toggle-class="switch" negtive></div></div>
+		    <div class="settings-setter"><div toggle-class="switchExpect"></div><div toggle-class="switch" negtive></div></div>
 		    <div class="settings-label"><span id="result"></span><br><span id="expect"></span></div>
 		</div><!-- END of 算法4.周期7 -->
 		<div class="settings-section" name="ALG"><!-- 算法4.周期8 -->
-		    <div class="settings-setter"><div toggle-class="switch" negtive></div></div>
+		    <div class="settings-setter"><div toggle-class="switchExpect"></div><div toggle-class="switch" negtive></div></div>
 		    <div class="settings-label"><span id="result"></span><br><span id="expect"></span></div>
 		</div><!-- END of 算法4.周期8 -->
 		<div class="settings-section" name="ALG"><!-- 算法4.周期9 -->
-		    <div class="settings-setter"><div toggle-class="switch" negtive></div></div>
+		    <div class="settings-setter"><div toggle-class="switchExpect"></div><div toggle-class="switch" negtive></div></div>
 		    <div class="settings-label"><span id="result"></span><br><span id="expect"></span></div>
 		</div><!-- END of 算法4.周期9 -->
 	</div>

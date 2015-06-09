@@ -1,14 +1,15 @@
 package ecommerce.algorithm4.processor.v2;
 
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Processor3O implements IProcessor {
+public class Processor implements IProcessor {
 	
-	private static final Logger logger = LoggerFactory.getLogger(Processor3O.class);
+	private static final Logger logger = LoggerFactory.getLogger(Processor.class);
 
 	private int offset;
 	private boolean[] source;
@@ -16,12 +17,14 @@ public class Processor3O implements IProcessor {
 	private int cycleStep;
 	private int maxStep;
 	private List<Integer> procedure;
+	private String classCycle;
 	
-	public Processor3O(boolean[] source, int offset, int cycleStep, char[] expect){
+	public Processor(boolean[] source, int offset, int cycleStep, char[] expect, Class classCycle){
 		this.offset = offset;
 		this.source = source;
 		this.cycleStep = cycleStep;
 		this.expect = expect;
+		this.classCycle = classCycle.getName();
 	}
 	
 	@Override public int getMaxStep() { return maxStep; }	
@@ -29,6 +32,15 @@ public class Processor3O implements IProcessor {
 	
 	@Override
 	public int execute() {
+		
+		Constructor<ICycle> constructor = null;
+		try {
+			@SuppressWarnings("unchecked")
+			Class<ICycle> Cycle = (Class<ICycle>) Class.forName(this.classCycle);
+			constructor = Cycle.getConstructor(int.class, char[].class);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 		int totalSum = 0;
 		this.procedure = new ArrayList<Integer>();
@@ -41,12 +53,18 @@ public class Processor3O implements IProcessor {
 				subExpect[tmp] = this.expect[tmp+i];
 
 			if(steps.size() == 0){
-				cycle = new Cycle(1, subExpect);
+				//cycle = new Cycle4TripleX(1, subExpect);
+				try {
+					cycle = (ICycle) constructor.newInstance(1, subExpect);
+				} catch (Exception e) { e.printStackTrace(); }
 			} else {
 				int step = 2;
 				for(int var : steps)
 					step += Math.abs(var);
-				cycle = new Cycle(step, subExpect);
+				//cycle = new Cycle4TripleX(step, subExpect);
+				try {
+					cycle = (ICycle) constructor.newInstance(step, subExpect);
+				} catch (Exception e) { e.printStackTrace(); }
 			}
 			
 			int length = this.offset+i+(cycleStep-1)<=this.source.length ? cycleStep : this.source.length-(this.offset+i);
