@@ -10,6 +10,9 @@ public class Result {
 	private boolean hasExpect;
 	private int expect;
 	private char expectItem;
+	private String type;
+	
+	public String getType(){return this.type;}
 
 	public Result(List<Integer> source, int sum, int max, boolean hasExpect){
 		this.source = source;
@@ -28,9 +31,10 @@ public class Result {
 			this.sum += val;
 	}
 
-	public Result(List<Integer>source, int max, int expect, char item){
+	public Result(List<Integer>source, int max, int expect, char item, String type){
 		
 		this.source = source;
+		this.type = type;
 		this.max = max;
 		this.hasExpect = expect==0?false:true;
 		this.expect = expect;

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<style type="text/css">
+		#fdiv{
+			position: fixed;
+			_position: absolute;
+			margin-left:350px;
+			width:1050px;
+			_top: expression(eval(document.documentElement.scrollTop) );
+		}
+		#fdiv img{
+			margin-left: 190px;
+			margin-top: 470px;
+		}
+
+		.left { float:left;background:#E0E0D0; width:250px; height:800px; }
+		.right{ float:left;background:#F0F0F0; width:1000px; height:800px;  }
+		.main { height:600px;background:#FEFEFE;width:0px; }
+		.trSelected{
+			background-color: #51b2f6;			
+			text-align: center;
+			font-size: 12px;
+		}
+		.menus span{
+            width:20px;
+            height:20px;
+    		position: absolute;
+        	top: -20px;
+        	margin-left: -20px;
+    	}
+    	
+    	input.ui-button { padding: 1px 5px !important; }
+    </style>
+	<meta charset="UTF-8">
+	<title>算法1 : ABAB...</title>
+	<link rel="stylesheet" href="css/jquery-ui.css">
+	<link rel="stylesheet" href="css/jqx.base.css">
+	<link rel="stylesheet" href="css/alg.css">
+	<script type="text/javascript" src="js/jquery/jquery-1.11.2.min.js"></script>
+	<script type="text/javascript" src="js/jquery/jquery-ui.js"></script>
+	<script type="text/javascript" src="js/jqxcore.js"></script>
+	<script type="text/javascript" src="js/jqxswitchbutton.js"></script>
+	<script type="text/javascript" src="js/alg4.js"></script>
+	<script type="text/javascript" src="js/alg1.js"></script>
+	<script type="text/javascript" src="js/newalg.js"></script>
+	<script type="text/javascript" src="js/ALG.js"></script>
+
+	<script type="text/javascript">
+		
+		function onPocker(){
+			var val = $(this).val();
+			var elementID = $('input[name=current]:checked').val();
+			$('#'+elementID).val($('#'+elementID).val()+val);
+			count();
+		}
+		
+		function count(){
+			
+			var map = {};
+			$('input[tag=button]').each(function(){
+				map[$(this).val()] = 0;
+			});
+			
+			var total = '';
+			$('input[tag=turn]').each(function(){
+				//total += $(this).val();
+				var str = $(this).val();
+				for(i=0; i<str.length; i++)
+					map[str[i]] = map[str[i]]+1; 
+			});
+			
+			$('input[tag=button]').each(function(){
+				$('#count' + $(this).val()).val(map[$(this).val()]);				
+			});
+		}
+		
+		
+		$(function(){
+
+			$('#ALGX').append("<br/>");
+			$('#ALGX').append("<input type='radio' name='current' value='input1' checked='checked'/>1. <input tag='turn' id='input1'/><br>");
+			for(var i=2; i<70; i++){
+				var html = "<input type='radio' name='current' value='input" + i + "'/>" + i + ". <input tag='turn' id='input" + i +"'/><br>"
+				$('#ALGX').append(html);
+			}
+			
+			$('input[type=button]').each(function(){
+				$(this).button();
+			});
+			
+			$('#btnA').button().click(onPocker);
+			$('#btn2').button().click(onPocker);
+			$('#btn3').button().click(onPocker);
+			$('#btn4').button().click(onPocker);
+			$('#btn5').button().click(onPocker);
+			$('#btn6').button().click(onPocker);
+			$('#btn7').button().click(onPocker);
+			$('#btn8').button().click(onPocker);
+			$('#btn9').button().click(onPocker);
+			$('#btn10').button().click(onPocker);
+			$('#btnJ').button().click(onPocker);
+			$('#btnQ').button().click(onPocker);
+			$('#btnK').button().click(onPocker);
+			
+		});//$(function())
+		
+		
+	</script>
+</head>
+<body>
+<div>
+</div>
+	<div id="fdiv"><!-- FLOAT -->
+		<div>
+			<input id="btnA" type="button" value="A" tag='button' style='width:30px;'/>
+			<input id="btn2" type="button" value="2" tag='button' style='width:30px;'/>
+			<input id="btn3" type="button" value="3" tag='button' style='width:30px;'/>
+			<input id="btn4" type="button" value="4" tag='button' style='width:30px;'/>
+			<input id="btn5" type="button" value="5" tag='button' style='width:30px;'/>
+			<input id="btn6" type="button" value="6" tag='button' style='width:30px;'/>
+			<input id="btn7" type="button" value="7" tag='button' style='width:30px;'/>
+			<input id="btn8" type="button" value="8" tag='button' style='width:30px;'/>
+			<input id="btn9" type="button" value="9" tag='button' style='width:30px;'/>
+			<input id="btn10" type="button" value="10" tag='button' style='width:30px;'/>
+			<input id="btnJ" type="button" value="J" tag='button' style='width:30px;'/>
+			<input id="btnQ" type="button" value="Q" tag='button' style='width:30px;'/>
+			<input id="btnK" type="button" value="K" tag='button' style='width:30px;'/>
+		</div>
+		<div>
+			<input id="countA" type="button" value="0" style='width:30px;'/>
+			<input id="count2" type="button" value="0" style='width:30px;'/>
+			<input id="count3" type="button" value="0" style='width:30px;'/>
+			<input id="count4" type="button" value="0" style='width:30px;'/>
+			<input id="count5" type="button" value="0" style='width:30px;'/>
+			<input id="count6" type="button" value="0" style='width:30px;'/>
+			<input id="count7" type="button" value="0" style='width:30px;'/>
+			<input id="count8" type="button" value="0" style='width:30px;'/>
+			<input id="count9" type="button" value="0" style='width:30px;'/>
+			<input id="count10" type="button" value="0" style='width:30px;'/>
+			<input id="countJ" type="button" value="0" style='width:30px;'/>
+			<input id="countQ" type="button" value="0" style='width:30px;'/>
+			<input id="countK" type="button" value="0" style='width:30px;'/>
+		</div>
+	</div><!-- END OF FLOAT -->
+	
+	<div style="heigth:200px;">
+		<div class="left">
+		</div><!-- END of LEFT -->
+		<div class="right">
+<BR>
+<pre><span id="sourceFormatX"></span></pre>
+<div id="ALGX">	
+
+</div>
+		</div><!-- END of RIGHT -->
+	</div>
+</body>
+</html>

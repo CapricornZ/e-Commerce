@@ -25,6 +25,8 @@ function preProcessALG1Single(container, inputType){
 			container.find('#expects').html(expect);
 		}
 	}
+	if('BLANK' == inputType){
+	}
 	var expect = container.find('#expects').html();
 	return expect;
 }
@@ -54,7 +56,7 @@ function postProcessALG1Single(container, data, inputType){
 		}
 		
 		var expectItem = 'N/A';
-		if(container.find("div[toggle-class=switchExpect]").val())
+		if(container.find("div[toggle-class=switch]").val())
 			expectItem = rtn.expectItem;
 		else{
 			if('A' == rtn.expectItem)
@@ -66,6 +68,24 @@ function postProcessALG1Single(container, data, inputType){
 		container.find("#rowexpect").html(expectItem + '*' + rtn.expect);
 		return {'item':expectItem, 'count':rtn.expect};
 	}
+}
+
+function obtainALG1Expect(container, source, alg1Type){
+	
+	var divExpects = new Array();
+	container.find("[toggle-class='expects']").each(function(){
+		divExpects.push($(this));
+	});
+	
+	$.post('ajax/alg/1/' + alg1Type + '/obtainExpects.do',
+		{ "source" : source },
+		function(data, status){
+			for(i=0; i<data.length; i++)
+				divExpects[i].html(data[i]);
+		}).error(function(){
+			for(i=0; i<divs.length; i++)
+				divExpects[i].html("");
+		});
 }
 
 function processALG1(container, inputType, source, alg1Type){
@@ -116,6 +136,7 @@ function processALG1(container, inputType, source, alg1Type){
 			}
 
 			container.find('#algexpect').html(rtn.item + '*' + rtn.count);
+			//container.find('#algexpect').html(data[data.length-1]);
 			return rtn;
 		},"json").error(function(){
 			

@@ -1,54 +1,25 @@
 package ecommerce.algorithm4.processor.v2;
 
-import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Processor implements IProcessor {
-	
-	private static final Logger logger = LoggerFactory.getLogger(Processor.class);
+public class ProcessorImmidiate implements IProcessor {
 
+	private static final Logger logger = LoggerFactory.getLogger(ProcessorImmidiate.class);
+	
+	private int maxStep;
 	private int offset;
 	private boolean[] source;
-	private char[] expect;
 	private int cycleStep;
-	private int maxStep;
 	private List<Integer> procedure;
-	private String classCycle;
-	public String getClassCycle(){
-		return this.classCycle;
-	}
-	
-	public Processor(boolean[] source, int offset, int cycleStep, char[] expect, Class classCycle){
-		this.offset = offset;
-		this.source = source;
-		this.cycleStep = cycleStep;
-		this.expect = expect;
-		this.classCycle = classCycle.getName();
-	}
-	
-	@Override public int getMaxStep() { return maxStep; }	
-	@Override public List<Integer> getProcedure(){ return this.procedure; }
+	private char[] expect;
 	
 	@Override
 	public int execute() {
-		
-		Constructor<ICycle> constructor = null;
-		Constructor<ICycle> constructorFirst = null;
-		try {
-			@SuppressWarnings("unchecked")
-			Class<ICycle> Cycle = (Class<ICycle>) Class.forName(this.classCycle);
-			constructor = Cycle.getConstructor(int.class, char[].class);
-			@SuppressWarnings("unchecked")
-			Class<ICycle> CycleFirst = (Class<ICycle>)Class.forName(this.classCycle+"First");
-			constructorFirst = CycleFirst.getConstructor(int.class, char[].class);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
+
 		int totalSum = 0;
 		this.procedure = new ArrayList<Integer>();
 		List<Integer> steps = new ArrayList<Integer>();
@@ -58,21 +29,18 @@ public class Processor implements IProcessor {
 			char[] subExpect = new char[cycleStep];
 			for(int tmp=0; tmp<cycleStep && tmp+i<this.expect.length; tmp++)
 				subExpect[tmp] = this.expect[tmp+i];
-
+			
+			boolean[] pattern = new boolean[]{true, false, true, false, true, false};
+			
 			if(steps.size() == 0){
-				//cycle = new Cycle4TripleX(1, subExpect);
-				try {
-					//cycle = (ICycle) constructor.newInstance(1, subExpect);
-					cycle = (ICycle) constructorFirst.newInstance(1, subExpect);
-				} catch (Exception e) { e.printStackTrace(); }
+				
+				cycle = new Cycle(1, subExpect, pattern);
 			} else {
+				
 				int step = 2;
 				for(int var : steps)
 					step += Math.abs(var);
-				//cycle = new Cycle4TripleX(step, subExpect);
-				try {
-					cycle = (ICycle) constructor.newInstance(step, subExpect);
-				} catch (Exception e) { e.printStackTrace(); }
+				cycle = new Cycle(step, subExpect, pattern);
 			}
 			
 			int length = this.offset+i+(cycleStep-1)<=this.source.length ? cycleStep : this.source.length-(this.offset+i);
@@ -103,7 +71,7 @@ public class Processor implements IProcessor {
 				return 0;
 			}
 		}
-
+		
 		logger.debug(String.format("=%d {MAX:%d}\r\n", totalSum, this.maxStep));
 		if(cycle == null){
 			return 2;
@@ -118,5 +86,14 @@ public class Processor implements IProcessor {
 		} else {//当前Cycle未完成
 			return cycle.getStep();
 		}
+	}
+
+	@Override public int getMaxStep() { return maxStep; }	
+	@Override public List<Integer> getProcedure(){ return this.procedure; }
+
+	@Override
+	public String getClassCycle() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

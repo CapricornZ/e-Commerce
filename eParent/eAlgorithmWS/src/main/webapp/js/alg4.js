@@ -25,6 +25,8 @@ function preProcessALG4Single(container, inputType){
 			container.find('#expects').html(expect);
 		}
 	}
+	if('BLANK' == inputType){
+	}
 	var expect = container.find('#expects').html();
 	return expect;
 }
@@ -53,7 +55,7 @@ function postProcessALG4Single(container, data, inputType){
 			container.find("div[toggle-class=switch]").attr("start", count);
 		}
 		var expectItem = 'N/A';
-		if(container.find("div[toggle-class=switchExpect]").val())
+		if(container.find("div[toggle-class=switch]").val())
 			expectItem = rtn.expectItem;
 		else{
 			if('A' == rtn.expectItem)
@@ -66,6 +68,24 @@ function postProcessALG4Single(container, data, inputType){
 		container.find("#rowexpect").html(expectItem + '*' + rtn.expect);
 		return {'item':expectItem, 'count':rtn.expect};
 	}
+}
+
+function obtainALG4Expect(container, source){
+	
+	var divExpects = new Array();
+	container.find('#expects').each(function(){
+		divExpects.push($(this));
+	});
+	
+	$.post('ajax/alg/4/obtainExpects.do',
+		{ "source" : source },
+		function(data, status){
+			for(i=0; i<data.length; i++)
+				divExpects[i].html(data[i]);
+		}).error(function(){
+			for(i=0; i<divs.length; i++)
+				divExpects[i].html("");
+		});
 }
 
 function processALG4(container, inputType, source){
@@ -122,6 +142,7 @@ function processALG4(container, inputType, source){
 			//var taf = container.find('#trueANDfalse').html();
 			//container.find('#trueANDfalse').html(taf + ' [' + rtn.item + '*' + rtn.count + ']');
 			container.find('#algexpect').html(rtn.item + '*' + rtn.count);
+			//container.find('#algexpect').html(data[data.length-1]);
 			return rtn;
 		},"json").error(function(){
 			console.log("ERROR");

@@ -1,5 +1,10 @@
 package ecommerce.algorithm4.processor.v2;
 
+/***
+ * 找到3X或3O才启动
+ * @author martin
+ *
+ */
 public class Start{
 
 	static public IProcessor findProcessor(boolean[] source, int cycleStep, char[] expectPattern) {

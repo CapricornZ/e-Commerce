@@ -99,7 +99,8 @@
 				function(data, status){
 					
 					console.log("GET ajax/alg1/search.do : " + status);
-					var rtn = eval('('+data+')');
+					//var rtn = eval('('+data+')');
+					var rtn = data;
 					$('#queryResult').html("<TR><th>ID</th><th>SOURCE</th><th>OPS</th></TR>");
 					$.each(rtn, function(key, val){
 						var id = "<td>" + val.id + "</td>";
@@ -164,7 +165,8 @@
 			{},
 			function(data, status){
 				
-				var rtn = eval('('+data+')');
+				//var rtn = eval('('+data+')');
+				var rtn = data;
 				$('#txtDataSource').val(rtn.source);
 				var inputSource = rtn.source;
 				var totalExpect = [];

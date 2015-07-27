@@ -13,17 +13,18 @@
     	
     <import resource="ALG.xml" />
     <import resource="TandFBuilders.xml" />
-    
-	<bean class="elements.controller.Alg1Controller">
+	
+	<bean class="elements.controller.UtilController">
 		<property name="recordService" ref="recordService"/>
 	</bean>
-	
 	<bean class="elements.controller.Alg1xController"/>
 	<bean class="elements.controller.Alg4xController"/>
 	<bean class="elements.controller.NewAlgxController"/>
 	
-	<bean class="elements.controller.Alg4Controller"/>
-	
+	<bean class="elements.controller.Alg1Controller">
+		<property name="recordService" ref="recordService"/>
+	</bean>
+	<bean class="elements.controller.Alg4Controller"/>	
 	<bean class="elements.controller.NewAlgController"/>
 	
 	<bean class="elements.controller.AjaxController">

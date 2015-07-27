@@ -4,61 +4,58 @@ import java.util.ArrayList;
 import java.util.List;
 
 /***
- * Cycle for 3x
- * 正：
- * 	遇到X -step
- * 	遇到O +step
- * 反：
- * 	遇到X +step
- * 	遇到O -step
- * 根据给定的expect,动态运算每一位
+ * 期待oxoxoxox……
  * @author martin
  *
  */
-public class Cycle4TripleX implements ICycle {
+public class Cycle implements ICycle {
 	
 	private int step;
 	private int sum = 0;
 	private List<Integer> process = new ArrayList<Integer>();
 	
+	private boolean[] pattern;/*oxoxox...或者xoxoxo...*/
+	/***
+	 * 对应的是页面上的正反开关
+	 */
 	private char[] expect;
-	public Cycle4TripleX(int step){
-		this.step = step;
-	}
-	
-	public Cycle4TripleX(int step, char[] expect){
+	public Cycle(int step, char[] expect, boolean[] pattern){
 		this.step = step; 
 		this.expect = expect;
+		this.pattern = pattern;
 	}
-
+	
 	@Override public int getSum(){ return this.sum; }
 	@Override public int getStep() { return this.step; }
 	@Override public List<Integer> getProcess(){ return this.process; }
 
 	@Override
 	public void execute(boolean[] source, int offset, int length) {
-		
+
 		this.sum = 0;
 		int maxLen = offset+length < source.length ? offset+length : source.length;
-		for(int i=0; offset+i<maxLen; i++)
-			if(this.expect[i] == '+'){
+		for(int i=0; offset+i<maxLen; i++){
+			
+			if(this.expect[i] == '+'){//如果相同则+step
 				
-				if(!source[offset+i]){//遇到X -》 -step
+				if(source[offset+i] != this.pattern[i]){
 					this.sum -= this.step;
 					this.process.add(-this.step);
-				} else {//遇到O -》 +step
+				} else {
 					this.sum += this.step;
-					this.process.add(this.step);
+					this.process.add(+this.step);
 				}
-			} else {
+			} else {//如果不同则+step
 				
-				if(!source[offset+i]){//遇到X -》+step
-					this.sum += this.step;
-					this.process.add(this.step);
-				} else {//遇到O -》-step
+				if(source[offset+i] == this.pattern[i]){
 					this.sum -= this.step;
 					this.process.add(-this.step);
+				} else {
+					this.sum += this.step;
+					this.process.add(+this.step);
 				}
 			}
+		}
 	}
+
 }
