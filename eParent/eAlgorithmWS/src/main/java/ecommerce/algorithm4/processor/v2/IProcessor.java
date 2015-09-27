@@ -13,4 +13,5 @@ public interface IProcessor {
 	int getMaxStep();
 	List<Integer> getProcedure();
 	String getClassCycle();
+	boolean getExpect();
 }

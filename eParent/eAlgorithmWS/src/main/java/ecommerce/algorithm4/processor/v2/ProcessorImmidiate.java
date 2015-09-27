@@ -1,6 +1,7 @@
 package ecommerce.algorithm4.processor.v2;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -13,9 +14,19 @@ public class ProcessorImmidiate implements IProcessor {
 	private int maxStep;
 	private int offset;
 	private boolean[] source;
+	private boolean[] expect;/*oxoxoxox*/
 	private int cycleStep;
 	private List<Integer> procedure;
-	private char[] expect;
+	private char[] expectPattern;/*++++++++++*/
+	
+	public ProcessorImmidiate(boolean[] source, int offset, int cycleStep, char[] expectPattern, boolean[] expect){
+		this.offset = offset;
+		this.source = source;
+		this.cycleStep = cycleStep;
+		this.expectPattern = expectPattern;
+		this.expect = expect;
+		//this.classCycle = classCycle.getName();
+	}
 	
 	@Override
 	public int execute() {
@@ -24,22 +35,23 @@ public class ProcessorImmidiate implements IProcessor {
 		this.procedure = new ArrayList<Integer>();
 		List<Integer> steps = new ArrayList<Integer>();
 		ICycle cycle = null;
+		int initStep = 2;
 		for(int i=0; i+offset<this.source.length; i+=cycleStep){
 			
 			char[] subExpect = new char[cycleStep];
-			for(int tmp=0; tmp<cycleStep && tmp+i<this.expect.length; tmp++)
-				subExpect[tmp] = this.expect[tmp+i];
+			for(int tmp=0; tmp<cycleStep && tmp+i<this.expectPattern.length; tmp++)
+				subExpect[tmp] = this.expectPattern[tmp+i];
 			
-			boolean[] pattern = new boolean[]{true, false, true, false, true, false};
-			
+			boolean[] pattern = Arrays.copyOfRange(this.expect, this.cycleStep*steps.size(), this.expect.length > this.cycleStep ? this.expect.length : this.cycleStep);
 			if(steps.size() == 0){
 				
-				cycle = new Cycle(1, subExpect, pattern);
+				cycle = new CycleFirst(initStep, subExpect, pattern);
 			} else {
 				
 				int step = 2;
 				for(int var : steps)
 					step += Math.abs(var);
+				
 				cycle = new Cycle(step, subExpect, pattern);
 			}
 			
@@ -74,7 +86,7 @@ public class ProcessorImmidiate implements IProcessor {
 		
 		logger.debug(String.format("=%d {MAX:%d}\r\n", totalSum, this.maxStep));
 		if(cycle == null){
-			return 2;
+			return initStep;
 		}
 		
 		if(cycle.getProcess().size() == this.cycleStep){//当前cycle已完成
@@ -95,5 +107,10 @@ public class ProcessorImmidiate implements IProcessor {
 	public String getClassCycle() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public boolean getExpect() { 
+		return this.expect[this.expect.length-1];
 	}
 }

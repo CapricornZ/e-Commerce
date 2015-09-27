@@ -8,5 +8,5 @@ public interface ICycle {
 	List<Integer> getProcess();
 	int getSum();
 	int getStep();
-
+	boolean getExpectItem();
 }

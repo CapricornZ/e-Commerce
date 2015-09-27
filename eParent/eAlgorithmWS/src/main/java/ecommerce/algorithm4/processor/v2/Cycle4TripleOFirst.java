@@ -36,6 +36,11 @@ public class Cycle4TripleOFirst implements ICycle {
 			return 2;
 	}
 	@Override public List<Integer> getProcess(){ return this.process; }
+	@Override
+	public boolean getExpectItem() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 
 	@Override
 	public void execute(boolean[] source, int offset, int length) {

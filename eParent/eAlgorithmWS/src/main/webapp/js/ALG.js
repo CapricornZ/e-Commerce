@@ -28,9 +28,12 @@ function pressA(val){
 	var countB=0;
 	processALG1($('#ALG1'), 'A', val, 'POSITIVE');
 	processALG1($('#ALG1N'), 'A', val, 'NEGTIVE');
-	processALG4($('#ALG4'), 'A', val);
-	processNEWALG($('#NEWALG'), 'A', val, 'POSITIVE');
-	processNEWALG($('#NEWALGN'), 'A', val, 'NEGTIVE');
+	//processALG4($('#ALG4'), 'A', val);
+	ALG4($('#ALG4'), 'A', val);
+	NEWALG($('#NEWALG'), 'A', val, 'POSITIVE');
+	//processNEWALG($('#NEWALG'), 'A', val, 'POSITIVE');
+	NEWALG($('#NEWALGN'), 'A', val, 'NEGTIVE');
+	//processNEWALG($('#NEWALGN'), 'A', val, 'NEGTIVE');
 	$("span[name='algexpect']").each(function(){
 		var expect = $(this).html();
 		if(null != expect){
@@ -81,9 +84,13 @@ function pressB(val){
 	
 	processALG1($('#ALG1'), 'B', val, 'POSITIVE');
 	processALG1($('#ALG1N'), 'B', val, 'NEGTIVE');
-	processALG4($('#ALG4'), 'B', val);
-	processNEWALG($('#NEWALG'), 'B', val, 'POSITIVE');
-	processNEWALG($('#NEWALGN'), 'B', val, 'NEGTIVE');
+	
+	//processALG4($('#ALG4'), 'B', val);
+	ALG4($('#ALG4'), 'B', val);
+	NEWALG($('#NEWALG'), 'B', val, 'POSITIVE');
+	//processNEWALG($('#NEWALG'), 'B', val, 'POSITIVE');
+	NEWALG($('#NEWALGN'), 'B', val, 'NEGTIVE');
+	//processNEWALG($('#NEWALGN'), 'B', val, 'NEGTIVE');
 	$("span[name='algexpect']").each(function(){
 		var expect = $(this).html();
 		if(null != expect){
@@ -132,9 +139,12 @@ function pressBackspace(val){
 	var countB=0;
 	processALG1($('#ALG1'), 'DEL', val, 'POSITIVE');
 	processALG1($('#ALG1N'), 'DEL', val, 'NEGTIVE');
-	processALG4($('#ALG4'), 'DEL', val);
-	processNEWALG($('#NEWALG'), 'DEL', val, 'POSITIVE');
-	processNEWALG($('#NEWALGN'), 'DEL', val, 'NEGTIVE');
+	//processALG4($('#ALG4'), 'DEL', val);
+	ALG4($('#ALG4'), 'DEL', val);
+	//processNEWALG($('#NEWALG'), 'DEL', val, 'POSITIVE');
+	NEWALG($('#NEWALG'), 'DEL', val, 'POSITIVE');
+	//processNEWALG($('#NEWALGN'), 'DEL', val, 'NEGTIVE');
+	NEWALG($('#NEWALGN'), 'DEL', val, 'NEGTIVE');
 	$("span[name='algexpect']").each(function(){
 		var expect = $(this).html();
 		if(null != expect){
@@ -145,10 +155,12 @@ function pressBackspace(val){
 				countB+=parseInt(array[1]);
 		}
 	});//end of EACH
+	
+	var unit = $('#unit').val();
 	if(countA>countB)
-		$('#totalExpect').html("A*" + (countA-countB));
+		$('#totalExpect').html("A*" + (countA-countB)*unit);
 	if(countB>countA)
-		$('#totalExpect').html("B*" + (countB-countA));
+		$('#totalExpect').html("B*" + (countB-countA)*unit);
 	if(countB==countA)
-		$('#totalExpect').html("A=B=" + countA);
+		$('#totalExpect').html("A=B=" + countA*unit);
 }

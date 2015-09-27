@@ -119,4 +119,10 @@ public class Processor implements IProcessor {
 			return cycle.getStep();
 		}
 	}
+
+	@Override
+	public boolean getExpect() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

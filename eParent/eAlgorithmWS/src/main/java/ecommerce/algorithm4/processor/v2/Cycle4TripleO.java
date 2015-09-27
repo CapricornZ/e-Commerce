@@ -61,4 +61,10 @@ public class Cycle4TripleO implements ICycle {
 				}
 			}
 	}
+
+	@Override
+	public boolean getExpectItem() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

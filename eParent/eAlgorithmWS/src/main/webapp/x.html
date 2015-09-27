@@ -1,5 +1,6 @@
 <html>
 <head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <style>
     .menus{
          position: relative;
@@ -16,34 +17,50 @@
 <script type="text/javascript" src="js/jquery/jquery-1.11.2.min.js"></script>
 <script>
 	$(function(){
-		
-		$.post('ajax/alg/4/accept.do',
-			{ 
-				"source" : "BAAAAAAABAABBBAB",
-				"expects": [
-					"++++++++++++++++++++",
-					"++++++++++++++++++++",
-					"++++++++++++++++++++",
-					"++++++++++++++++++++"
-				]
-			},
-			function(data, status){//SUCCESS
-
-				console.log(data);
-				
-			}).error(function(){//ERROR
-				console.log("ERROR");
-			});//$.post
+		$("#frm").submit(function(){
+			
+			var selected = $("select[name='type']").find("option:selected");
+			var action = selected.attr("action");
+			var prePath = "ajax/alg/";
+			var subPath = $("#algCategory").val();
+			var path = prePath + subPath + action;
+			$("#frm").attr("action", path);
+		});
 	});
 </script>
 </head>
 <body>
 <br/><br/><br/>
 <div class="menus" id="menu">
- 	<a href="#" >待解决</a>&nbsp;
-	<a href="#" >已解决</a>&nbsp;
-	<a href="#" >推荐[精华]</a>
-	<span onclick="return show($('#menu'));">+</span>
+
+    <form id="frm" action="ajax/alg/1/POSITIVE/acceptFile.do" method="POST" enctype="multipart/form-data">
+    	算法
+    	<SELECT id="algCategory">
+			<OPTION VALUE="1/POSITIVE/" SELECTED>算法1
+			<OPTION VALUE="1/NEGTIVE/">算法1`
+			<OPTION VALUE="4/">算法4
+			<OPTION VALUE="new/POSITIVE/">新算法
+			<OPTION VALUE="new/NEGTIVE/">新算法`
+		</SELECT><br/>
+    	周期
+    	<SELECT NAME="cycle">
+			<OPTION VALUE="6" SELECTED>6
+			<OPTION VALUE="7">7
+			<OPTION VALUE="8">8
+			<OPTION VALUE="9">9
+		</SELECT><br/>
+		类型
+		<SELECT name="type">
+			<option action="acceptFile.do" value="POSITIVE" SELECTED>正
+			<option action="acceptFile.do" value="NEGTIVE">反
+			<option action="oxANDxo/acceptFile.do" value="oxox...">oxox...
+			<option action="oxANDxo/acceptFile.do" value="xoxo...">xoxo...
+			<option action="oxANDxo/acceptFile.do" value="oooo...">oooo...
+			<option action="oxANDxo/acceptFile.do" value="xxxx...">xxxx...
+		</SELECT><br/>
+        yourfile: <input type="file" name="dataFile"/><br/>  
+        <input type="submit" value="提交"/>  
+    </form>  
 </div>
 </body>
 </html> 

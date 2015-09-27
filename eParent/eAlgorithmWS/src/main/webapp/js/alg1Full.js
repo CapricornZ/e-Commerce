@@ -228,7 +228,7 @@ function processALG1(container, inputType, source, alg1Type){
 	
 	var rtnAlg = new Array();
 	rtnAlg.push(processALG1PositiveNegtive(container, inputType, source, alg1Type));
-	//rtnAlg.push(processALG1oxANDxo(container, inputType, source, alg1Type));
+	rtnAlg.push(processALG1oxANDxo(container, inputType, source, alg1Type));
 	var countSubA = 0;
 	for(i=0; i<rtnAlg.length; i++){
 		if(rtnAlg[i].item == 'A')

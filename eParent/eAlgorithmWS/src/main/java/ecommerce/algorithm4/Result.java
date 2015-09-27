@@ -13,6 +13,16 @@ public class Result {
 	private String type;
 	
 	public String getType(){return this.type;}
+	
+	public int getMaxCycleStep(){
+		int max = 0;
+		for(int i=0; i<this.source.size(); i++)
+			max = max < Math.abs(this.source.get(i)) ? Math.abs(this.source.get(i)) : max; 
+		return max;
+	}
+	public int getCountOfCycle(int cycle){
+		return this.source.size() / cycle + (this.source.size() % cycle == 0 ? 0 : 1);
+	}
 
 	public Result(List<Integer> source, int sum, int max, boolean hasExpect){
 		this.source = source;
@@ -65,7 +75,7 @@ public class Result {
 				sb.append(String.format("+%d", val));
 			else
 				sb.append(String.format("%d", val));
-		sb.append(String.format(" = %d  MAX:%d", sum, max));
+		sb.append(String.format(" = %d MAX:%d", sum, max));
 		return sb.toString();
 	}
 }

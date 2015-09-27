@@ -8,7 +8,7 @@ import java.util.List;
  * @author martin
  *
  */
-public class Cycle implements ICycle {
+public class CycleFirst implements ICycle {
 	
 	private int step;
 	private int sum = 0;
@@ -20,14 +20,14 @@ public class Cycle implements ICycle {
 	 * 对应的是页面上的正反开关
 	 */
 	private char[] expect;
-	public Cycle(int step, char[] expect, boolean[] pattern){
+	public CycleFirst(int step, char[] expect, boolean[] pattern){
 		this.step = step; 
 		this.expect = expect;
 		this.pattern = pattern;
 	}
 	
 	@Override public int getSum(){ return this.sum; }
-	@Override public int getStep() { return this.step; }
+	@Override public int getStep() { return this.sum < 0 ? 1 : 2; }
 	@Override public List<Integer> getProcess(){ return this.process; }
 	@Override public boolean getExpectItem(){return this.expectItem;}
 
@@ -38,24 +38,25 @@ public class Cycle implements ICycle {
 		int maxLen = offset+length < source.length ? offset+length : source.length;
 		for(int i=0; offset+i<maxLen; i++){
 			
+			int step = this.sum < 0 ? 1 : 2;
 			this.expectItem = this.pattern[i+1];
 			if(this.expect[i] == '+'){//如果相同则+step
-				
+
 				if(source[offset+i] != this.pattern[i]){
-					this.sum -= this.step;
-					this.process.add(-this.step);
+					this.sum -= step;
+					this.process.add(-step);
 				} else {
-					this.sum += this.step;
-					this.process.add(+this.step);
+					this.sum += step;
+					this.process.add(+step);
 				}
 			} else {//如果不同则+step
 				
 				if(source[offset+i] == this.pattern[i]){
-					this.sum -= this.step;
-					this.process.add(-this.step);
+					this.sum -= step;
+					this.process.add(-step);
 				} else {
-					this.sum += this.step;
-					this.process.add(+this.step);
+					this.sum += step;
+					this.process.add(+step);
 				}
 			}
 		}

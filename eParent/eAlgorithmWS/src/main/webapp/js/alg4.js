@@ -88,8 +88,82 @@ function obtainALG4Expect(container, source){
 		});
 }
 
+function processALG4oxANDxo(container, inputType, source){
+	
+	var funcRtn = {'item':'N/A', 'count':0};
+	$.post('ajax/alg/4/preAccept.do',
+		{ "source" : source },
+		function(data, status){//SUCCESS
+	
+			console.log(data);
+			$('#sourceFormat').html(data[0]);
+			container.find('#trueANDfalse').html(data[1]);
+			
+		}).error(function(){//ERROR
+			console.log("ERROR");
+		});//$.post
+	
+	var expectPatterns = new Array();
+	var divs = new Array();
+	container.find("div[name='ALGoxANDxo']").each(function(){
+		divs.push($(this));
+		expectPatterns.push(preProcessALG4Single($(this), inputType));
+	});
+	var obj = $.post('ajax/alg/4/oxANDxo/accept.do',
+		{
+			"source" : source,
+			"expects": expectPatterns
+		},
+		function(data, status){
+			
+			var i = 0;
+			var countA = 0;
+			var countB = 0;
+			for(i=0; i<divs.length; i++){
+				var expectObj = postProcessALG4Single(divs[i], data[i], inputType);
+				if(expectObj.count != 0){
+					if('A'==expectObj.item)
+						countA += expectObj.count;
+					if('B'==expectObj.item)
+						countB += expectObj.count;
+				}
+			}
+			
+			var rtn = {'item':'N/A', 'count':0};
+			var expectSum = '';
+			if(countA>countB){
+				expectSum = 'A*'+(countA-countB);
+				rtn = {'item':'A', 'count':countA-countB};
+			}
+			if(countA<countB){
+				expectSum = 'B*'+(countB-countA);
+				rtn = {'item':'B', 'count':countB-countA};
+			}
+			
+			//var taf = container.find('#trueANDfalse').html();
+			//container.find('#trueANDfalse').html(taf + ' [' + rtn.item + '*' + rtn.count + ']');
+			container.find('#algexpect').html(rtn.item + '*' + rtn.count);
+			//container.find('#algexpect').html(data[data.length-1]);
+			funcRtn = rtn;
+			return rtn;
+		},"json").error(function(){
+			console.log("ERROR");
+			for(i=0; i<divs.length; i++){
+				
+				divs[i].find("div[toggle-class=switch]").jqxSwitchButton({ disabled:true });
+				divs[i].find("div[toggle-class=switch]").removeAttr("start");
+				divs[i].find("#expects").html("");
+				divs[i].find("#result").html("");
+				divs[i].find("#rowexpect").html("");
+			}
+			return {'item':'X', 'count':0};
+		});
+	return funcRtn;
+}
+
 function processALG4(container, inputType, source){
 	
+	var funcRtn = {'item':'N/A', 'count':0};
 	$.post('ajax/alg/4/preAccept.do',
 		{ "source" : source },
 		function(data, status){//SUCCESS
@@ -143,6 +217,7 @@ function processALG4(container, inputType, source){
 			//container.find('#trueANDfalse').html(taf + ' [' + rtn.item + '*' + rtn.count + ']');
 			container.find('#algexpect').html(rtn.item + '*' + rtn.count);
 			//container.find('#algexpect').html(data[data.length-1]);
+			funcRtn = rtn;
 			return rtn;
 		},"json").error(function(){
 			console.log("ERROR");
@@ -156,4 +231,25 @@ function processALG4(container, inputType, source){
 			}
 			return {'item':'X', 'count':0};
 		});
+	return funcRtn;
+}
+
+function ALG4(container, inputType, source, algType){
+	
+	var rtnAlg = new Array();
+	rtnAlg.push(processALG4(container, inputType, source, algType));
+	//rtnAlg.push(processALG4oxANDxo(container, inputType, source, algType));
+	var countSubA = 0;
+	for(i=0; i<rtnAlg.length; i++){
+		if(rtnAlg[i].item == 'A')
+			countSubA += rtnAlg[i].count;
+		if(rtnAlg[i].item == 'B')
+			countSubA -= rtnAlg[i].count;
+	}
+	if(countSubA > 0)
+		container.find('#algexpect').html('A*' + countSubA);
+	if(countSubA < 0)
+		container.find('#algexpect').html('B*' + -countSubA);
+	if(countSubA == 0)
+		container.find('#algexpect').html('N/A*0');
 }

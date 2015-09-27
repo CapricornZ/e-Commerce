@@ -66,7 +66,7 @@ public class Alg4Controller {
 				ecommerce.algorithm4.processor.v2.Start.findProcessor(result, cycle, expectPattern.toCharArray());
 		if(null != processor){
 			expect = processor.execute();
-			finalRes = new Result(processor.getProcedure(), processor.getMaxStep(), expect, 'X');
+			finalRes = new Result(processor.getProcedure(), processor.getMaxStep(), expect, 'X', "");
 		}
 		//resultsPositive.add(finalRes);
 		//rtnAccept.add(null==finalRes? "" : finalRes.getFormated());
